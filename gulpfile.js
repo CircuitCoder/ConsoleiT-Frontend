@@ -1,12 +1,9 @@
 'use strict';
 
-var browserify = require('browserify');
-var watchify = require('watchify');
-var tsify = require('tsify');
-
 var assign = require('lodash.assign');
 
 var gulp = require('gulp');
+var util = require('gulp-util');
 var vinylSource = require('vinyl-source-stream');
 var vinylBuffer = require('vinyl-buffer');
 var uglify = require('gulp-uglify');
@@ -16,13 +13,9 @@ var sass = require('gulp-sass');
 var htmlmin = require('gulp-htmlmin');
 var cssmin = require('gulp-cssmin');
 var connect = require('gulp-connect');
+var concat = require('gulp-concat');
 
 var del = require('del');
-
-var browserifyOpt = {
-  entries: ['./ts/main.ts'],
-  debug: true
-};
 
 var htmlminOpt = {
   collapseWhitespace: true,
@@ -34,14 +27,33 @@ var htmlminOpt = {
   minifyCSS: true,
   minifyURLs: true
 }
-var b = watchify(browserify(assign({}, watchify.args, browserifyOpt)));
 
-function buildjs() {
-  b.plugin(tsify, {noImplicitAny: true})
-      .bundle()
-      .pipe(vinylSource('bundle.js'))
-      .pipe(vinylBuffer())
-      .pipe(sourcemaps.init({loadMaps: true}))
+var tsOpt= {
+  target: "es5",
+  module: "system",
+  moduleResolution: "node",
+  emitDecoratorMetadata: true,
+  experimentalDecorators: true,
+  noImplicitAny: false
+}
+
+var depList = [
+  'node_modules/es6-shim/es6-shim.js',
+  'node_modules/systemjs/dist/system-polyfills.js',
+  'node_modules/angular2/bundles/angular2-polyfills.js',
+  'node_modules/systemjs/dist/system.src.js',
+  'node_modules/rxjs/bundles/Rx.js',
+  'node_modules/angular2/bundles/angular2.dev.js'
+];
+
+
+var tsProject = typescript.createProject(tsOpt);
+
+function buildjs(bundler) {
+  return gulp.src(['./typings/browser.d.ts','./ts/**/*.ts'])
+      .on('error', util.log)
+      .pipe(sourcemaps.init())
+      .pipe(typescript(tsProject))
       .pipe(uglify())
       .pipe(sourcemaps.write('./'))
       .pipe(gulp.dest('./dist/js'))
@@ -49,7 +61,8 @@ function buildjs() {
 };
 
 function buildcss() {
-  gulp.src('./sass/**/*.scss')
+  return gulp.src('./sass/**/*.scss')
+      .on('error', util.log)
       .pipe(sourcemaps.init())
       .pipe(sass().on('error', sass.logError))
       .pipe(cssmin())
@@ -59,7 +72,8 @@ function buildcss() {
 };
 
 function buildhtml() {
-  gulp.src('./html/**/*.html')
+  return gulp.src('./html/**/*.html')
+      .on('error', util.log)
       .pipe(sourcemaps.init())
       .pipe(htmlmin())
       .pipe(sourcemaps.write('./'))
@@ -67,15 +81,21 @@ function buildhtml() {
       .pipe(connect.reload());
 };
 
+function builddep() {
+  return gulp.src(depList)
+      .pipe(sourcemaps.init())
+      .pipe(uglify())
+      .pipe(sourcemaps.write('./'))
+      .pipe(gulp.dest('./dist/lib'));
+}
+
 gulp.task('build:js', ['clean:js'], buildjs);
 gulp.task('build:html', ['clean:html'], buildhtml);
 gulp.task('build:css', ['clean:css'], buildcss);
-gulp.task('build', ['clean'], function() {
-  buildjs();
-  buildhtml();
-  buildcss();
-});
-gulp.task('watch', ['build'], function() {
+gulp.task('build:dep', ['clean:dep'], builddep);
+gulp.task('build', ['build:js', 'build:css', 'build:html']);
+gulp.task('build:fresh', ['build', 'build:dep']);
+gulp.task('watch', ['build:js', 'build:css', 'build:html'], function() {
   gulp.watch('./ts/**/*.ts', ['build:js']);
   gulp.watch('./sass/**/*.scss', ['build:css']);
   gulp.watch('./html/**/*.html', ['build:html']);
@@ -94,7 +114,11 @@ gulp.task('clean:css', function() {
 });
 
 gulp.task('clean:html', function() {
-  return del('dist/html');
+  return del('dist/**/*.html');
+});
+
+gulp.task('clean:dep', function() {
+  return del('dist/lib');
 });
 
 gulp.task('webserver', function() {

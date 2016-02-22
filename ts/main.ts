@@ -1,10 +1,6 @@
-interface Person {
-  name: string;
-}
+import {bootstrap} from 'angular2/platform/browser'
+import {AppComponent} from './app.component'
 
-function greeter(person: Person) {
-  return "Hello, " + person.name;
-}
+bootstrap(AppComponent);
 
-var user = {name: "Liu"};
-console.log(greeter(user));
+console.log("Ha");

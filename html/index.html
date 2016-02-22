@@ -3,10 +3,31 @@
   <head>
     <meta charset="UTF-8">
     <title>Hello gulp</title>
-    <script src="js/bundle.js"></script>
+    <script src="lib/es6-shim.js"></script>
+    <script src="lib/system-polyfills.js"></script>
+    <script src="lib/angular2-polyfills.js"></script>
+    <script src="lib/system.src.js"></script>
+    <script src="lib/Rx.js"></script>
+    <script src="lib/angular2.dev.js"></script>
+
+    <script>
+      System.config({
+        map: {
+          consoleit: 'js'
+        },
+        packages: {
+          'consoleit': {
+            main: 'main.js',
+            format: 'register',
+            defaultExtension: 'js'
+          }
+        }
+      });
+      System.import('consoleit').then(null, console.error.bind(console));
+    </script>
     <link rel="stylesheet" href="css/main.css">
   </head>
   <body>
-    Hello gulp!
+    <ci-frame></ci-frame>
   </body>
 </html>
