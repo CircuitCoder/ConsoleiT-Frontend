@@ -38,6 +38,7 @@ var tsOpt= {
 }
 
 var depList = [
+  'lib/fix.js',
   'node_modules/es6-shim/es6-shim.js',
   'node_modules/systemjs/dist/system-polyfills.js',
   'node_modules/angular2/bundles/angular2-polyfills.js',
@@ -83,9 +84,8 @@ function buildhtml() {
 
 function builddep() {
   return gulp.src(depList)
-      .pipe(sourcemaps.init())
+      .pipe(concat('./bundle.js'))
       .pipe(uglify())
-      .pipe(sourcemaps.write('./'))
       .pipe(gulp.dest('./dist/lib'));
 }
 

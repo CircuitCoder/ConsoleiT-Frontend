@@ -9,6 +9,7 @@ ConsoleiT 的前端代码
 
 ### 开发
 ```
+gulp build:dep
 gulp
 ```
 
