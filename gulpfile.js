@@ -1,8 +1,12 @@
 'use strict';
 
+var readFileSync = require('fs').readFileSync;
+
 var assign = require('lodash.assign');
 
 var gulp = require('gulp');
+var gulpif = require('gulp-if');
+var rename = require('gulp-rename');
 var util = require('gulp-util');
 var vinylSource = require('vinyl-source-stream');
 var vinylBuffer = require('vinyl-buffer');
@@ -15,7 +19,15 @@ var cssmin = require('gulp-cssmin');
 var connect = require('gulp-connect');
 var concat = require('gulp-concat');
 
+var rev = require('gulp-rev');
+var revReplace = require('gulp-rev-replace');
+
 var del = require('del');
+
+var sequence = require('run-sequence');
+
+var production = false;
+var webserver = false;
 
 var htmlminOpt = {
   collapseWhitespace: true,
@@ -34,7 +46,10 @@ var tsOpt= {
   moduleResolution: "node",
   emitDecoratorMetadata: true,
   experimentalDecorators: true,
-  noImplicitAny: false
+  noImplicitAny: true,
+  removeComments: true,
+  outFile: 'bundle.js',
+  typescript: require('typescript')
 }
 
 var depList = [
@@ -55,10 +70,16 @@ function buildjs(bundler) {
       .on('error', util.log)
       .pipe(sourcemaps.init())
       .pipe(typescript(tsProject))
-      .pipe(uglify())
-      .pipe(sourcemaps.write('./'))
-      .pipe(gulp.dest('./dist/js'))
-      .pipe(connect.reload());
+      .pipe(gulpif(production, uglify()))
+      .pipe(gulpif(!production, sourcemaps.write('./')))
+      .pipe(rev())
+      .pipe(gulp.dest('./build/js'))
+      .pipe(rev.manifest({
+        path: './build/rev-manifest.json',
+        base: './build',
+        merge: true
+      }))
+      .pipe(gulp.dest('./build'));
 };
 
 function buildcss() {
@@ -66,67 +87,121 @@ function buildcss() {
       .on('error', util.log)
       .pipe(sourcemaps.init())
       .pipe(sass().on('error', sass.logError))
-      .pipe(cssmin())
-      .pipe(sourcemaps.write('./'))
-      .pipe(gulp.dest('./dist/css'))
-      .pipe(connect.reload());
+      .pipe(gulpif(production, cssmin()))
+      .pipe(gulpif(!production, sourcemaps.write('./')))
+      .pipe(rev())
+      .pipe(gulp.dest('./build/css'))
+      .pipe(rev.manifest({
+        path: './build/rev-manifest.json',
+        base: './build',
+        merge: true
+      }))
+      .pipe(gulp.dest('./build'));
 };
 
 function buildhtml() {
   return gulp.src('./html/**/*.html')
       .on('error', util.log)
       .pipe(sourcemaps.init())
-      .pipe(htmlmin())
-      .pipe(sourcemaps.write('./'))
-      .pipe(gulp.dest('./dist'))
-      .pipe(connect.reload());
+      .pipe(gulpif(production, htmlmin()))
+      .pipe(gulpif(!production, sourcemaps.write('./')))
+      .pipe(rev())
+      .pipe(gulp.dest('./build'))
+      .pipe(rev.manifest({
+        path: './build/rev-manifest.json',
+        base: './build',
+        merge: true
+      }))
+      .pipe(gulp.dest('./build'));
 };
 
 function builddep() {
   return gulp.src(depList)
-      .pipe(concat('./bundle.js'))
-      .pipe(uglify())
-      .pipe(gulp.dest('./dist/lib'));
+      .pipe(concat({path: './bundle-dep.js', cwd: ''}))
+      .pipe(gulpif(production, uglify()))
+      .pipe(rev())
+      .pipe(gulp.dest('./build/js'))
+      .pipe(rev.manifest({
+        path: './build/rev-manifest.json',
+        base: './build',
+        merge: true
+      }))
+      .pipe(gulp.dest('./build'));
 }
 
-gulp.task('build:js', ['clean:js'], buildjs);
-gulp.task('build:html', ['clean:html'], buildhtml);
-gulp.task('build:css', ['clean:css'], buildcss);
-gulp.task('build:dep', ['clean:dep'], builddep);
-gulp.task('build', ['build:js', 'build:css', 'build:html']);
-gulp.task('build:fresh', ['build', 'build:dep']);
-gulp.task('watch', ['build:js', 'build:css', 'build:html'], function() {
-  gulp.watch('./ts/**/*.ts', ['build:js']);
-  gulp.watch('./sass/**/*.scss', ['build:css']);
-  gulp.watch('./html/**/*.html', ['build:html']);
+function buildrev() {
+  function replaceMap(filename) {
+    if(filename.indexOf('.map') > -1) {
+      return filename.replace(/.*\//g, '');
+    } else return filename;
+  }
+  return gulp.src(['./build/**/*.*', '!./build/rev-manifest.json'])
+      .pipe(revReplace({
+        manifest: gulp.src('./build/rev-manifest.json'),
+        modifiedUnreved: replaceMap,
+        modifiedReved: replaceMap
+      }))
+      .pipe(gulp.dest('./dist'));
+}
+
+gulp.task('prebuild:production', function(done) {
+  production = true;
+  done();
 });
 
 gulp.task('clean', function() {
-  return del('dist');
+  return del(['dist', 'build']);
 });
 
 gulp.task('clean:js', function() {
-  return del('dist/js');
+  return del(['dist/js/**/*.*', '!dist/js/bundle-dep-*.*', 'build/js/**/*.*', '!build/js/bundle-dep-*.*']);
 });
 
 gulp.task('clean:css', function() {
-  return del('dist/css');
+  return del(['dist/css', 'build/css']);
 });
 
 gulp.task('clean:html', function() {
-  return del('dist/**/*.html');
+  return del(['dist/**/*.html', 'dist/**/*.html.map', 'build/**/*.html', 'build/**/*.html.map']);
 });
 
 gulp.task('clean:dep', function() {
-  return del('dist/lib');
+  return del('dist/js/bundle-dep-*.*', 'build/js/bundle-dep-*.*');
 });
 
-gulp.task('webserver', function() {
+gulp.task('clean:index', function() {
+  return del('dist/index.html');
+});
+
+gulp.task('build:js', gulp.series('clean:js', buildjs));
+gulp.task('build:html', gulp.series('clean:html', buildhtml));
+gulp.task('build:css', gulp.series('clean:css', buildcss));
+gulp.task('build:dep', gulp.series('clean:dep', builddep));
+gulp.task('build:index', gulp.series('clean:index', function() {
+  return gulp.src('./dist/index-*.html')
+      .pipe(rename('index.html'))
+      .pipe(gulp.dest('./dist'))
+      .pipe(gulpif(webserver, connect.reload()));
+}));
+gulp.task('build:rev', gulp.series(buildrev, 'build:index'));
+
+gulp.task('build', gulp.series(gulp.series('build:dep', 'build:js', 'build:css', 'build:html'), 'build:rev'));
+gulp.task('build:production', gulp.series('prebuild:production', 'build'));
+gulp.task('watch', gulp.series('build', function(done) {
+  gulp.watch('./ts/**/*.ts', gulp.series('build:js', 'build:rev'));
+  gulp.watch('./sass/**/*.scss', gulp.series('build:css', 'build:rev'));
+  gulp.watch('./html/**/*.html', gulp.series('build:html', 'build:rev'));
+  done();
+}));
+
+gulp.task('webserver', function(done) {
+  webserver = true;
   connect.server({
     root: 'dist',
     port: 3000,
     livereload: true
   });
+  done();
 });
 
-gulp.task('default', ['watch', 'webserver']);
+gulp.task('default', gulp.series('watch', 'webserver'));

@@ -3,26 +3,19 @@
   <head>
     <meta charset="UTF-8">
     <title>Hello gulp</title>
-    <script src="lib/bundle.js"></script>
+    <script src="js/bundle-dep.js"></script>
+    <script src="js/bundle.js"></script>
 
-    <script>
-      System.config({
-        map: {
-          consoleit: 'js'
-        },
-        packages: {
-          'consoleit': {
-            main: 'main.js',
-            format: 'register',
-            defaultExtension: 'js'
-          }
-        }
-      });
-      System.import('consoleit').then(null, console.error.bind(console));
-    </script>
     <link rel="stylesheet" href="css/main.css">
   </head>
   <body>
     <ci-frame></ci-frame>
+
+    <script>
+      System.import('main').then(function(module) {
+        console.log(module);
+        module.start();
+      });
+    </script>
   </body>
 </html>

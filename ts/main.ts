@@ -1,6 +1,6 @@
 import {bootstrap} from 'angular2/platform/browser'
-import {AppComponent} from './app.component'
+import {CIFrame} from './frame'
 
-bootstrap(AppComponent);
-
-console.log("Ha");
+export function start() {
+  bootstrap(CIFrame);
+}
