@@ -7,7 +7,7 @@ ConsoleiT 的前端代码
 ## 安装
 在 git clone 完成以后，在项目目录下执行以下指令:
 * `npm install`
-* `npm run gulp build:fresh`
+* `npm run gulp build:production`
 
 这会在项目根目录下生成 dist 目录，其中包含生成的资源
 
@@ -21,9 +21,7 @@ npm install gulpjs/gulp#4.0
 
 运行开发服务器
 ```
-gulp -v
-gulp build:dep
-gulp
+npm run gulp
 ```
 
 ## 维护者
