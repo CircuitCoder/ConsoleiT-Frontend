@@ -49,6 +49,7 @@ var tsOpt= {
   noImplicitAny: true,
   removeComments: true,
   outFile: 'bundle.js',
+  rootDir: 'ts',
   typescript: require('typescript')
 }
 
@@ -62,6 +63,12 @@ var depList = [
   'node_modules/angular2/bundles/angular2.dev.js'
 ];
 
+var fontList = [
+  'node_modules/material-design-icons/iconfont/MaterialIcons-Regular.eot',
+  'node_modules/material-design-icons/iconfont/MaterialIcons-Regular.woff',
+  'node_modules/material-design-icons/iconfont/MaterialIcons-Regular.woff2',
+  'node_modules/material-design-icons/iconfont/MaterialIcons-Regular.ttf',
+];
 
 var tsProject = typescript.createProject(tsOpt);
 
@@ -87,6 +94,8 @@ function buildcss() {
       .on('error', util.log)
       .pipe(sourcemaps.init())
       .pipe(sass().on('error', sass.logError))
+      .pipe(gulp.src('./lib/*.css', {passthrough: true}))
+      .pipe(concat('main.css'))
       .pipe(gulpif(production, cssmin()))
       .pipe(gulpif(!production, sourcemaps.write('./')))
       .pipe(rev())
@@ -121,6 +130,18 @@ function builddep() {
       .pipe(gulpif(production, uglify()))
       .pipe(rev())
       .pipe(gulp.dest('./build/js'))
+      .pipe(rev.manifest({
+        path: './build/rev-manifest.json',
+        base: './build',
+        merge: true
+      }))
+      .pipe(gulp.dest('./build'));
+}
+
+function buildfont() {
+  return gulp.src(fontList)
+      .pipe(rev())
+      .pipe(gulp.dest('./build/fonts'))
       .pipe(rev.manifest({
         path: './build/rev-manifest.json',
         base: './build',
@@ -169,6 +190,10 @@ gulp.task('clean:dep', function() {
   return del('dist/js/bundle-dep-*.*', 'build/js/bundle-dep-*.*');
 });
 
+gulp.task('clean:font', function() {
+  return del('dist/fonts/**/*.*', 'build/fonts/**/*.*');
+});
+
 gulp.task('clean:index', function() {
   return del('dist/index.html');
 });
@@ -177,6 +202,7 @@ gulp.task('build:js', gulp.series('clean:js', buildjs));
 gulp.task('build:html', gulp.series('clean:html', buildhtml));
 gulp.task('build:css', gulp.series('clean:css', buildcss));
 gulp.task('build:dep', gulp.series('clean:dep', builddep));
+gulp.task('build:font', gulp.series('clean:font', buildfont));
 gulp.task('build:index', gulp.series('clean:index', function() {
   return gulp.src('./dist/index-*.html')
       .pipe(rename('index.html'))
@@ -185,7 +211,7 @@ gulp.task('build:index', gulp.series('clean:index', function() {
 }));
 gulp.task('build:rev', gulp.series(buildrev, 'build:index'));
 
-gulp.task('build', gulp.series(gulp.series('build:dep', 'build:js', 'build:css', 'build:html'), 'build:rev'));
+gulp.task('build', gulp.series(gulp.series('build:font', 'build:dep', 'build:js', 'build:css', 'build:html'), 'build:rev'));
 gulp.task('build:production', gulp.series('prebuild:production', 'build'));
 gulp.task('watch', gulp.series('build', function(done) {
   gulp.watch('./ts/**/*.ts', gulp.series('build:js', 'build:rev'));
