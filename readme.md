@@ -1,6 +1,9 @@
 # ConsoleiT Frontend
 ConsoleiT 的前端代码
 
+[![依赖状态](https://david-dm.org/CircuitCoder/ConsoleiT-Frontend.svg)](https://david-dm.org/CircuitCoder/ConsoleiT-Frontend)
+[![开发依赖状态](https://david-dm.org/CircuitCoder/ConsoleiT-Frontend/dev-status.svg)](https://david-dm.org/CircuitCoder/ConsoleiT-Frontend#info=devDependencies)
+
 ## 安装
 在 git clone 完成以后，在项目目录下执行以下指令:
 * `npm install`
