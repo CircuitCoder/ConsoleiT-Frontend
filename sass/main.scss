@@ -1,1 +1,13 @@
-@import 'material-icons'
+ci-frame {
+  main {
+    background-color: #FAFAFA;
+  }
+
+  @media (min-width: 1050px) {
+    .ci-frame-container {
+      width: 1050px - 150px;
+      margin: 0 auto;
+      padding: 10px 0;
+    }
+  }
+}
