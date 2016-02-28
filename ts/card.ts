@@ -4,7 +4,7 @@ import {OnActivate, OnDeactivate} from 'angular2/router'
 
 @Injectable()
 export class CICardService {
-  private static animationSpeed = 2;
+  private static animationSpeed = 3;
   private static cards = new Array<CICard>();
   private static shownCard = 0;
   
