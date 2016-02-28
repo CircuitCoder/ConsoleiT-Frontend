@@ -1,52 +1,46 @@
 import {Directive, ViewChild, Component, ElementRef, Injectable, Input} from 'angular2/core'
 import {NgClass} from 'angular2/common'
+import {OnActivate, OnDeactivate} from 'angular2/router'
 
 @Injectable()
 export class CICardService {
-  private static animating = false;
-  private static intervalId = 0;
-  private static cards = new Array();
+  private static animationSpeed = 2;
+  private static cards = new Array<CICard>();
   private static shownCard = 0;
-  private static clearing = false;
   
-  registerCard(card: CICard) {
-    if(CICardService.clearing) return;
+  public register(card: CICard) {
     CICardService.cards.push(card);
-
-    if(CICardService.animating) return;
-    CICardService.animating = true;
-    console.log(CICardService.cards);
-
-    CICardService.intervalId = setInterval(function() {
-      CICardService.cards[CICardService.shownCard].setVisible(true);
-      ++CICardService.shownCard;
-      if(CICardService.shownCard == CICardService.cards.length) {
-        clearInterval(CICardService.intervalId);
-        CICardService.animating = false;
-      }
-    }, 100);
   }
 
-  clearCard() {
-    return new Promise<void>(function(resolve) {
-      if(CICardService.clearing) return;
-      CICardService.clearing = true;
-      
-      if(CICardService.animating) {
-        clearInterval(CICardService.intervalId);
-      }
-      CICardService.animating = true;
+  public showAll() {
+    return Promise.all(CICardService.cards.map((c:CICard) => {
+      var p = c.getPosition();
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          c.setVisible(true).then(() => {
+            return resolve();
+          });
+        }, (p.top*2+p.left)/CICardService.animationSpeed);
+      })
+    }));
+  }
 
-      CICardService.intervalId = setInterval(function() {
-        CICardService.cards[CICardService.shownCard].setVisible(false);
-        --CICardService.shownCard;
-        if(CICardService.shownCard == 0) {
-          clearInterval(CICardService.intervalId);
-          CICardService.animating = false;
-          CICardService.clearing = false;
-        }
-      }, 100);
-    });
+  public hideAll() {
+    console.log(CICardService.cards);
+    return Promise.all(CICardService.cards.map((c:CICard) => {
+      var p = c.getPosition();
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          c.setVisible(false).then(() => {
+            return resolve();
+          });
+        }, (p.top*2+p.left)/CICardService.animationSpeed);
+      })
+    }));
+  }
+
+  public clearCard() {
+    CICardService.cards = new Array<CICard>();
   }
 }
 
@@ -57,16 +51,22 @@ class CICardContent {
   constructor(private _el: ElementRef) {
   }
 
-  setVisible(visible: boolean) {
-    if(visible) {
+  getItemCount() {
+    return this._el.nativeElement.children.length;
+  }
+
+  toggle() {
+    return new Promise((resolve) => {
       for(var i = 0; i< this._el.nativeElement.children.length; ++i) {
         ((_i: number) => {
           setTimeout(() => {
-            this._el.nativeElement.children[_i].classList.add('visible');
-          }, 200+_i*100);
+            this._el.nativeElement.children[_i].classList.toggle('visible');
+          }, _i*100);
         })(i);
       }
-    }
+
+      setTimeout(resolve, this._el.nativeElement.children.length*100 + 100); // Wait for animation
+    });
   }
 }
 
@@ -86,15 +86,58 @@ export class CICard {
   }
 
   ngAfterViewInit() {
-    this._cardService.registerCard(this);
+    this._cardService.register(this);
   }
 
-  setVisible(visible: boolean) {
-    console.log("VISIBLE", this._el.nativeElement);
-    if(this.visible != visible) {
+  setVisible(visible: boolean): Promise<any> {
+    if(visible == this.visible) return Promise.resolve();
+
+    else if(visible) {
       this.visible = visible;
-      this.contentWrapper.setVisible(true);
+      return Promise.all([
+        new Promise((resolve) => {
+          setTimeout(resolve, 400);
+        }),
+        new Promise((resolve) => {
+          setTimeout(() => {
+            this.contentWrapper.toggle().then(() => {
+              console.log("RJEIOJFDLKSJFLSD");
+              resolve();
+            });
+          }, 200);
+        })
+      ]);
+
+    } else {
+      this.visible = visible;
+      return Promise.all([
+        new Promise((resolve) => {
+          setTimeout(resolve, this.contentWrapper.getItemCount() * 100 - 200);
+        }),
+        this.contentWrapper.toggle()
+      ]);
     }
+  }
+
+  getPosition() {
+    var rect = this._el.nativeElement.getBoundingClientRect();
+    console.log(rect);
+    return rect;
   }
 }
 
+export class CICardView implements OnDeactivate, OnActivate {
+  constructor(protected _cardService: CICardService) { }
+
+  ngAfterViewInit() {
+    this._cardService.showAll();
+  }
+
+  routerOnActivate() {
+    this._cardService.clearCard();
+  }
+
+  routerOnDeactivate() {
+    return this._cardService.hideAll();
+  }
+}

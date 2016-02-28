@@ -1,5 +1,5 @@
 import {Injectable, Component} from 'angular2/core'
-import {CICard} from './card'
+import {CICard, CICardView, CICardService} from './card'
 import {MDL} from './mdl'
 
 @Injectable()
@@ -43,15 +43,16 @@ export module CILoginService {
 @Component({
   templateUrl: 'view/login.html',
   directives: [CICard, MDL],
-  providers: [CILoginService]
+  providers: [CILoginService, CICardService]
 })
 
-export class CILogin {
+export class CILogin extends CICardView {
   username: String;
   passwd: String;
   isRegister: boolean;
 
-  constructor(private _loginService: CILoginService) {
+  constructor(private _loginService: CILoginService, _cardService: CICardService) {
+    super(_cardService);
     this.username = "";
     this.passwd = "";
     this.isRegister = false;
