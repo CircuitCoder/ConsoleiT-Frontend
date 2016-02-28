@@ -4,3 +4,5 @@ typings
 build
 
 *.sw[a-p]
+
+*.log

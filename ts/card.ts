@@ -1,4 +1,4 @@
-import {Component, ElementRef, Injectable} from 'angular2/core'
+import {Directive, ViewChild, Component, ElementRef, Injectable, Input} from 'angular2/core'
 import {NgClass} from 'angular2/common'
 
 @Injectable()
@@ -24,8 +24,7 @@ export class CICardService {
         clearInterval(CICardService.intervalId);
         CICardService.animating = false;
       }
-    }, 500);
-    console.log(CICardService.intervalId);
+    }, 100);
   }
 
   clearCard() {
@@ -46,8 +45,28 @@ export class CICardService {
           CICardService.animating = false;
           CICardService.clearing = false;
         }
-      }, 500);
+      }, 100);
     });
+  }
+}
+
+@Directive({
+  selector: '.ci-card-content',
+})
+class CICardContent {
+  constructor(private _el: ElementRef) {
+  }
+
+  setVisible(visible: boolean) {
+    if(visible) {
+      for(var i = 0; i< this._el.nativeElement.children.length; ++i) {
+        ((_i: number) => {
+          setTimeout(() => {
+            this._el.nativeElement.children[_i].classList.add('visible');
+          }, 200+_i*100);
+        })(i);
+      }
+    }
   }
 }
 
@@ -55,19 +74,27 @@ export class CICardService {
   selector: 'ci-card',
   templateUrl: '/tmpl/card.html',
   providers: [CICardService],
-  directives: [NgClass]
+  directives: [NgClass, CICardContent]
 })
 
 export class CICard {
-  _visible = false;
-  constructor(private _el: ElementRef, private _cardService: CICardService) {
-    _cardService.registerCard(this);
+  visible = false;
+  @ViewChild(CICardContent) contentWrapper:CICardContent;
+
+  constructor(private _el: ElementRef,
+              private _cardService: CICardService) {
+  }
+
+  ngAfterViewInit() {
+    this._cardService.registerCard(this);
   }
 
   setVisible(visible: boolean) {
     console.log("VISIBLE", this._el.nativeElement);
-    if(this._visible != visible) {
-      this._visible = visible;
+    if(this.visible != visible) {
+      this.visible = visible;
+      this.contentWrapper.setVisible(true);
     }
   }
 }
+

@@ -61,7 +61,8 @@ var depList = [
   'node_modules/angular2/bundles/angular2-polyfills.js',
   'node_modules/systemjs/dist/system.src.js',
   'node_modules/rxjs/bundles/Rx.js',
-  'node_modules/angular2/bundles/angular2.dev.js'
+  'node_modules/angular2/bundles/angular2.dev.js',
+  'node_modules/angular2/bundles/router.dev.js'
 ];
 
 var fontList = [
@@ -226,7 +227,8 @@ gulp.task('webserver', function(done) {
   connect.server({
     root: 'dist',
     port: 3000,
-    livereload: true
+    livereload: true,
+    fallback: 'dist/index.html'
   });
   done();
 });

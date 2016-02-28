@@ -1,3 +1,3 @@
-export class CIDataNotif {
+export interface CIDataNotif {
   
 }

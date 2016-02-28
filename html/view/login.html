@@ -1,0 +1,23 @@
+<div class="login-title">
+  <canvas class="login-canvas"></canvas>
+</div>
+<div class="login-box">
+  <ci-card>
+    <ci-card-title>登陆</ci-card-title>
+    <div class="login-fields">
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" ci-mdl>
+        <input class="mdl-textfield__input" type="text" id="#ci-login-uname">
+        <label class="mdl-textfield__label" for="ci-login-uname">用户名</label>
+      </div>
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" ci-mdl>
+        <input class="mdl-textfield__input" type="password" id="#ci-login-passwd">
+        <label class="mdl-textfield__label" for="ci-login-passwd">密码</label>
+      </div>
+    </div>
+    <div class="mdl-card__actions mdl-card--border">
+      <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" ci-mdl (click) = "doLogin()">
+        登陆
+      </button>
+    </div>
+  </ci-card>
+</div>

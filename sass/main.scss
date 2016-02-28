@@ -8,6 +8,35 @@ ci-frame {
       width: 1050px - 150px;
       margin: 0 auto;
       padding: 10px 0;
+
+      .ci-frame-col-main {
+        width: (1050px - 200px)/2;
+        float: left;
+      }
+
+      .ci-frame-col-sec {
+        width: (1050px - 200px)/2;
+        float: left;
+        margin-left: 50px;
+      }
     }
   }
+
+  header.mdl-layout__header {
+    transition-property: transform;
+    transition-duration: 0.2s;
+    transition-timing-function: ease-out;
+    transform: translateY(0);
+  }
+
+  .ci-anonymous {
+    > header.mdl-layout__header {
+      transition-timing-function: ease-in;
+      transform: translateY(-70px);
+    }
+  }
+}
+
+body {
+  background: #FAFAFA;
 }

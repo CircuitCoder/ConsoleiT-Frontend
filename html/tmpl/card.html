@@ -1,5 +1,8 @@
 <div class="mdl-card" [ngClass]="{'mdl-shadow--4dp': visible, 'visible': visible}">
   <div class="ci-card-content">
+    <div class="mdl-card__title">
+      <div class="mdl-card__title-text"><ng-content select="ci-card-title"></ng-content></div>
+    </div>
     <ng-content></ng-content>
   </div>
 </div>

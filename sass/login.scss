@@ -1,0 +1,18 @@
+.login-box {
+  width: 100%;
+  position: fixed;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+
+  ci-card {
+    width: 300px;
+    height: auto;
+    margin: 0 auto;
+
+    .login-fields {
+      padding: 0 16px;
+    }
+  }
+}
