@@ -209,7 +209,7 @@ gulp.task('build:index', gulp.series('clean:index', function() {
   return gulp.src('./dist/index-*.html')
       .pipe(rename('index.html'))
       .pipe(gulp.dest('./dist'))
-      .pipe(gulpif(webserver, connect.reload()));
+      .pipe(connect.reload());
 }));
 gulp.task('build:rev', gulp.series(buildrev, 'build:index'));
 
@@ -228,7 +228,8 @@ gulp.task('webserver', function(done) {
     root: 'dist',
     port: 3000,
     livereload: true,
-    fallback: 'dist/index.html'
+    fallback: 'dist/index.html',
+    debug: true
   });
   done();
 });

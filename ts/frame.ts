@@ -22,7 +22,13 @@ import {CILogin, CILoginService} from './login'
   }, {
     path: '/login',
     name: 'Login',
-    component: CILogin
+    component: CILogin,
+    data: {action: 'login'}
+  }, {
+    path: '/register',
+    name: 'Register',
+    component: CILogin,
+    data: {action: 'register'}
   }
 ])
 

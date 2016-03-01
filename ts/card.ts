@@ -78,8 +78,8 @@ class CICardContent {
 })
 
 export class CICard {
-  visible = false;
-  @ViewChild(CICardContent) contentWrapper:CICardContent;
+  public visible = false;
+  @ViewChild(CICardContent) private contentWrapper:CICardContent;
 
   constructor(private _el: ElementRef,
               private _cardService: CICardService) {
@@ -100,10 +100,7 @@ export class CICard {
         }),
         new Promise((resolve) => {
           setTimeout(() => {
-            this.contentWrapper.toggle().then(() => {
-              console.log("RJEIOJFDLKSJFLSD");
-              resolve();
-            });
+            resolve(this.contentWrapper.toggle());
           }, 200);
         })
       ]);
@@ -123,6 +120,10 @@ export class CICard {
     var rect = this._el.nativeElement.getBoundingClientRect();
     console.log(rect);
     return rect;
+  }
+
+  toggleContent() {
+    return this.contentWrapper.toggle();
   }
 }
 

@@ -1,7 +1,9 @@
 import {ElementRef, Directive} from 'angular2/core';
 
-interface MDLHandler {
+export interface MDLHandler {
   upgradeElement(el: any): void;
+  upgradeDom(): void;
+  upgradeDom(el: any): void;
 }
 
 declare var componentHandler: MDLHandler;
@@ -10,7 +12,9 @@ declare var componentHandler: MDLHandler;
   selector: '[ci-mdl]'
 })
 export class MDL {
-  constructor(el: ElementRef) {
-    componentHandler.upgradeElement(el.nativeElement);
+  constructor(private _el: ElementRef) { }
+  
+  ngAfterViewInit() {
+    componentHandler.upgradeDom();
   }
 }
