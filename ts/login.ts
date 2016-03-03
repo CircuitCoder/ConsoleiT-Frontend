@@ -1,7 +1,7 @@
 import {ViewChild, Injectable, Component} from 'angular2/core'
 import {CICard, CICardView, CICardService} from './card'
 import {MDL} from './mdl'
-import {ROUTER_DIRECTIVES, ROUTER_PROVIDERS, RouteParams, Router} from 'angular2/router'
+import {ROUTER_DIRECTIVES, ROUTER_PROVIDERS, RouteParams, RouteData, Router} from 'angular2/router'
 import {CILoginData} from './data'
 
 @Injectable()
@@ -59,6 +59,7 @@ export class CILogin extends CICardView {
   constructor(private _loginService: CILoginService,
               _cardService: CICardService,
               private _router: Router,
+              private _routeData: RouteData,
               private _routeParams: RouteParams) {
     super(_cardService);
     this.data = {
@@ -66,10 +67,7 @@ export class CILogin extends CICardView {
       email: "",
       passwd: ""
     };
-  }
-
-  ngOnInit() {
-    this.isRegister = this._routeParams.get('action') == 'register';
+    this.isRegister = this._routeData.get('action') == 'register';
   }
 
   commit() {

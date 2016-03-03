@@ -226,7 +226,7 @@ gulp.task('webserver', function(done) {
   webserver = true;
   connect.server({
     root: 'dist',
-    port: 3000,
+    port: 3001,
     livereload: true,
     fallback: 'dist/index.html',
     debug: true
