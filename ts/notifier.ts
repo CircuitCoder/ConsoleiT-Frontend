@@ -2,17 +2,30 @@ import {Injectable, Component} from 'angular2/core'
 
 @Injectable()
 export class CINotifier {
-  private static errorMap : { [id: string] : string } = {
+  private static msgMap: { [id: string] : string } = {
     CredentialRejected: "凭证错误",
     DuplicatedEmail: "邮箱已占用",
+    $Unknown: "未知错误"
+  }
+
+  private static container :any;
+
+  setContainer(container: any) {
+    CINotifier.container = container;
   }
 
   register(key: string, value: string) {
-    CINotifier.errorMap[key]=value;
+    CINotifier.msgMap[key]=value;
   }
 
   show(key: string) {
-    console.log(CINotifier.errorMap[key]);
+    if(!(key in CINotifier.msgMap)) key = "$Unknown";
+    if(CINotifier.container.MaterialSnackbar) {
+      CINotifier.container.MaterialSnackbar.showSnackbar({
+        message: CINotifier.msgMap[key],
+        timeout: 2000
+      });
+    }
   }
 }
 

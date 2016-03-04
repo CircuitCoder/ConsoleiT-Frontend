@@ -40,7 +40,8 @@ export class CIFrame {
   user: Object;
 
   constructor(private _loginService: CILoginService,
-              private _router: Router) {
+              private _router: Router,
+              private _notifier: CINotifier) {
 
     this.notif = new Array();
     this.user = null;
@@ -60,5 +61,9 @@ export class CIFrame {
         outer._router.navigate(['Login']);
       }
     });
+  }
+
+  ngAfterViewInit() {
+    this._notifier.setContainer(document.getElementById("ci-snackbar"));
   }
 }
