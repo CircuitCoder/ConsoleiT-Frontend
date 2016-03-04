@@ -29,14 +29,12 @@ export class CILoginService {
   }
 
   doLogin(email: String, passwd: String) {
-    var req = 
-    this._http.post(
+    let req = this._http.post(
       CILoginService.urlBase + 'login',
       JSON.stringify({ email, passwd }),
       CILoginService.reqOpt
     );
     req.subscribe((res) => {
-      console.log(res);
       let data = res.json();
       if(data.error) {
         this._notifier.show(data.error);
@@ -47,6 +45,7 @@ export class CILoginService {
       }
     }, (error) => {
       console.log(error);
+      this._notifier.show("$Unknown");
     });
   }
 
@@ -56,8 +55,24 @@ export class CILoginService {
     });
   }
 
-  doRegister(email: String, realname: String, cb: () => void) {
-    
+  doRegister(email: String, realname: String, next: () => void) {
+    let req = this._http.post(
+      CILoginService.urlBase + 'register',
+      JSON.stringify({ email, realname }),
+      CILoginService.reqOpt
+    );
+    req.subscribe((res) => {
+      let data = res.json();
+      if(data.error) {
+        this._notifier.show(data.error);
+      } else {
+        this._notifier.show(data.msg);
+        return next();
+      }
+    }, (error) => {
+      console.log(error);
+      this._notifier.show("$Unknown");
+    });
   }
 }
 
@@ -99,9 +114,9 @@ export class CILogin extends CICardView {
   }
 
   commit() {
-    console.log(this.data);
     if(this.isRegister)
       this._loginService.doRegister(this.data.email, this.data.realname, () => {
+        this.switchState();
       });
     else this._loginService.doLogin(this.data.email, this.data.passwd);
   }

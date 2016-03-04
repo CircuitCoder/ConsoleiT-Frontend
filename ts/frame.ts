@@ -66,4 +66,7 @@ export class CIFrame {
   ngAfterViewInit() {
     this._notifier.setContainer(document.getElementById("ci-snackbar"));
   }
+
+  logout() {
+  }
 }
