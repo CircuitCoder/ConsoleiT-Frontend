@@ -1,40 +1,63 @@
 import {ViewChild, Injectable, Component} from 'angular2/core'
+import {ROUTER_DIRECTIVES, ROUTER_PROVIDERS, RouteParams, RouteData, Router} from 'angular2/router'
+import {HTTP_PROVIDERS, Http, Response, Headers, RequestOptions} from 'angular2/http'
+
 import {CICard, CICardView, CICardService} from './card'
 import {MDL} from './mdl'
-import {ROUTER_DIRECTIVES, ROUTER_PROVIDERS, RouteParams, RouteData, Router} from 'angular2/router'
 import {CILoginData} from './data'
+import {CINotifier} from './notifier'
+import * as Config from './config'
 
 @Injectable()
 export class CILoginService {
 
   private static listeners = new Array<CILoginService.Listener>();
+  private static urlBase = 'http://' + Config.backend.host + ':' + Config.backend.port + '/account/';
+  private static reqOpt = new RequestOptions({
+    headers: new Headers({
+      'Content-Type': 'application/json'
+    })
+  });
 
-  constructor() {
-  }
+  constructor(
+    private _http: Http,
+    private _notifier: CINotifier
+  ) { }
   
   addListener(l: CILoginService.Listener) {
     CILoginService.listeners.push(l);
   }
 
   doLogin(email: String, passwd: String) {
-    // Pretend to login
-    var user = {
-      username: "CircuitCoder",
-      realname: "Liu Xiaoyi"
-    }
-
-    CILoginService.listeners.forEach((l) => {
-      l.onLogin(user);
+    var req = 
+    this._http.post(
+      CILoginService.urlBase + 'login',
+      JSON.stringify({ email, passwd }),
+      CILoginService.reqOpt
+    );
+    req.subscribe((res) => {
+      console.log(res);
+      let data = res.json();
+      if(data.error) {
+        this._notifier.show(data.error);
+      } else {
+        CILoginService.listeners.forEach((l) => {
+          if(l.onLogin) l.onLogin(data.user);
+        });
+      }
+    }, (error) => {
+      console.log(error);
     });
   }
 
   doLogout() {
     CILoginService.listeners.forEach((l) => {
-      l.onLogout();
+      if(l.onLogout) l.onLogout();
     });
   }
 
-  doRegister(email: String, realname: String) {
+  doRegister(email: String, realname: String, cb: () => void) {
+    
   }
 }
 
@@ -48,7 +71,12 @@ export module CILoginService {
 @Component({
   templateUrl: 'view/login.html',
   directives: [CICard, MDL, ROUTER_DIRECTIVES],
-  providers: [CILoginService, CICardService, ROUTER_PROVIDERS]
+  providers: [
+    CILoginService,
+    CICardService,
+    ROUTER_PROVIDERS,
+    HTTP_PROVIDERS
+  ]
 })
 
 export class CILogin extends CICardView {
@@ -72,7 +100,9 @@ export class CILogin extends CICardView {
 
   commit() {
     console.log(this.data);
-    if(this.isRegister) this._loginService.doRegister(this.data.email, this.data.realname);
+    if(this.isRegister)
+      this._loginService.doRegister(this.data.email, this.data.realname, () => {
+      });
     else this._loginService.doLogin(this.data.email, this.data.passwd);
   }
 

@@ -1,17 +1,20 @@
-import {Component} from 'angular2/core'
+import {Injectable, Component} from 'angular2/core'
 import {ROUTER_DIRECTIVES, ROUTER_PROVIDERS, RouteConfig, Router} from 'angular2/router'
+import {HTTP_PROVIDERS, Http, Response, Headers, RequestOptions} from 'angular2/http'
+
 import {CICard} from './card'
 import {CIDataNotif} from './data'
 import {MDL} from './mdl'
 
 import {CIDashboard} from './dashboard'
 import {CILogin, CILoginService} from './login'
+import {CINotifier} from './notifier'
 
 @Component({
   selector: 'ci-frame',
   templateUrl: 'tmpl/frame.html',
   directives: [CICard, MDL, ROUTER_DIRECTIVES],
-  providers: [ROUTER_PROVIDERS, CILoginService]
+  providers: [ROUTER_PROVIDERS, CILoginService, HTTP_PROVIDERS, CINotifier]
 })
 
 @RouteConfig([
@@ -46,13 +49,15 @@ export class CIFrame {
 
     _loginService.addListener({
       onLogin(user) {
-        console.log("Login");
+        console.log(user);
         outer.user = user;
         outer._router.navigate(['Dashboard']);
       },
 
       onLogout() {
         console.log("Logout");
+        outer.user = null;
+        outer._router.navigate(['Login']);
       }
     });
   }
