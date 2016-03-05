@@ -58,8 +58,24 @@ export class CILoginService {
   }
 
   doLogout() {
-    CILoginService.listeners.forEach((l) => {
-      if(l.onLogout) l.onLogout();
+    let req = this._http.get(
+      CILoginService.urlBase + 'logout',
+      CILoginService.reqOpt
+    );
+    req.subscribe((res) => {
+      var data = res.json();
+      if(data.error) {
+        this._notifier.show(data.error);
+      } else {
+        this._notifier.show(data.msg);
+        CILoginService.user = null;
+        CILoginService.listeners.forEach((l) => {
+          if(l.onLogout) l.onLogout();
+        });
+      }
+    }, (error) => {
+      console.log(error);
+      this._notifier.show('$Unknown');
     });
   }
 
