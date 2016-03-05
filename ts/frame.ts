@@ -72,17 +72,19 @@ export class CIFrame {
 
   ngAfterViewInit() {
     this._loginService.doRestore((error, user) => {
-      if(error &&
-         !this._router.isRouteActive(this._router.generate(['Login'])) && 
-         !this._router.isRouteActive(this._router.generate(['Register']))) {
-        this._notifier.show(error);
-        this._router.navigate(['Login']);
+      if(error) {
+        if(!this._router.isRouteActive(this._router.generate(['Login'])) && 
+           !this._router.isRouteActive(this._router.generate(['Register']))) {
+          this._notifier.show(error);
+          this._router.navigate(['Login']);
+        }
       } else {
         this.user = user
         if(this._router.isRouteActive(this._router.generate(['Login'])) ||
-         this._router.isRouteActive(this._router.generate(['Register']))) {
+           this._router.isRouteActive(this._router.generate(['Register']))) {
+          console.log("REDIR");
           this._notifier.show("AlreadyLoggedIn");
-        this._router.navigate(['Dashboard']);
+          this._router.navigate(['Dashboard']);
         }
       }
 
