@@ -13,20 +13,30 @@ export class CICardService {
   }
 
   public showAll() {
+    console.log("show");
+    let startPoint = CICardService.cards.reduce((prev: number, c: CICard) => {
+      let p = c.getPosition();
+      return Math.min(prev, p.top*2 + p.left);
+    }, Infinity);
+
     return Promise.all(CICardService.cards.map((c:CICard) => {
-      var p = c.getPosition();
+      let p = c.getPosition();
       return new Promise((resolve, reject) => {
         setTimeout(() => {
           c.setVisible(true).then(() => {
             return resolve();
           });
-        }, (p.top*2+p.left)/CICardService.animationSpeed);
+        }, (p.top*2+p.left-startPoint)/CICardService.animationSpeed);
       })
     }));
   }
 
   public hideAll() {
-    console.log(CICardService.cards);
+    let startPoint = CICardService.cards.reduce((prev: number, c: CICard) => {
+      let p = c.getPosition();
+      return Math.min(prev, p.top*2 + p.left);
+    }, Infinity);
+
     return Promise.all(CICardService.cards.map((c:CICard) => {
       var p = c.getPosition();
       return new Promise((resolve, reject) => {
@@ -34,7 +44,7 @@ export class CICardService {
           c.setVisible(false).then(() => {
             return resolve();
           });
-        }, (p.top*2+p.left)/CICardService.animationSpeed);
+        }, (p.top*2+p.left-startPoint)/CICardService.animationSpeed);
       })
     }));
   }
@@ -118,7 +128,6 @@ export class CICard {
 
   getPosition() {
     var rect = this._el.nativeElement.getBoundingClientRect();
-    console.log(rect);
     return rect;
   }
 
