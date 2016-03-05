@@ -12,8 +12,7 @@ export class CICardService {
     CICardService.cards.push(card);
   }
 
-  public showAll() {
-    console.log("show");
+  public setVisibleAll(visible: boolean) {
     let startPoint = CICardService.cards.reduce((prev: number, c: CICard) => {
       let p = c.getPosition();
       return Math.min(prev, p.top*2 + p.left);
@@ -23,25 +22,7 @@ export class CICardService {
       let p = c.getPosition();
       return new Promise((resolve, reject) => {
         setTimeout(() => {
-          c.setVisible(true).then(() => {
-            return resolve();
-          });
-        }, (p.top*2+p.left-startPoint)/CICardService.animationSpeed);
-      })
-    }));
-  }
-
-  public hideAll() {
-    let startPoint = CICardService.cards.reduce((prev: number, c: CICard) => {
-      let p = c.getPosition();
-      return Math.min(prev, p.top*2 + p.left);
-    }, Infinity);
-
-    return Promise.all(CICardService.cards.map((c:CICard) => {
-      var p = c.getPosition();
-      return new Promise((resolve, reject) => {
-        setTimeout(() => {
-          c.setVisible(false).then(() => {
+          c.setVisible(visible).then(() => {
             return resolve();
           });
         }, (p.top*2+p.left-startPoint)/CICardService.animationSpeed);
@@ -140,7 +121,7 @@ export class CICardView implements OnDeactivate, OnActivate {
   constructor(protected _cardService: CICardService) { }
 
   ngAfterViewInit() {
-    this._cardService.showAll();
+    this._cardService.setVisibleAll(true);
   }
 
   routerOnActivate() {
@@ -148,6 +129,6 @@ export class CICardView implements OnDeactivate, OnActivate {
   }
 
   routerOnDeactivate() {
-    return this._cardService.hideAll();
+    return this._cardService.setVisibleAll(false);
   }
 }
