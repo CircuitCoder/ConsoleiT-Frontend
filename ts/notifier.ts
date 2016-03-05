@@ -6,10 +6,18 @@ export class CINotifier {
     CredentialRejected: "凭证错误",
     DuplicatedEmail: "邮箱已占用",
     RegisterationEmailSent: "我们已将密码发往您的邮箱",
+    NotLoggedIn: "请先登录",
+    OperationSuccessful: "操作成功",
+    InvalidCondition: "非法操作",
+    AlreadyLoggedIn: "您已登陆",
     $Unknown: "未知错误"
   }
 
   private static container :any;
+
+  constructor() {
+    this.setContainer(document.getElementById("ci-snackbar"));
+  }
 
   setContainer(container: any) {
     CINotifier.container = container;

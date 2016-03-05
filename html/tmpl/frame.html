@@ -1,4 +1,4 @@
-<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header" ci-mdl [ngClass]="{'ci-anonymous': user==null}">
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header" ci-mdl [ngClass]="{'ci-anonymous': user==null}" *ngIf="started">
   <header class="mdl-layout__header">
     <div class="mdl-layout__header-row">
       <span class="mdl-layout-title">主页</span>
@@ -22,10 +22,7 @@
   <main class="mdl-layout__content">
     <div class="ci-frame-container">
       <router-outlet></router-outlet>
-      <div id="ci-snackbar" class="mdl-js-snackbar mdl-snackbar">
-        <div class="mdl-snackbar__text"></div>
-        <button class="mdl-snackbar__action" type="button"></button>
-      </div>
     </div>
   </main>
 </div>
+

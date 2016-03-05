@@ -8,6 +8,11 @@ import {CILoginData} from './data'
 import {CINotifier} from './notifier'
 import * as Config from './config'
 
+export interface CIUser {
+  realname: string,
+  email: string
+}
+
 @Injectable()
 export class CILoginService {
 
@@ -18,6 +23,8 @@ export class CILoginService {
       'Content-Type': 'application/json'
     })
   });
+
+  private static user:CIUser = null;
 
   constructor(
     private _http: Http,
@@ -39,8 +46,9 @@ export class CILoginService {
       if(data.error) {
         this._notifier.show(data.error);
       } else {
+        CILoginService.user = <CIUser> data.user;
         CILoginService.listeners.forEach((l) => {
-          if(l.onLogin) l.onLogin(data.user);
+          if(l.onLogin) l.onLogin(<CIUser> data.user);
         });
       }
     }, (error) => {
@@ -74,11 +82,33 @@ export class CILoginService {
       this._notifier.show("$Unknown");
     });
   }
+
+  doRestore(cb: (error: any, user: CIUser) => void) {
+    let req = this._http.get(
+      CILoginService.urlBase + 'restore',
+      CILoginService.reqOpt
+    );
+    req.subscribe((res) => {
+      let data = res.json();
+      if(data.user) CILoginService.user = data.user;
+      cb(data.error, <CIUser> data.user);
+    }, (error) => {
+      throw error;
+    });
+  }
+
+  getUser() {
+    return CILoginService.user;
+  }
+
+  isLoggedIn() {
+    return CILoginService.user != null;
+  }
 }
 
 export module CILoginService {
   export interface Listener {
-    onLogin: (user: Object) => void;
+    onLogin: (user: CIUser) => void;
     onLogout: () => void;
   }
 }
@@ -90,7 +120,7 @@ export module CILoginService {
     CILoginService,
     CICardService,
     ROUTER_PROVIDERS,
-    HTTP_PROVIDERS
+    /* HTTP_PROVIDERS */
   ]
 })
 
@@ -105,6 +135,7 @@ export class CILogin extends CICardView {
               private _routeData: RouteData,
               private _routeParams: RouteParams) {
     super(_cardService);
+
     this.data = {
       realname: "",
       email: "",

@@ -7,21 +7,22 @@ import {CIDataNotif} from './data'
 import {MDL} from './mdl'
 
 import {CIDashboard} from './dashboard'
-import {CILogin, CILoginService} from './login'
+import {CIUser, CILogin, CILoginService} from './login'
 import {CINotifier} from './notifier'
 
 @Component({
   selector: 'ci-frame',
   templateUrl: 'tmpl/frame.html',
   directives: [CICard, MDL, ROUTER_DIRECTIVES],
-  providers: [ROUTER_PROVIDERS, CILoginService, HTTP_PROVIDERS, CINotifier]
+  providers: [ROUTER_PROVIDERS, CILoginService, /*HTTP_PROVIDERS,*/ CINotifier]
 })
 
 @RouteConfig([
   {
     path:'/dashboard',
     name: 'Dashboard',
-    component: CIDashboard
+    component: CIDashboard,
+    useAsDefault: true
   }, {
     path: '/login',
     name: 'Login',
@@ -32,19 +33,25 @@ import {CINotifier} from './notifier'
     name: 'Register',
     component: CILogin,
     data: {action: 'register'}
+  }, {
+    path: '/**',
+    redirectTo: ['Dashboard']
   }
 ])
 
 export class CIFrame {
   notif: CIDataNotif[];
-  user: Object;
+  user: CIUser;
+  started: Boolean;
 
   constructor(private _loginService: CILoginService,
               private _router: Router,
-              private _notifier: CINotifier) {
+              private _notifier: CINotifier,
+              private _http: Http) {
 
     this.notif = new Array();
     this.user = null;
+    this.started = false;
 
     var outer = this;
 
@@ -64,9 +71,26 @@ export class CIFrame {
   }
 
   ngAfterViewInit() {
-    this._notifier.setContainer(document.getElementById("ci-snackbar"));
+    this._loginService.doRestore((error, user) => {
+      if(error &&
+         !this._router.isRouteActive(this._router.generate(['Login'])) && 
+         !this._router.isRouteActive(this._router.generate(['Register']))) {
+        this._notifier.show(error);
+        this._router.navigate(['Login']);
+      } else {
+        this.user = user
+        if(this._router.isRouteActive(this._router.generate(['Login'])) ||
+         this._router.isRouteActive(this._router.generate(['Register']))) {
+          this._notifier.show("AlreadyLoggedIn");
+        this._router.navigate(['Dashboard']);
+        }
+      }
+
+      this.started = true;
+    });
   }
 
   logout() {
+    this._loginService.doLogout();
   }
 }

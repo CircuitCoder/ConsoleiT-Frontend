@@ -11,6 +11,11 @@
   <base href="/"></base>
   <body>
     <ci-frame></ci-frame>
+    <div id="ci-snackbar" class="mdl-js-snackbar mdl-snackbar">
+      <div class="mdl-snackbar__text"></div>
+      <button class="mdl-snackbar__action" type="button"></button>
+    </div>
+
     <script>
       System.import('main').then(function(module) {
         console.log(module);
