@@ -58,10 +58,10 @@ var depList = [
   'lib/material.min.js',
   'node_modules/es6-shim/es6-shim.js',
   'node_modules/systemjs/dist/system-polyfills.js',
-  'node_modules/angular2/bundles/angular2-polyfills.js',
-  'node_modules/systemjs/dist/system.src.js',
+  'node_modules/angular2/bundles/angular2-polyfills.min.js',
+  'node_modules/systemjs/dist/system.js',
   'node_modules/rxjs/bundles/Rx.js',
-  'node_modules/angular2/bundles/angular2.dev.js',
+  'node_modules/angular2/bundles/angular2.dev.js', // Minified version is broken
   'node_modules/angular2/bundles/router.dev.js',
   'node_modules/angular2/bundles/http.dev.js'
 ];
@@ -80,7 +80,7 @@ function buildjs(bundler) {
       .on('error', util.log)
       .pipe(sourcemaps.init())
       .pipe(typescript(tsProject))
-      .pipe(gulpif(production, uglify()))
+      .pipe(gulpif(production, uglify({mangle: false})))
       .pipe(gulpif(!production, sourcemaps.write('./')))
       .pipe(rev())
       .pipe(gulp.dest('./build/js'))
@@ -115,7 +115,11 @@ function buildhtml() {
   return gulp.src('./html/**/*.html')
       .on('error', util.log)
       .pipe(sourcemaps.init())
-      .pipe(gulpif(production, htmlmin()))
+//      .pipe(gulpif(production, htmlmin({
+//        // From https://github.com/kangax/html-minifier/issues/289#issuecomment-180971821
+//        customAttrSurround: [ [/#/, /(?:)/], [/\*/, /(?:)/], [/\[?\(?/, /(?:)/] ],
+//        customAttrAssign: [ /\)?\]?=/ ] 
+//      })))
       .pipe(gulpif(!production, sourcemaps.write('./')))
       .pipe(rev())
       .pipe(gulp.dest('./build'))
@@ -130,7 +134,7 @@ function buildhtml() {
 function builddep() {
   return gulp.src(depList)
       .pipe(concat({path: './bundle-dep.js', cwd: ''}))
-      .pipe(gulpif(production, uglify()))
+      .pipe(gulpif(production, uglify({mangle: false})))
       .pipe(rev())
       .pipe(gulp.dest('./build/js'))
       .pipe(rev.manifest({

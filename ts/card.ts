@@ -73,8 +73,7 @@ export class CICard {
   @ViewChild(CICardContent) private contentWrapper:CICardContent;
 
   constructor(private _el: ElementRef,
-              private _cardService: CICardService) {
-  }
+              private _cardService: CICardService) { }
 
   ngAfterViewInit() {
     this._cardService.register(this);
