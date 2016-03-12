@@ -10,6 +10,8 @@ import {CIDashboard} from './dashboard'
 import {CIUser, CILogin, CILoginService} from './login'
 import {CINotifier} from './notifier'
 
+declare var md5: any;
+
 @Component({
   selector: 'ci-frame',
   templateUrl: 'tmpl/frame.html',
@@ -42,7 +44,8 @@ import {CINotifier} from './notifier'
 export class CIFrame {
   notif: CIDataNotif[];
   user: CIUser;
-  started: Boolean;
+  avatarUrl: string;
+  started: boolean;
 
   constructor(private _loginService: CILoginService,
               private _router: Router,
@@ -51,6 +54,7 @@ export class CIFrame {
 
     this.notif = new Array();
     this.user = null;
+    this.avatarUrl = "";
     this.started = false;
 
     var outer = this;
@@ -59,6 +63,7 @@ export class CIFrame {
       onLogin(user) {
         console.log(user);
         outer.user = user;
+        outer.avatarUrl = "https://gravatar.lug.ustc.edu.cn/avatar/" + md5(user.email) + "?d=mm&r=g";
         outer._router.navigate(['Dashboard']);
       },
 
@@ -80,9 +85,10 @@ export class CIFrame {
         }
       } else {
         this.user = user
+        this.avatarUrl = "https://gravatar.lug.ustc.edu.cn/avatar/" + md5(user.email) + "?d=mm&r=g";
+        console.log(this.avatarUrl);
         if(this._router.isRouteActive(this._router.generate(['Login'])) ||
            this._router.isRouteActive(this._router.generate(['Register']))) {
-          console.log("REDIR");
           this._notifier.show("AlreadyLoggedIn");
           this._router.navigate(['Dashboard']);
         }

@@ -14,9 +14,16 @@
 
   <div class="mdl-layout__drawer">
     <span class="mdl-layout-title">Console iT</span>
-    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" (click)="logout()">
-      Logout
-    </button>
+    <div class="profile-box">
+      <img [src]="avatarUrl" class="mdl-shadow--2dp">
+      <div class="realname">{{ user.realname }}</div>
+      <div class="email">{{ user.email }}</div>
+      <div class="operations">
+        <button class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect" (click)="logout()">
+          <i class="material-icons">power_settings_new</i>
+        </button>
+      </div>
+    </div>
   </div>
 
   <main class="mdl-layout__content">

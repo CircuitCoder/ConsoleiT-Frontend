@@ -35,6 +35,58 @@ ci-frame {
       transform: translateY(-70px);
     }
   }
+
+  .profile-box {
+    position: absolute;
+    height: 100px;
+    right: 0;
+    left: 0;
+    bottom: 0;
+
+    border-top: 1px solid rgba(0,0,0,.12);
+
+    img {
+      position: absolute;
+      top: 10px;
+      bottom: 10px;
+      left: 10px;
+      width: 80px;
+      height: 80px;
+
+      border-radius: 50%;
+    }
+
+    .realname {
+      color: rgba(0,0,0,.87);
+      position: absolute;
+      height: 20px;
+      font-size: 18px;
+      line-height: 20px;
+      top: 15px;
+      right: 10px;
+      left: 100px;
+    }
+
+    .email {
+      color: rgba(0,0,0,.54);
+      position: absolute;
+      height: 20px;
+      font-size: 12px;
+      line-height: 20px;
+      top: 35px;
+      right: 10px;
+      left: 100px;
+    }
+
+    .operations {
+      position: absolute;
+      height: 32px;
+      bottom: 10px;
+      right: 10px;
+      left: 100px;
+      color: rgba(0,0,0,.38);
+    }
+  }
 }
 
 #ci-snackbar {
