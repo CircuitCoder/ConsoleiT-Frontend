@@ -56,6 +56,7 @@ var tsOpt= {
 
 var depList = [
   'lib/fix.js',
+  'lib/md5.js',
   'lib/material.min.js',
   'node_modules/es6-shim/es6-shim.js',
   'node_modules/systemjs/dist/system-polyfills.js',
