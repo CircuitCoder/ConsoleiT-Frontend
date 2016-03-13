@@ -8,6 +8,7 @@ import {MDL} from './mdl'
 
 import {CIDashboard} from './dashboard'
 import {CIUser, CILogin, CILoginService} from './login'
+import {CIProfile} from './profile'
 import {CINotifier} from './notifier'
 
 declare var md5: any;
@@ -20,12 +21,17 @@ declare var md5: any;
 })
 
 @RouteConfig([
+
+  /* Pages */
   {
     path:'/dashboard',
     name: 'Dashboard',
     component: CIDashboard,
     useAsDefault: true
-  }, {
+  },
+  
+  /* Accounts */
+  {
     path: '/login',
     name: 'Login',
     component: CILogin,
@@ -36,6 +42,20 @@ declare var md5: any;
     component: CILogin,
     data: {action: 'register'}
   }, {
+    path: '/profile',
+    name: 'Profile',
+    component: CIProfile
+  },
+
+  /* Settings */
+  {
+    path: '/settings',
+    name: 'Settings',
+    component: CIDashboard
+  },
+  
+  /* Fallback */
+  {
     path: '/**',
     redirectTo: ['Dashboard']
   }

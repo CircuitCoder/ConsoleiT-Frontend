@@ -20,7 +20,13 @@
       <div class="email">{{ user.email }}</div>
       <div class="operations">
         <button class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect" (click)="logout()">
-          <i class="material-icons">power_settings_new</i>
+          <i class="material-icons">exit_to_app</i>
+        </button>
+        <button class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect" [routerLink]="['Profile']">
+          <i class="material-icons">person</i>
+        </button>
+        <button class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect" [routerLink]="['Settings']" *ngIf="user.isRoot">
+          <i class="material-icons">settings</i>
         </button>
       </div>
     </div>
