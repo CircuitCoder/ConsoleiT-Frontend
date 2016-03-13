@@ -10,6 +10,10 @@
     "typings": "typings",
     "gulp": "gulp"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CircuitCoder/ConsoleiT-Frontend.git"
+  },
   "author": "Liu Xiaoyi",
   "license": "AGPL-3.0",
   "devDependencies": {
