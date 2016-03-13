@@ -4,11 +4,6 @@
       <ci-card-title>
         个人信息
       </ci-card-title>
-      <ci-card-actions>
-        <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised" (click) = "updateProfile()" ci-mdl>
-          更新
-        </button>
-      </ci-card-actions>
     </ci-card>
   </div>
 
@@ -18,17 +13,17 @@
         账户与安全
       </ci-card-title>
       <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <input class="mdl-textfield__input" type="text" id="ci-profile-oripasswd">
+        <input class="mdl-textfield__input" type="password" id="ci-profile-oripasswd">
         <label class="mdl-textfield__label" for="ci-profile-oripasswd">当前密码</label>
       </div>
       <br/>
       <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <input class="mdl-textfield__input" type="text" id="ci-profile-passwd">
+        <input class="mdl-textfield__input" type="password" id="ci-profile-passwd">
         <label class="mdl-textfield__label" for="ci-profile-passwd">新密码</label>
       </div>
 
       <ci-card-actions>
-        <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised" type="submit" (click) = "updateProfile()">
+        <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised" type="submit" (click) = "updatePasswd()">
           更新密码
         </button>
       </ci-card-actions>
