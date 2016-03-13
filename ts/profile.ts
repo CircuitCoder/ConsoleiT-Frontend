@@ -11,8 +11,8 @@ import {MDL} from './mdl'
 })
 
 export class CIProfile extends CICardView {
-  oripasswd: String,
-  passwd: String,
+  oripasswd: String;
+  passwd: String;
 
   constructor(_cardService: CICardService, private _loginService: CILoginService, private _notifier: CINotifier) {
     super(_cardService);

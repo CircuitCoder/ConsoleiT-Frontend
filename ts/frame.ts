@@ -1,4 +1,4 @@
-import {Injectable, Component} from 'angular2/core'
+import {Injectable, Component, ElementRef} from 'angular2/core'
 import {ROUTER_DIRECTIVES, ROUTER_PROVIDERS, RouteConfig, Router} from 'angular2/router'
 import {HTTP_PROVIDERS, Http, Response, Headers, RequestOptions} from 'angular2/http'
 
@@ -70,7 +70,8 @@ export class CIFrame {
   constructor(private _loginService: CILoginService,
               private _router: Router,
               private _notifier: CINotifier,
-              private _http: Http) {
+              private _http: Http,
+              private _el: ElementRef) {
 
     this.notif = new Array();
     this.user = null;
@@ -120,5 +121,9 @@ export class CIFrame {
 
   logout() {
     this._loginService.doLogout();
+  }
+
+  closeDrawer() {
+    this._el.nativeElement.getElementsByClassName("mdl-layout")[0].MaterialLayout.toggleDrawer();
   }
 }
