@@ -3,24 +3,19 @@ ci-frame {
     background-color: #FAFAFA;
   }
 
-  @media (min-width: 1050px) {
-    .ci-frame-container {
+  .ci-frame-container {
+    margin: 0 auto;
+    padding: 10px 0;
+
+    @media (min-width: 1050px) {
       width: 1050px - 150px;
-      margin: 0 auto;
-      padding: 10px 0;
+    }
 
-      .ci-frame-col-main {
-        width: (1050px - 200px)/2;
-        float: left;
-      }
-
-      .ci-frame-col-sec {
-        width: (1050px - 200px)/2;
-        float: left;
-        margin-left: 50px;
-      }
+    @media (max-width: 1049px) {
+      width: 590px - 150px;
     }
   }
+
 
   header.mdl-layout__header {
     transition-property: transform;

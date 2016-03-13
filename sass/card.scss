@@ -38,6 +38,10 @@ ci-card {
           padding: 16px 0;
         }
       }
+
+      .mdl-card--border:empty {
+        display: none;
+      }
     }
 
 
@@ -46,6 +50,34 @@ ci-card {
         transition-delay: 0s;
         opacity: 1;
         transition-timing-function: ease-out;
+      }
+    }
+  }
+}
+
+.ci-card-container {
+  &[type="2-col"] {
+    width: 100%;
+
+    .ci-card-col {
+      &:first-child {
+        margin-right: 20px;
+      }
+
+      width: 440px;
+      float: left;
+    }
+    
+    ci-card {
+      width: 440px;
+
+      margin-left: 0;
+      margin-right: 0;
+
+      .mdl-textfield {
+        // Expand textfields to the full width of narrow elements
+        width: 100%;
+        max-width: 100%;
       }
     }
   }

@@ -8,8 +8,7 @@
       <ng-content></ng-content>
     </div>
 
-    <div class="mdl-card__actions mdl-card--border">
-      <ng-content select="ci-card-actions"></ng-content>
-    </div>
+    <!-- Keep the following element in one line for empty checking -->
+    <div class="mdl-card__actions mdl-card--border"><ng-content select="ci-card-actions"></ng-content></div>
   </div>
 </div>
