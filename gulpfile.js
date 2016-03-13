@@ -197,7 +197,7 @@ gulp.task('build:rev', gulp.series(buildrev));
 gulp.task('build', gulp.series(gulp.series('build:font', 'build:dep', 'build:js', 'build:css', 'build:index'), 'build:rev'));
 gulp.task('build:production', gulp.series('prebuild:production', 'build'));
 gulp.task('watch', gulp.series('build', function(done) {
-  gulp.watch(['./ts/**/*.ts', './html/views/**/*.html', './html/tmpl/**/*.html'], gulp.series('build:js', 'build:rev'));
+  gulp.watch(['./ts/**/*.ts', './html/view/**/*.html', './html/tmpl/**/*.html'], gulp.series('build:js', 'build:rev'));
   gulp.watch('./sass/**/*.scss', gulp.series('build:css', 'build:rev'));
   gulp.watch('./html/index.html', gulp.series('build:index', 'build:rev'));
   done();
