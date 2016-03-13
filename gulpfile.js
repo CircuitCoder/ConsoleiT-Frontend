@@ -18,6 +18,7 @@ var htmlmin = require('gulp-htmlmin');
 var cssmin = require('gulp-cssmin');
 var connect = require('gulp-connect');
 var concat = require('gulp-concat');
+var inlineNg2Template = require('gulp-inline-ng2-template');
 
 var rev = require('gulp-rev');
 var revReplace = require('gulp-rev-replace');
@@ -76,8 +77,9 @@ var fontList = [
 var tsProject = typescript.createProject(tsOpt);
 
 function buildjs(bundler) {
-  return gulp.src(['./typings/browser.d.ts','./ts/**/*.ts'])
+  return gulp.src(['./typings/browser.d.ts','./ts/**/*.ts', '!./ts/config.example.ts'])
       .on('error', util.log)
+      .pipe(inlineNg2Template({ base: '/html' })) // Currently doesn't support source maps
       .pipe(sourcemaps.init())
       .pipe(typescript(tsProject))
       .pipe(gulpif(production, uglify({mangle: false})))
@@ -103,26 +105,6 @@ function buildcss() {
       .pipe(gulpif(!production, sourcemaps.write('./')))
       .pipe(rev())
       .pipe(gulp.dest('./build/css'))
-      .pipe(rev.manifest({
-        path: './build/rev-manifest.json',
-        base: './build',
-        merge: true
-      }))
-      .pipe(gulp.dest('./build'));
-};
-
-function buildhtml() {
-  return gulp.src('./html/**/*.html')
-      .on('error', util.log)
-      .pipe(sourcemaps.init())
-//      .pipe(gulpif(production, htmlmin({
-//        // From https://github.com/kangax/html-minifier/issues/289#issuecomment-180971821
-//        customAttrSurround: [ [/#/, /(?:)/], [/\*/, /(?:)/], [/\[?\(?/, /(?:)/] ],
-//        customAttrAssign: [ /\)?\]?=/ ] 
-//      })))
-      .pipe(gulpif(!production, sourcemaps.write('./')))
-      .pipe(rev())
-      .pipe(gulp.dest('./build'))
       .pipe(rev.manifest({
         path: './build/rev-manifest.json',
         base: './build',
@@ -169,7 +151,8 @@ function buildrev() {
         modifiedUnreved: replaceMap,
         modifiedReved: replaceMap
       }))
-      .pipe(gulp.dest('./dist'));
+      .pipe(gulp.dest('./dist'))
+      .pipe(gulpif(webserver, connect.reload()));
 }
 
 gulp.task('prebuild:production', function(done) {
@@ -189,10 +172,6 @@ gulp.task('clean:css', function() {
   return del(['dist/css', 'build/css']);
 });
 
-gulp.task('clean:html', function() {
-  return del(['dist/**/*.html', 'dist/**/*.html.map', 'build/**/*.html', 'build/**/*.html.map']);
-});
-
 gulp.task('clean:dep', function() {
   return del('dist/js/bundle-dep-*.*', 'build/js/bundle-dep-*.*');
 });
@@ -206,24 +185,21 @@ gulp.task('clean:index', function() {
 });
 
 gulp.task('build:js', gulp.series('clean:js', buildjs));
-gulp.task('build:html', gulp.series('clean:html', buildhtml));
 gulp.task('build:css', gulp.series('clean:css', buildcss));
 gulp.task('build:dep', gulp.series('clean:dep', builddep));
 gulp.task('build:font', gulp.series('clean:font', buildfont));
 gulp.task('build:index', gulp.series('clean:index', function() {
-  return gulp.src('./dist/index-*.html')
-      .pipe(rename('index.html'))
-      .pipe(gulp.dest('./dist'))
-      .pipe(connect.reload());
+  return gulp.src('./html/index.html')
+      .pipe(gulp.dest('./build'));
 }));
-gulp.task('build:rev', gulp.series(buildrev, 'build:index'));
+gulp.task('build:rev', gulp.series(buildrev));
 
-gulp.task('build', gulp.series(gulp.series('build:font', 'build:dep', 'build:js', 'build:css', 'build:html'), 'build:rev'));
+gulp.task('build', gulp.series(gulp.series('build:font', 'build:dep', 'build:js', 'build:css', 'build:index'), 'build:rev'));
 gulp.task('build:production', gulp.series('prebuild:production', 'build'));
 gulp.task('watch', gulp.series('build', function(done) {
-  gulp.watch('./ts/**/*.ts', gulp.series('build:js', 'build:rev'));
+  gulp.watch(['./ts/**/*.ts', './html/views/**/*.html', './html/tmpl/**/*.html'], gulp.series('build:js', 'build:rev'));
   gulp.watch('./sass/**/*.scss', gulp.series('build:css', 'build:rev'));
-  gulp.watch('./html/**/*.html', gulp.series('build:html', 'build:rev'));
+  gulp.watch('./html/index.html', gulp.series('build:index', 'build:rev'));
   done();
 }));
 

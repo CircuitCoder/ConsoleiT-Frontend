@@ -14,7 +14,7 @@
 
   <div class="mdl-layout__drawer">
     <span class="mdl-layout-title">Console iT</span>
-    <div class="profile-box">
+    <div class="profile-box" *ngIf="user">
       <img [src]="avatarUrl" class="mdl-shadow--2dp">
       <div class="realname">{{ user.realname }}</div>
       <div class="email">{{ user.email }}</div>
