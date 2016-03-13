@@ -113,6 +113,26 @@ export class CILoginService {
     });
   }
 
+  doChangePasswd(oripasswd: String, passwd: String, next: () => void) {
+    let req = this._http.post(
+      CILoginService.urlBase + 'settings/passwd',
+      JSON.stringify({ oripasswd, passwd }),
+      CILoginService.reqOpt
+    );
+    req.subscribe((res) => {
+      let data = res.json();
+      if(data.error) {
+        this._notifier.show(data.error);
+      } else {
+        this._notifier.show(data.msg);
+        return next();
+      }
+    }, (error) => {
+      console.log(error);
+      this._notifier.show("$Unknown");
+    });
+  }
+
   getUser() {
     return CILoginService.user;
   }

@@ -13,12 +13,12 @@
         账户与安全
       </ci-card-title>
       <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <input class="mdl-textfield__input" type="password" id="ci-profile-oripasswd">
+        <input class="mdl-textfield__input" type="password" id="ci-profile-oripasswd" [(ngModel)]="oripasswd">
         <label class="mdl-textfield__label" for="ci-profile-oripasswd">当前密码</label>
       </div>
       <br/>
       <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <input class="mdl-textfield__input" type="password" id="ci-profile-passwd">
+        <input class="mdl-textfield__input" type="password" id="ci-profile-passwd" [(ngModel)]="passwd">
         <label class="mdl-textfield__label" for="ci-profile-passwd">新密码</label>
       </div>
 

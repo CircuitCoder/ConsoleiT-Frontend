@@ -9,7 +9,9 @@ export class CINotifier {
     NotLoggedIn: "请先登录",
     OperationSuccessful: "操作成功",
     InvalidCondition: "非法操作",
+    InvalidInput: "非法输入",
     AlreadyLoggedIn: "您已登陆",
+    PasswdMismatch: "密码不匹配",
     $Unknown: "未知错误"
   }
 
