@@ -30,6 +30,14 @@ ci-card {
           transition-timing-function: ease-out, ease-out;
         }
       }
+
+      .ci-card-inner {
+        padding: 0 16px;
+
+        .mdl-card__supporting-text {
+          padding: 16px 0;
+        }
+      }
     }
 
 

@@ -6,19 +6,17 @@
     <ci-card-title>
       {{ isRegister ? "注册" : "登陆" }}
     </ci-card-title>
-    <div class="login-fields">
-      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" ci-mdl>
-        <input class="mdl-textfield__input" type="text" id="ci-login-email" [(ngModel)]="data.email">
-        <label class="mdl-textfield__label" for="ci-login-email">邮箱</label>
-      </div>
-      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" ci-mdl *ngIf="!isRegister">
-        <input class="mdl-textfield__input" type="password" id="ci-login-passwd" [(ngModel)]="data.passwd">
-        <label class="mdl-textfield__label" for="ci-login-passwd">密码</label>
-      </div>
-      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" ci-mdl *ngIf="isRegister">
-        <input class="mdl-textfield__input" type="text" id="ci-login-realname" [(ngModel)]="data.realname">
-        <label class="mdl-textfield__label" for="ci-login-realname">真实姓名</label>
-      </div>
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" ci-mdl>
+      <input class="mdl-textfield__input" type="text" id="ci-login-email" [(ngModel)]="data.email">
+      <label class="mdl-textfield__label" for="ci-login-email">邮箱</label>
+    </div>
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" ci-mdl *ngIf="!isRegister">
+      <input class="mdl-textfield__input" type="password" id="ci-login-passwd" [(ngModel)]="data.passwd">
+      <label class="mdl-textfield__label" for="ci-login-passwd">密码</label>
+    </div>
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" ci-mdl *ngIf="isRegister">
+      <input class="mdl-textfield__input" type="text" id="ci-login-realname" [(ngModel)]="data.realname">
+      <label class="mdl-textfield__label" for="ci-login-realname">真实姓名</label>
     </div>
     <div class="mdl-card__actions mdl-card--border">
       <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" (click) = "commit()" ci-mdl>
