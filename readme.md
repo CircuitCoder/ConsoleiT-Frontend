@@ -5,7 +5,7 @@ ConsoleiT 的前端代码
 [![开发依赖状态](https://david-dm.org/CircuitCoder/ConsoleiT-Frontend/dev-status.svg)](https://david-dm.org/CircuitCoder/ConsoleiT-Frontend#info=devDependencies)
 
 ## 安装
-在 git clone 完成以后，首先请修改 `ts/config.ts` 内容，随后在项目目录下执行以下指令:
+在 git clone 完成以后，首先请将 `ts/config.example.ts` 重命名为 `ts/config.ts` ，修改其内容，随后在项目目录下执行以下指令:
 * `npm install`
 * `npm run typings install`
 * `npm run gulp build:production`

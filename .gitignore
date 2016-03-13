@@ -6,3 +6,5 @@ build
 *.sw[a-p]
 
 *.log
+
+ts/config.ts
