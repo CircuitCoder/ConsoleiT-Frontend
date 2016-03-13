@@ -86,6 +86,15 @@ ci-frame {
       left: 100px;
       color: rgba(0,0,0,.38);
     }
+
+    .masker {
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 40px;
+      background: linear-gradient(90deg, rgba(255,255,255,0) 0%, white 75%, white 100%);
+    }
   }
 }
 
