@@ -12,7 +12,7 @@
     </div>
   </header>
 
-  <div class="mdl-layout__drawer ci-drawer" (click)="closeDrawer()">
+  <div class="mdl-layout__drawer ci-drawer" (click)="closeDrawer($event)">
     <span class="mdl-layout-title">Console iT</span>
     <nav class="mdl-navigation">
       <a [routerLink]="['Dashboard']" class="mdl-navigation__link">主页</a>

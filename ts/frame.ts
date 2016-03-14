@@ -130,7 +130,8 @@ export class CIFrame {
     this._loginService.doLogout();
   }
 
-  closeDrawer() {
+  closeDrawer($event: any) {
+    if($event.target == this._el.nativeElement.getElementsByClassName('ci-drawer')[0]) return;
     this._el.nativeElement.getElementsByClassName("mdl-layout")[0].MaterialLayout.toggleDrawer();
   }
 }
