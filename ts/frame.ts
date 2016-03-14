@@ -11,6 +11,8 @@ import {CIUser, CILogin, CILoginService} from './login'
 import {CIProfile} from './profile'
 import {CINotifier} from './notifier'
 
+import {CIAbout} from './misc'
+
 declare var md5: any;
 
 @Component({
@@ -52,6 +54,10 @@ declare var md5: any;
     path: '/settings',
     name: 'Settings',
     component: CIDashboard
+  }, {
+    path: '/about',
+    name: 'About',
+    component: CIAbout
   },
   
   /* Fallback */
