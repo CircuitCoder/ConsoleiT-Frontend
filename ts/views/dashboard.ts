@@ -1,5 +1,6 @@
 import {Component} from 'angular2/core'
 import {CICardView, CICard, CICardService} from '../card'
+import {CILoginService, CIUser} from '../login'
 import {MDL} from '../mdl'
 
 @Component({
@@ -9,8 +10,12 @@ import {MDL} from '../mdl'
 })
 
 export class CIDashboard extends CICardView{
-  constructor(cardService: CICardService) {
-    super(cardService);
+
+  user: CIUser;
+
+  constructor(_cardService: CICardService, private _loginService: CILoginService) {
+    super(_cardService);
+    this.user = _loginService.getUser();
   }
 
   gotoGithub() {
