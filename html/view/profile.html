@@ -4,6 +4,20 @@
       <ci-card-title>
         个人信息
       </ci-card-title>
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <input class="mdl-textfield__input" type="text" id="ci-profile-realname" [(ngModel)]="user.realname" disabled>
+        <label class="mdl-textfield__label" for="ci-profile-realname">真实姓名</label>
+      </div>
+      <br/>
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <input class="mdl-textfield__input" type="text" id="ci-profile-email" [(ngModel)]="user.email" disabled>
+        <label class="mdl-textfield__label" for="ci-profile-email">注册邮箱</label>
+      </div>
+      <ci-card-actions>
+        <button class="mdl-button mdl-js-button mdl-js-ripple-effect" (click)="gotoGravatar()">
+          前往 Gravatar 更换头像
+        </button>
+      </ci-card-actions>
     </ci-card>
   </div>
 

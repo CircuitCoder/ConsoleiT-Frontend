@@ -99,17 +99,23 @@ export class CILoginService {
     });
   }
 
-  doRestore(cb: (error: any, user: CIUser) => void) {
+  doRestore() {
     let req = this._http.get(
       CILoginService.urlBase + 'restore',
       CILoginService.reqOpt
     );
     req.subscribe((res) => {
       let data = res.json();
-      if(data.user) CILoginService.user = data.user;
-      cb(data.error, <CIUser> data.user);
+      if(data.user) {
+        CILoginService.user = data.user;
+      }
+
+      CILoginService.listeners.forEach((l) => {
+        if(l.onRestore) l.onRestore(data.error, <CIUser> data.user);
+      });
     }, (error) => {
-      throw error;
+      console.log(error);
+      this._notifier.show('$Unknown');
     });
   }
 
@@ -144,8 +150,9 @@ export class CILoginService {
 
 export module CILoginService {
   export interface Listener {
-    onLogin: (user: CIUser) => void;
-    onLogout: () => void;
+    onLogin?: (user: CIUser) => void;
+    onLogout?: () => void;
+    onRestore?: (error: string, user: CIUser) => void;
   }
 }
 

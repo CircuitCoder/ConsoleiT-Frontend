@@ -81,42 +81,43 @@ export class CIFrame {
     var outer = this;
 
     _loginService.addListener({
-      onLogin(user) {
-        console.log(user);
+      onLogin: (user: CIUser) => {
         outer.user = user;
         outer.avatarUrl = "https://gravatar.lug.ustc.edu.cn/avatar/" + md5(user.email) + "?d=mm&r=g";
         outer._router.navigate(['Dashboard']);
       },
 
-      onLogout() {
+      onLogout: () => {
         console.log("Logout");
         outer.user = null;
         outer._router.navigate(['Login']);
+      },
+
+      onRestore: (error: string, user: CIUser) => {
+        if(error) {
+          if(!outer._router.isRouteActive(outer._router.generate(['Login'])) && 
+             !outer._router.isRouteActive(outer._router.generate(['Register']))) {
+            outer._notifier.show(error);
+            outer._router.navigate(['Login']);
+          }
+        } else {
+          outer.user = user
+          outer.avatarUrl = "https://gravatar.lug.ustc.edu.cn/avatar/" + md5(user.email) + "?d=mm&r=g";
+          console.log(outer.avatarUrl);
+          if(outer._router.isRouteActive(outer._router.generate(['Login'])) ||
+             outer._router.isRouteActive(outer._router.generate(['Register']))) {
+            outer._notifier.show("AlreadyLoggedIn");
+            outer._router.navigate(['Dashboard']);
+          }
+        }
+
+        outer.started = true;
       }
     });
   }
 
   ngAfterViewInit() {
-    this._loginService.doRestore((error, user) => {
-      if(error) {
-        if(!this._router.isRouteActive(this._router.generate(['Login'])) && 
-           !this._router.isRouteActive(this._router.generate(['Register']))) {
-          this._notifier.show(error);
-          this._router.navigate(['Login']);
-        }
-      } else {
-        this.user = user
-        this.avatarUrl = "https://gravatar.lug.ustc.edu.cn/avatar/" + md5(user.email) + "?d=mm&r=g";
-        console.log(this.avatarUrl);
-        if(this._router.isRouteActive(this._router.generate(['Login'])) ||
-           this._router.isRouteActive(this._router.generate(['Register']))) {
-          this._notifier.show("AlreadyLoggedIn");
-          this._router.navigate(['Dashboard']);
-        }
-      }
-
-      this.started = true;
-    });
+    this._loginService.doRestore();
   }
 
   logout() {

@@ -1,6 +1,6 @@
 import {Injectable, Component} from 'angular2/core'
 import {CICard, CICardView, CICardService} from './card'
-import {CILoginService} from './login'
+import {CILoginService, CIUser} from './login'
 import {CINotifier} from './notifier'
 import {MDL} from './mdl'
 
@@ -14,8 +14,11 @@ export class CIProfile extends CICardView {
   oripasswd: String;
   passwd: String;
 
+  user: CIUser;
+
   constructor(_cardService: CICardService, private _loginService: CILoginService, private _notifier: CINotifier) {
     super(_cardService);
+    this.user = _loginService.getUser();
   }
 
   updatePasswd() {
@@ -25,5 +28,9 @@ export class CIProfile extends CICardView {
         // Do nothing
       });
     }
+  }
+
+  gotoGravatar() {
+    window.location.href="//gravatar.lug.ustc.edu.cn/";
   }
 }
