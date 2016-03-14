@@ -62,23 +62,35 @@ ci-card {
     .ci-card-col {
       &:first-child {
         margin-right: 20px;
+
+        @media (max-width: 1049px) {
+
+          & ci-card:last-child {
+            margin-bottom: 0;
+          }
+        }
       }
 
       width: 440px;
       float: left;
     }
-    
-    ci-card {
-      width: 440px;
+  }
 
-      margin-left: 0;
-      margin-right: 0;
+  &[type="1col"] {
+    width: 440px;
+    margin: 0 auto;
+  }
+  
+  ci-card {
+    width: 440px;
 
-      .mdl-textfield {
-        // Expand textfields to the full width of narrow elements
-        width: 100%;
-        max-width: 100%;
-      }
+    margin-left: 0;
+    margin-right: 0;
+
+    .mdl-textfield {
+      // Expand textfields to the full width of narrow elements
+      width: 100%;
+      max-width: 100%;
     }
   }
 }
