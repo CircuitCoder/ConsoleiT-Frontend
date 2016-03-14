@@ -37,6 +37,14 @@ ci-frame {
 
     padding-bottom: $profile-height + 1px; // For the border
 
+    .mdl-navigation__link {
+      transition: background 0.2s ease;
+      
+      &.router-link-active {
+        background: rgba(0,0,0,.06);
+      }
+    }
+
     .profile-box {
       position: absolute;
       height: $profile-height;
