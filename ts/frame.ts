@@ -11,6 +11,7 @@ import {CIUser, CILoginService} from './login'
 import {CIDashboard} from './views/dashboard'
 import {CILogin} from './views/login'
 import {CIProfile} from './views/profile'
+import {CIConf} from './views/conf'
 import {CIAbout} from './views/misc'
 
 declare var md5: any;
@@ -47,6 +48,13 @@ declare var md5: any;
     path: '/profile',
     name: 'Profile',
     component: CIProfile
+  },
+
+  /* Conf */
+  {
+    path: "/conf/:id",
+    name: 'Conf',
+    component: CIConf
   },
 
   /* Settings */
