@@ -3,15 +3,15 @@ import {ROUTER_DIRECTIVES, ROUTER_PROVIDERS, RouteConfig, Router} from 'angular2
 import {HTTP_PROVIDERS, Http, Response, Headers, RequestOptions} from 'angular2/http'
 
 import {CICard} from './card'
+import {CINotifier} from './notifier'
 import {CIDataNotif} from './data'
 import {MDL} from './mdl'
+import {CIUser, CILoginService} from './login'
 
-import {CIDashboard} from './dashboard'
-import {CIUser, CILogin, CILoginService} from './login'
-import {CIProfile} from './profile'
-import {CINotifier} from './notifier'
-
-import {CIAbout} from './misc'
+import {CIDashboard} from './views/dashboard'
+import {CILogin} from './views/login'
+import {CIProfile} from './views/profile'
+import {CIAbout} from './views/misc'
 
 declare var md5: any;
 

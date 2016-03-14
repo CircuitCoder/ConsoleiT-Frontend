@@ -1,6 +1,7 @@
 import {Component} from 'angular2/core'
-import {CICardView, CICard, CICardService} from './card'
-import {MDL} from './mdl'
+
+import {CICardView, CICard, CICardService} from '../card'
+import {MDL} from '../mdl'
 
 @Component({
   templateUrl: 'view/about.html',
