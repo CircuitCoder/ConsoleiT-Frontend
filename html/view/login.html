@@ -22,7 +22,7 @@
       <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" (click) = "commit()" ci-mdl>
         {{ isRegister ? "注册" : "登陆" }}
       </button>
-      <button class="mdl-button mdl-js-button mdl-js-ripple-effect state-button" (click) = "switchState()" ci-mdl>
+      <button class="mdl-button mdl-js-button mdl-js-ripple-effect state-button" [routerLink]="isRegister ? ['Login'] : ['Register']" ci-mdl>
         {{ isRegister ? "登陆" : "注册" }}
       </button>
     </ci-card-actions>
