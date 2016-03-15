@@ -31,13 +31,14 @@ ci-frame {
     }
   }
 
-  .ci-drawer {
+  .ci-drawer.mdl-layout__drawer {
 
     $profile-height: 100px;
 
     padding-bottom: $profile-height + 1px; // For the border
 
     .mdl-navigation__link {
+      color: rgba(0,0,0,.87);
       transition: background 0.2s ease;
       
       &.router-link-active {
