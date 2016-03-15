@@ -145,8 +145,16 @@ export class CIFrame {
   }
 
   closeDrawer($event: any) {
-    if($event.target == this._el.nativeElement.getElementsByClassName('ci-drawer')[0]) return;
-    this._el.nativeElement.getElementsByClassName("mdl-layout")[0].MaterialLayout.toggleDrawer();
+    let drawer = this._el.nativeElement.getElementsByClassName('ci-drawer')[0];
+    let target = $event.target;
+    while(true) {
+      if(target.tagName == "A" || target.tagName == "BUTTON") {
+        this._el.nativeElement.getElementsByClassName("mdl-layout")[0].MaterialLayout.toggleDrawer();
+        return;
+      }
+      else if(target == drawer) return;
+      else target = target.parentNode;
+    }
   }
 
   updateSidebar() {
