@@ -7,6 +7,7 @@ import {CINotifier} from './notifier'
 import {CIDataNotif} from './data'
 import {MDL} from './mdl'
 import {CIUser, CILoginService} from './login'
+import {CIConfService} from './conf'
 
 import {CIDashboard} from './views/dashboard'
 import {CILogin} from './views/login'
@@ -20,7 +21,7 @@ declare var md5: any;
   selector: 'ci-frame',
   templateUrl: 'tmpl/frame.html',
   directives: [CICard, MDL, ROUTER_DIRECTIVES],
-  providers: [ROUTER_PROVIDERS, CILoginService, /*HTTP_PROVIDERS,*/ CINotifier]
+  providers: [ROUTER_PROVIDERS, CILoginService, /*HTTP_PROVIDERS,*/ CINotifier, CIConfService]
 })
 
 @RouteConfig([
@@ -80,10 +81,12 @@ export class CIFrame {
   user: CIUser;
   avatarUrl: string;
   started: boolean;
+  confs: any[];
 
   constructor(private _loginService: CILoginService,
               private _router: Router,
               private _notifier: CINotifier,
+              private _confService: CIConfService,
               private _http: Http,
               private _el: ElementRef) {
 
@@ -91,6 +94,7 @@ export class CIFrame {
     this.user = null;
     this.avatarUrl = "";
     this.started = false;
+    this.confs = [];
 
     var outer = this;
 
@@ -99,6 +103,7 @@ export class CIFrame {
         outer.user = user;
         outer.avatarUrl = "https://gravatar.lug.ustc.edu.cn/avatar/" + md5(user.email) + "?d=mm&r=g";
         outer._router.navigate(['Dashboard']);
+        this.updateSidebar();
       },
 
       onLogout: () => {
@@ -126,6 +131,7 @@ export class CIFrame {
         }
 
         outer.started = true;
+        this.updateSidebar();
       }
     });
   }
@@ -142,4 +148,13 @@ export class CIFrame {
     if($event.target == this._el.nativeElement.getElementsByClassName('ci-drawer')[0]) return;
     this._el.nativeElement.getElementsByClassName("mdl-layout")[0].MaterialLayout.toggleDrawer();
   }
+
+  updateSidebar() {
+    this._confService.getList((res) => {
+      this.confs = res;
+      console.log(res);
+    });
+  }
+
+  gotoConf(id: Number) { }
 }

@@ -16,9 +16,11 @@
     <span class="mdl-layout-title">Console iT</span>
     <nav class="mdl-navigation">
       <a [routerLink]="['Dashboard']" class="mdl-navigation__link">主页</a>
+
+      <a *ngFor="#conf of confs" class="mdl-navigation__link">{{ conf.title }}</a>
+
       <a [routerLink]="['About']" class="mdl-navigation__link">关于</a>
     </nav>
-
 
     <div class="profile-box" *ngIf="user">
       <img [src]="avatarUrl" class="mdl-shadow--2dp">
