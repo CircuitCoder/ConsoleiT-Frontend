@@ -26,4 +26,17 @@ export class CIHttp {
       cb(error, null);
     });
   }
+
+  protected post(action: string, data: any, cb: (err: any, res: any) => void) {
+    let req = this._http.post(
+      this.urlBase + action,
+      JSON.stringify(data),
+      this.reqOpt
+    );
+    req.subscribe((res) => {
+      cb(false, res.json());
+    }, (error) => {
+      cb(error, null);
+    });
+  }
 }
