@@ -76,14 +76,51 @@ ci-card {
     }
   }
 
+  &[type="action"] {
+    width: 100%;
+
+    @media (max-width: 1049px) {
+      width: 620px;
+      margin: 0 auto;
+    }
+    .ci-card-col {
+      &.narrow {
+        width: 300px;
+
+        @media (max-width: 1049px) {
+          width: 440px;
+        }
+      }
+
+      &.wide {
+        width: 580px;
+
+        @media (max-width: 1049px) {
+          width: 440px;
+        }
+      }
+
+      &:first-child {
+        margin-right: 20px;
+
+        @media (max-width: 1049px) {
+
+          & ci-card:last-child {
+            margin-bottom: 0;
+          }
+        }
+      }
+
+      float: left;
+    }
+  }
+
   &[type="1-col"] {
     width: 440px;
     margin: 0 auto;
   }
   
   ci-card {
-    width: 440px;
-
     margin-left: 0;
     margin-right: 0;
 

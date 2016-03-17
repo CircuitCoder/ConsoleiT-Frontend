@@ -5,8 +5,7 @@ import {MDL} from '../mdl'
 
 @Component({
   templateUrl: 'view/dashboard.html',
-  directives: [CICard, MDL],
-  providers: [CICardService]
+  directives: [CICard, MDL]
 })
 
 export class CIDashboard extends CICardView{

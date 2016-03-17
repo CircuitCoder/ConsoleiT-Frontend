@@ -7,8 +7,7 @@ import {MDL} from '../mdl'
 
 @Component({
   templateUrl: 'view/profile.html',
-  directives: [CICard, MDL],
-  providers: [CICardService, CILoginService]
+  directives: [CICard, MDL]
 })
 
 export class CIProfile extends CICardView {

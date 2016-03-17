@@ -80,7 +80,7 @@ var tsProject = typescript.createProject(tsOpt);
 function buildjs(bundler) {
   return gulp.src(['./typings/browser.d.ts','./ts/**/*.ts', '!./ts/config.example.ts'])
       .on('error', util.log)
-      .pipe(inlineNg2Template({ base: '/html' })) // Currently doesn't support source maps
+      .pipe(inlineNg2Template({ removeLineBreaks: true, base: '/html' })) // Currently doesn't support source maps
       .pipe(sourcemaps.init())
       .pipe(typescript(tsProject))
       .pipe(gulpif(production, uglify({mangle: false})))

@@ -64,7 +64,6 @@ class CICardContent {
 @Component({
   selector: 'ci-card',
   templateUrl: '/tmpl/card.html',
-  providers: [CICardService],
   directives: [NgClass, CICardContent]
 })
 

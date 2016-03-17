@@ -1,8 +1,8 @@
 import {Injectable, Component, ElementRef} from 'angular2/core'
-import {ROUTER_DIRECTIVES, ROUTER_PROVIDERS, RouteConfig, Router} from 'angular2/router'
-import {HTTP_PROVIDERS, Http, Response, Headers, RequestOptions} from 'angular2/http'
+import {ROUTER_DIRECTIVES, RouteConfig, Router} from 'angular2/router'
+import {Http, Response, Headers, RequestOptions} from 'angular2/http'
 
-import {CICard} from './card'
+import {CICardService} from './card'
 import {CINotifier} from './notifier'
 import {CIDataNotif} from './data'
 import {MDL} from './mdl'
@@ -20,8 +20,8 @@ declare var md5: any;
 @Component({
   selector: 'ci-frame',
   templateUrl: 'tmpl/frame.html',
-  directives: [CICard, MDL, ROUTER_DIRECTIVES],
-  providers: [ROUTER_PROVIDERS, CILoginService, /*HTTP_PROVIDERS,*/ CINotifier, CIConfService]
+  directives: [ROUTER_DIRECTIVES],
+  providers: [CILoginService, CINotifier, CIConfService, CICardService]
 })
 
 @RouteConfig([
@@ -53,7 +53,7 @@ declare var md5: any;
 
   /* Conf */
   {
-    path: "/conf/:id",
+    path: "/conf/:id/...",
     name: 'Conf',
     component: CIConf
   },

@@ -1,22 +1,15 @@
 import {ViewChild, Injectable, Component} from 'angular2/core'
-import {ROUTER_DIRECTIVES, ROUTER_PROVIDERS, RouteParams, RouteData, Router} from 'angular2/router'
-import {HTTP_PROVIDERS, Http, Response, Headers, RequestOptions} from 'angular2/http'
+import {ROUTER_DIRECTIVES, RouteParams, RouteData, Router} from 'angular2/router'
+import {Http, Response, Headers, RequestOptions} from 'angular2/http'
 
 import {CIUser, CILoginService} from '../login'
 import {CICard, CICardView, CICardService} from '../card'
 import {MDL} from '../mdl'
 import {CILoginData} from '../data'
 
-
 @Component({
   templateUrl: 'view/login.html',
-  directives: [CICard, MDL, ROUTER_DIRECTIVES],
-  providers: [
-    CILoginService,
-    CICardService,
-    ROUTER_PROVIDERS,
-    /* HTTP_PROVIDERS */
-  ]
+  directives: [CICard, MDL, ROUTER_DIRECTIVES]
 })
 
 export class CILogin extends CICardView {
