@@ -7,12 +7,19 @@ export class CICardService {
   private static animationSpeed = 3;
   private static cards = new Array<CICard>();
   private static shownCard = 0;
+
+  private static visible = false;
   
   public register(card: CICard) {
     CICardService.cards.push(card);
+    if(CICardService.visible) {
+      setTimeout(() => card.setVisible(true), 50); // TODO: ensure the animation performs
+    }
   }
 
   public setVisibleAll(visible: boolean) {
+    CICardService.visible = visible;
+
     let startPoint = CICardService.cards.reduce((prev: number, c: CICard) => {
       let p = c.getPosition();
       return Math.min(prev, p.top*2 + p.left);
