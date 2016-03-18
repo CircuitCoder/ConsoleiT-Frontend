@@ -20,10 +20,13 @@
       <div class="mdl-card__supporting-text">
         目前会议正在 <strong>{{ confStatus }}</strong>
       </div>
-      <ci-card-actions [ngSwitch]="confData.status" *ngIf = "confData.status != 0">
+      <ci-card-actions [ngSwitch]="confData.status">
         <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" *ngSwitchWhen="1" [routerLink]="['Academic']">
           学术团队申请通道
         </button>
+        <div class="ci-annotation" *ngSwitchDefault style="padding: 8px">
+          无可用快捷方式
+        </div>
       </ci-card-actions>
     </ci-card>
     <ci-card>
