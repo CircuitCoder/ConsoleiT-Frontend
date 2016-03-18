@@ -21,9 +21,11 @@
         目前会议正在 <strong>{{ confStatus }}</strong>
       </div>
       <ci-card-actions [ngSwitch]="confData.status">
-        <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" *ngSwitchWhen="1" [routerLink]="['Academic']">
-          学术团队申请通道
-        </button>
+        <div *ngSwitchWhen="1">
+          <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" [routerLink]="['Academic', {uid: userId}]">
+            学术团队申请通道
+          </button>
+        </div>
         <div class="ci-annotation" *ngSwitchDefault style="padding: 8px">
           无可用快捷方式
         </div>

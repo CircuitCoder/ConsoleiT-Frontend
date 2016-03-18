@@ -62,6 +62,10 @@ ci-card {
     font-style: italic;
     color: rgba(0,0,0,.3);
   }
+
+  .material-icons {
+    color: rgba(0,0,0,.54);
+  }
 }
 
 .ci-card-container {
@@ -139,4 +143,8 @@ ci-card {
       max-width: 100%;
     }
   }
+}
+
+.ci-radios {
+  padding: 16px 0;
 }

@@ -73,7 +73,7 @@ export class CIConfService extends CIHttp {
     });
   }
 
-  getData(id: Number, cb: (res: any) => void) {
+  getData(id: number, cb: (res: any) => void) {
     this.get('/' + id, (err, res) => {
       if(err) {
         console.log(err);
@@ -85,20 +85,49 @@ export class CIConfService extends CIHttp {
   }
 
   /* Settings */
-  updateMember(id: Number, role: Number) {
+  updateMember(id: number, role: number) {
   }
 
-  deleteMember(id: Number) {
+  deleteMember(id: number) {
   }
 
   /* Forms */
   updateForm() {
   }
 
-  getForm() {
+  getForm(formType: string, cb: (form: any) => void) {
+    let id = CIConfService.conf._id;
+    this.get('/' + id + '/' + formType + '/form', (err, res) => {
+      if(err) {
+        console.log(err);
+        this._notifier.show("$Unknown");
+      } else {
+        cb(res);
+      }
+    });
   }
 
-  postForm() {
+  postForm(formType: string, data: any, cb: (result: any) => void) {
+    let id = CIConfService.conf._id;
+    this.post('/' + id + '/' + formType + '/form', data, (err, res) => {
+      if(err) {
+        console.log(err);
+        this._notifier.show("$Unknown");
+      } else {
+        cb(res);
+      }
+    });
+  }
+
+  getFormResult(formType: string, uid: number, cb: (result: any) => void) {
+    this.get('/' + CIConfService.conf._id + '/' + formType + '/' + uid, (err, res) => {
+      if(err) {
+        console.log(err);
+        this._notifier.show("$Unknown");
+      } else {
+        cb(res);
+      }
+    });
   }
 
   getFormResults() {

@@ -7,6 +7,7 @@ import {CIHttp} from './http'
 import * as Config from './config'
 
 export interface CIUser {
+  _id: number,
   realname: string,
   email: string
 }

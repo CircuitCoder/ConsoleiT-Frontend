@@ -3,9 +3,24 @@ import {ComponentInstruction, CanActivate, Router,  AuxRoute, RouteConfig, Route
 
 import {CICardView, CICard, CICardService} from '../card'
 import {CIConfService} from '../conf'
+import {CILoginService} from '../login'
 import {MDL} from '../mdl'
 
 import * as CIUtil from '../util'
+
+@Component({
+  templateUrl: 'view/conf/academic-list.html',
+  directives: [CICard, ROUTER_DIRECTIVES]
+})
+
+class CIConfAcademicList extends CICardView {
+  results: any[];
+
+  constructor(_card: CICardService, private _conf: CIConfService) {
+    super(_card);
+    this.results = [];
+  }
+}
 
 @Component({
   templateUrl: 'view/conf/academic.html',
@@ -13,8 +28,29 @@ import * as CIUtil from '../util'
 })
 
 class CIConfAcademic extends CICardView {
-}
 
+  form: any;
+  data: any;
+  userId: number;
+
+  constructor(_card: CICardService, private _conf: CIConfService, params: RouteParams) {
+    super(_card);
+    this.form = [];
+    this.userId = +params.get('uid');
+  }
+
+  routerOnActivate() {
+    this._conf.getForm('academic', (form) => {
+      this.form = form;
+    });
+
+    this._conf.getFormResult('academic', this.userId, (data) => {
+      this.data = data;
+    });
+
+    return super.routerOnActivate();
+  }
+}
 
 @Component({
   templateUrl: 'view/conf/index.html',
@@ -29,9 +65,11 @@ class CIConfHome extends CICardView {
   confMembers: any;
   confRoles: any;
 
-  constructor(_card: CICardService, private _conf: CIConfService) {
+  userId: number;
+
+  constructor(_card: CICardService, private _conf: CIConfService, private _login: CILoginService) {
     super(_card);
-    console.log("construct");
+    this.userId = _login.getUser()._id;
   }
 
   routerOnActivate() {
@@ -52,6 +90,48 @@ class CIConfHome extends CICardView {
 }
 
 @Component({
+  templateUrl: 'view/conf/form.html',
+  directives: [CICard, MDL]
+})
+
+class CIConfForm extends CICardView {
+
+  formType: any;
+  data: any;
+  formName: any;
+
+  constructor(_card: CICardService, private _conf: CIConfService, params: RouteParams) {
+    super(_card);
+    this.formType = params.get('type');
+    this.data = [];
+
+    if(this.formType == 'academic') this.formName = "学术团队申请";
+    else if(this.formType == 'participant') this.formName = "代表报名";
+    else this.formName = this.formType;
+  }
+
+  routerOnActivate() {
+    this._conf.getForm(this.formType,(res) => {
+      this.data = res;
+    });
+
+    return super.routerOnActivate();
+  }
+
+  pushField() {
+    this.data.push({
+      type: "input"
+    });
+
+    console.log(this.data);
+  }
+
+  deleteField(i: number) {
+    this.data.splice(i,i+1);
+  }
+}
+
+@Component({
   template: '<router-outlet></router-outlet>',
   directives: [RouterOutlet],
 })
@@ -63,9 +143,17 @@ class CIConfHome extends CICardView {
     component: CIConfHome,
     useAsDefault: true
   }, {
-    path: '/academic',
+    path: '/academic/list',
+    name: 'AcademicList',
+    component: CIConfAcademicList
+  }, {
+    path: '/academic/:uid',
     name: 'Academic',
-    component: CIConfHome
+    component: CIConfAcademic
+  }, {
+    path: '/settings/form/:type',
+    name: 'Form',
+    component: CIConfForm
   }
 ])
 

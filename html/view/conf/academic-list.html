@@ -1,0 +1,29 @@
+<div class="ci-card-container" type="action">
+  <div class="ci-card-col wide">
+    <ci-card>
+      <ci-card-title>
+        提交状态
+      </ci-card-title>
+      <div class="mdl-card__supporting-text ci-annotation">
+        {{ results.length == 0 ? "目前无人提交申请" : "目前有 " + results.length + " 人提交申请" }}
+      </div>
+    </ci-card>
+    <ci-card *ngFor="#entry of results; #i = index">
+      <ci-card-title>
+        {{ index }} : {{ entry._id }}
+      </ci-card-title>
+    </ci-card>
+  </div>
+  <div class="ci-card-col narrow">
+    <ci-card>
+      <ci-card-title>
+        操作
+      </ci-card-title>
+      <div class="mdl-card__supporting-text">
+        <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" [routerLink] = "['Form', {type: 'academic'}]">
+          修改表单
+        </button>
+      </div>
+    </ci-card>
+  </div>
+</div>
