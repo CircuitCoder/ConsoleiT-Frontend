@@ -11,18 +11,40 @@ export class CIConfService extends CIHttp {
   }
 
   private static conf: any;
+  private static members: any;
+  private static group: any;
 
   private static STATUS_MAP: {[id: number]: string;} = {
     0: "进行准备",
     1: "招募学术团队",
   };
 
-  registerConf(conf: any) {
-    CIConfService.conf = conf;
+  registerConf(data: any) {
+    CIConfService.conf = data.conf;
+    CIConfService.members = data.members;
+    CIConfService.group = data.group;
   }
 
   getConf() {
     return CIConfService.conf;
+  }
+
+  getMemberMap() {
+    return CIConfService.members.reduce((prev: any, e: any) => {
+      prev[e._id] = e;
+      return prev;
+    }, {});
+  }
+
+  getRoleMap() {
+    return CIConfService.conf.roles.reduce((prev: any, e: any) => {
+      prev[e._id] = e;
+      return prev;
+    }, {});
+  }
+
+  getGroup() {
+    return CIConfService.group;
   }
 
   getStatus() {

@@ -15,7 +15,7 @@ import {CIProfile} from './views/profile'
 import {CIConf} from './views/conf'
 import {CIAbout} from './views/misc'
 
-declare var md5: any;
+import * as CIUtil from './util'
 
 @Component({
   selector: 'ci-frame',
@@ -101,7 +101,7 @@ export class CIFrame {
     _loginService.addListener({
       onLogin: (user: CIUser) => {
         outer.user = user;
-        outer.avatarUrl = "https://gravatar.lug.ustc.edu.cn/avatar/" + md5(user.email) + "?d=mm&r=g";
+        outer.avatarUrl = CIUtil.generateGravatar(user.email);
         outer._router.navigate(['Dashboard']);
         this.updateSidebar();
       },
@@ -121,7 +121,7 @@ export class CIFrame {
           }
         } else {
           outer.user = user
-          outer.avatarUrl = "https://gravatar.lug.ustc.edu.cn/avatar/" + md5(user.email) + "?d=mm&r=g";
+          outer.avatarUrl = CIUtil.generateGravatar(user.email);
           console.log(outer.avatarUrl);
           if(outer._router.isRouteActive(outer._router.generate(['Login'])) ||
              outer._router.isRouteActive(outer._router.generate(['Register']))) {

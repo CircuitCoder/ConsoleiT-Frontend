@@ -53,6 +53,15 @@ ci-card {
       }
     }
   }
+
+  strong {
+    color: rgba(0,0,0,.87);
+  }
+
+  .ci-annotation {
+    font-style: italic;
+    color: rgba(0,0,0,.3);
+  }
 }
 
 .ci-card-container {

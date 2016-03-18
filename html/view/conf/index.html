@@ -4,6 +4,9 @@
       <ci-card-title>
         {{ confData.title }}
       </ci-card-title>
+      <div class="mdl-card__supporting-text" [ngClass]="{'ci-annotation': !confData.desc || confData.desc == ''}">
+        {{ confData.desc && confData.desc != "" ? confData.desc : "组委并未为此会议添加简介" }}
+      </div>
     </ci-card>
   </div>
   <div class="ci-card-col narrow">
@@ -12,16 +15,28 @@
         会议信息
       </ci-card-title>
       <div class="mdl-card__supporting-text">
-        主办方: <strong><a (click)="gotoOwner()">{{ confOwner }}</a></strong>
+        主办方: <strong>{{ confGroup.title }}</strong>
       </div>
       <div class="mdl-card__supporting-text">
         目前会议正在 <strong>{{ confStatus }}</strong>
       </div>
-      <ci-card-actions [ngSwitch]="confData.status">
+      <ci-card-actions [ngSwitch]="confData.status" *ngIf = "confData.status != 0">
         <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" *ngSwitchWhen="1" [routerLink]="['Academic']">
           学术团队申请通道
         </button>
       </ci-card-actions>
+    </ci-card>
+    <ci-card>
+      <ci-card-title>
+        组委成员
+      </ci-card-title>
+      <div class="conf-member-list" *ngFor="#member of confData.members">
+        <img [src]="confMembers[member._id].gravatar" class="mdl-shadow--2dp">
+        <div class="conf-member-info">
+          <div class="conf-member-name">{{confMembers[member._id].realname}}</div>
+          <div class="conf-member-role">{{confRoles[member.role].title}}</div>
+        </div>
+      </div>
     </ci-card>
   </div>
   <div class="ci-card-col">
