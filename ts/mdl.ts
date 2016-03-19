@@ -1,8 +1,9 @@
 import {ElementRef, Directive} from 'angular2/core';
 
 export interface MDLHandler {
-  upgradeElement(el: any): void;
+  upgradeElements(el: any): void;
   upgradeDom(): void;
+  downgradeElements(el: any): void;
 }
 
 declare var componentHandler: MDLHandler;

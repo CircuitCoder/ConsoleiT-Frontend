@@ -3,7 +3,8 @@ import {CIFrame} from './frame'
 
 export interface CIFrameTabDefination {
   route: any[],
-  title: string
+  title: string,
+  router?: any
 }
 
 @Injectable()

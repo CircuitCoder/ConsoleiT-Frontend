@@ -1,5 +1,5 @@
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header" ci-mdl [ngClass]="{'ci-anonymous': user==null}" *ngIf="started">
-  <header class="mdl-layout__header" [ngClass]="{'ci-tabs': tab && tabs.length != 0, 'ci-tab-animating': tabAnimating, 'ci-title-animating': titleAnimating}">
+  <header class="mdl-layout__header" [ngClass]="{'ci-tabs': tabs.length != 0, 'ci-tab-animating': tabAnimating, 'ci-title-animating': titleAnimating}">
     <div class="mdl-layout__header-row">
       <span class="mdl-layout-title">{{ title }}</span>
       <div class="mdl-layout-spacer"></div>
@@ -11,8 +11,13 @@
       </div>
     </div>
 
-    <div class="mdl-layout__tab-bar mdl-js-ripple-effect" ci-mdl>
-      <a *ngFor="#tab of tabs" [routerLink]="tab.route">tab.title</a>
+    <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
+      <a *ngFor="#tab of tabs" class="mdl-layout__tab" [routerLink]="tab.route" [ngClass]="{'is-active': isRouteActive(tab.route, tab.router)}">
+        {{ tab.title }}
+        <span class="mdl-layout__tab-ripple-container mdl-js-ripple-effect">
+          <span class="mdl-ripple"></span>
+        </span>
+      </a>
     </div>
   </header>
 

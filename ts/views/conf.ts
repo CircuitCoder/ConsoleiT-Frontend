@@ -233,7 +233,7 @@ class CIConfForm extends CICardView {
 
 @RouteConfig([
   {
-    path: '/',
+    path: '/home',
     name: 'Home',
     component: CIConfHome,
     useAsDefault: true
@@ -255,12 +255,15 @@ class CIConfForm extends CICardView {
 export class CIConf {
 
   confId: number;
+  userId: number;
 
   constructor(routeParams: RouteParams,
     private _confService: CIConfService,
     private _router: Router,
+    private _login: CILoginService,
     private _frame: CIFrameService) {
       this.confId = +routeParams.get('id');
+      this.userId = _login.getUser()._id;
     }
 
   routerOnActivate() {
@@ -269,7 +272,17 @@ export class CIConf {
     return new Promise<void>((resolve, reject) => {
       outer._confService.getData(outer.confId, (data) => {
         outer._confService.registerConf(data);
-        this._frame.setState("会议 - " + data.conf.title, []);
+        this._frame.setState("会议 - " + data.conf.title, [
+          {
+            title: "主页",
+            route: ['/Conf', {id: this.confId}, 'Home'],
+            router: this._router
+          }, {
+            title: "学术团队报名",
+            route: ['/Conf', {id: this.confId}, 'Application', {type: 'academic', uid: this.userId}],
+            router: this._router
+          }
+        ]);
         resolve();
       });
     });

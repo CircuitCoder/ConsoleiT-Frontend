@@ -7,7 +7,7 @@ import {CIFrameService, CIFrameTabDefination} from './frame.service'
 import {CICardService} from './card'
 import {CINotifier} from './notifier'
 import {CIDataNotif} from './data'
-import {MDL} from './mdl'
+import {MDL, MDLHandler} from './mdl'
 import {CIUser, CILoginService} from './login'
 import {CIConfService} from './conf'
 
@@ -18,6 +18,8 @@ import {CIConf} from './views/conf'
 import {CIAbout} from './views/misc'
 
 import * as CIUtil from './util'
+
+declare var componentHandler: MDLHandler;
 
 @Component({
   selector: 'ci-frame',
@@ -103,6 +105,9 @@ export class CIFrame {
     this.avatarUrl = "";
     this.started = false;
     this.confs = [];
+
+    this.tabs = [];
+    this.title = ""
     this.titleAnimating = false;
     this.tabAnimating = false;
 
@@ -153,10 +158,9 @@ export class CIFrame {
   }
 
   setState(title: string, tabs: CIFrameTabDefination[]) {
-    console.log(title);
+    console.log(tabs);
     if(title) {
       this.titleAnimating = true;
-      console.log("TITLE");
       setTimeout(() => {
         this.title = title;
         this.titleAnimating = false;
@@ -166,10 +170,19 @@ export class CIFrame {
     if(tabs) {
       this.tabAnimating = true;
       setTimeout(() => {
-        this.title = title;
+        this.tabs = tabs;
         this.tabAnimating = false;
+        componentHandler.downgradeElements(this._el.nativeElement.getElementsByClassName("mdl-layout__tab-bar")[0]);
+        setTimeout(() => {
+          componentHandler.upgradeElements(this._el.nativeElement.getElementsByClassName("mdl-layout__tab-bar")[0]);
+        }, 0);
       }, 200)
     }
+  }
+
+  isRouteActive(route: any, router?: any) {
+    if(router) return router.isRouteActive(router.generate(route));
+    else return this._router.isRouteActive(this._router.generate(route));
   }
 
   logout() {
