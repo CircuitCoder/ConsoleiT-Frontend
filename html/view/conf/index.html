@@ -22,7 +22,7 @@
       </div>
       <ci-card-actions [ngSwitch]="confData.status">
         <div *ngSwitchWhen="1">
-          <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" [routerLink]="['Academic', {uid: userId}]">
+          <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" [routerLink]="['Application', {uid: userId, type: 'academic'}]">
             学术团队申请通道
           </button>
         </div>

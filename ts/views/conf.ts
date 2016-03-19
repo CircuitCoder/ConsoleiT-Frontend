@@ -10,11 +10,11 @@ import {MDL} from '../mdl'
 import * as CIUtil from '../util'
 
 @Component({
-  templateUrl: 'view/conf/academic-list.html',
+  templateUrl: 'view/conf/application-list.html',
   directives: [CICard, ROUTER_DIRECTIVES]
 })
 
-class CIConfAcademicList extends CICardView {
+class CIConfApplicationList extends CICardView {
   results: any[];
 
   constructor(_card: CICardService, private _conf: CIConfService) {
@@ -24,15 +24,18 @@ class CIConfAcademicList extends CICardView {
 }
 
 @Component({
-  templateUrl: 'view/conf/academic.html',
+  templateUrl: 'view/conf/application.html',
   directives: [CICard, MDL, ROUTER_DIRECTIVES]
 })
 
-class CIConfAcademic extends CICardView {
+class CIConfApplication extends CICardView {
+
+  formType: any;
+  formName: string;
+  userId: number;
 
   form: any;
   data: any;
-  userId: number;
 
   constructor(_card: CICardService,
     params: RouteParams,
@@ -41,16 +44,25 @@ class CIConfAcademic extends CICardView {
     private _notifier: CINotifier) {
       super(_card);
       this.form = [];
+      this.data = {};
       this.userId = +params.get('uid');
+      this.formType = params.get('type');
+
+      if(this.formType == 'academic') this.formName = "学术团队申请";
+      else if(this.formType == 'participant') this.formName = "代表报名";
+      else this.formName = this.formType;
+      setInterval(() => console.log(this.data), 1000);
     }
 
   routerOnActivate() {
-    this._conf.getForm('academic', (form) => {
+    this._conf.getForm(this.formType, (form) => {
       this.form = form;
-    });
-
-    this._conf.getFormResult('academic', this.userId, (data) => {
-      this.data = data;
+      this._conf.getFormResult(this.formType, this.userId, (data) => {
+        this.form.forEach((e: any,i: number) => {
+          if(e.type == "checkbox" && !data[i]) data[i] = {};
+        });
+        this.data = data;
+      });
     });
 
     return super.routerOnActivate();
@@ -121,7 +133,16 @@ class CIConfForm extends CICardView {
 
   routerOnActivate() {
     this._conf.getForm(this.formType,(res) => {
-      this.data = res;
+      this.data = res.map((e: any) => {
+        return {
+          title: e.title,
+          desc: e.desc,
+          type: e.type,
+          choices: e.choices ? e.choices.join("\n") : ""
+        }
+      });
+
+      console.log(this.data);
     });
 
     return super.routerOnActivate();
@@ -194,13 +215,13 @@ class CIConfForm extends CICardView {
     component: CIConfHome,
     useAsDefault: true
   }, {
-    path: '/academic/list',
-    name: 'AcademicList',
-    component: CIConfAcademicList
+    path: '/:type/list',
+    name: 'ApplicationList',
+    component: CIConfApplicationList
   }, {
-    path: '/academic/:uid',
-    name: 'Academic',
-    component: CIConfAcademic
+    path: '/:type/:uid',
+    name: 'Application',
+    component: CIConfApplication
   }, {
     path: '/settings/form/:type',
     name: 'Form',

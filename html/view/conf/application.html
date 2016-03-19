@@ -1,0 +1,67 @@
+<div class="ci-card-container" type="action">
+  <div class="ci-card-col wide">
+    <ci-card *ngFor="#entry of form, #i = index">
+      <ci-card-title>
+        <span class="ci-annotation">{{ i+1 }}</span> {{ entry.title }}
+      </ci-card-title>
+
+      <div class="mdl-card__supporting-text">
+        {{ entry.desc }}
+      </div>
+
+      <!-- radios -->
+      <div class="ci-radios" *ngIf = "entry.type == 'radio'">
+        <template ngFor #choice [ngForOf]="entry.choices" #j = "index">
+          <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" [attr.for]="'conf-form-' + i + '-' + j">
+            <input type="radio"
+              [id]="'conf-form-' + i + '-' + j"
+              class="mdl-radio__button"
+              (click)="data[i] = choice"
+              [checked]="data[i] == choice">
+            <span class="mdl-radio__label">{{choice}}</span>
+          </label>
+          <br>
+        </template>
+      </div>
+
+      <!-- checkbox -->
+      <div class="ci-radios" *ngIf = "entry.type == 'checkbox' && data[i]">
+        <template ngFor #choice [ngForOf]="entry.choices" #j = "index">
+          <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" [attr.for]="'conf-form-' + i + '-' + j" ci-mdl>
+            <input type="checkbox"
+              [id]="'conf-form-' + i + '-' + j"
+              class="mdl-checkbox__input"
+              [(ngModel)]="data[i][choice]">
+            <span class="mdl-radio__label">{{choice}}</span>
+          </label>
+          <br>
+        </template>
+      </div>
+
+      <!-- input -->
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" ci-mdl *ngIf = "entry.type == 'input'">
+        <input class="mdl-textfield__input" type="text" [id]="'conf-form-'+i" [(ngModel)]="data[i]">
+        <label class="mdl-textfield__label" [attr.for]="'conf-form-'+i">回答</label>
+      </div>
+
+      <!-- textarea -->
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" ci-mdl *ngIf = "entry.type == 'area'">
+        <textarea class="mdl-textfield__input" type="text" [id]="'conf-form-'+i" rows="4" [(ngModel)]="data[i]"></textarea>
+        <label class="mdl-textfield__label" [attr.for]="'conf-form-'+i">回答</label>
+      </div>
+
+    </ci-card>
+  </div>
+  <div class="ci-card-col narrow">
+    <ci-card>
+      <ci-card-title>
+        {{ formName }}
+      </ci-card-title>
+      <div class="mdl-card__supporting-text">
+        <button class="mdl-button--raised mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+          提交
+        </button>
+      </div>
+    </ci-card>
+  </div>
+</div>
