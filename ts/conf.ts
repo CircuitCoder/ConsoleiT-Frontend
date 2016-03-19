@@ -58,7 +58,7 @@ export class CIConfService extends CIHttp {
     CIConfService.conf.members.forEach((e: any) => {
       if(e._id == uid) roleId = e.role;
     });
-    console.log(roleId);
+    if(roleId == -1) return false;
     let permObj = roleMap[roleId].perm;
 
     let seg = perm.split('.');

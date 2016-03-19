@@ -3,7 +3,9 @@
     <ci-card ci-mdl>
       <ci-card-title>欢迎, {{ user.realname }}</ci-card-title>
       <div class="mdl-card__supporting-text">
-        通知系统目前尚在编写当中
+        <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" [routerLink]="['/ConfList']">
+          查看正在报名中的会议
+        </button>
       </div>
     </ci-card>
   </div>

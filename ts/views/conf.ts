@@ -266,6 +266,24 @@ class CIConfForm extends CICardView {
 }
 
 @Component({
+  templateUrl: 'view/conf/settings.html'
+})
+
+export class CIConfSettings extends CICardView {
+
+  conf: any;
+  memberMap: any;
+
+  constructor(
+    _card: CICardService,
+    _conf: CIConfService) {
+      super(_card);
+      this.conf = _conf.getConf();
+      this.memberMap = _conf.getMemberMap();
+    }
+}
+
+@Component({
   template: '<router-outlet></router-outlet>',
   directives: [RouterOutlet],
 })
