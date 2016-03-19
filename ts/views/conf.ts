@@ -36,6 +36,8 @@ class CIConfApplication extends CICardView {
 
   form: any;
   data: any;
+  status: number;
+  statusText: string;
 
   constructor(_card: CICardService,
     params: RouteParams,
@@ -59,13 +61,30 @@ class CIConfApplication extends CICardView {
       this.form = form;
       this._conf.getFormResult(this.formType, this.userId, (data) => {
         this.form.forEach((e: any,i: number) => {
-          if(e.type == "checkbox" && !data[i]) data[i] = {};
+          if(e.type == "checkbox" && !data.submission[i]) data.submission[i] = {};
         });
-        this.data = data;
+        this.data = data.submission;
+
+        this.status = data.status;
+        if(this.status == 0)
+          this.statusText = "未提交";
+        else if(this.status == 1)
+          this.statusText = "等待审核";
+        else if(this.status == 2)
+          this.statusText = "通过";
+        else if(this.status == 3)
+          this.statusText = "拒绝";
+        else this.statusText = this.status.toString();
       });
     });
 
     return super.routerOnActivate();
+  }
+
+  submit() {
+    this._conf.postApplication(this.formType, this.userId, this.data, (res) => {
+      this._notifier.show(res.msg);
+    });
   }
 }
 

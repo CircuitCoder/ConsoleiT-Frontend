@@ -125,6 +125,20 @@ export class CIConfService extends CIHttp {
         console.log(err);
         this._notifier.show("$Unknown");
       } else {
+        cb({
+          status: res.status?res.status:0,
+          submission: res.submission?JSON.parse(res.submission):{}
+        });
+      }
+    });
+  }
+
+  postApplication(formType: string, uid: number, data: any, cb: (result: any) => void) {
+    this.post('/' + CIConfService.conf._id + '/' + formType + '/' + uid, {content: data}, (err, res) => {
+      if(err) {
+        console.log(err);
+        this._notifier.show("$Unknown");
+      } else {
         cb(res);
       }
     });

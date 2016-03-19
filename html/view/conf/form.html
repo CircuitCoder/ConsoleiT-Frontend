@@ -16,7 +16,7 @@
       </ci-card-title>
 
       <div class="ci-radios">
-        <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" [attr.for]="'conf-form-type-input-'+i">
+        <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" [attr.for]="'conf-form-type-input-'+i" [ngClass]="{'is-checked': entry.type=='input'}">
           <input type="radio"
             [id]="'conf-form-type-input-' + i"
             class="mdl-radio__button"
@@ -24,7 +24,7 @@
             [checked]="entry.type == 'input'">
           <span class="mdl-radio__label">文本</span>
         </label>
-        <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" [attr.for]="'conf-form-type-area-'+i">
+        <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" [attr.for]="'conf-form-type-area-'+i" [ngClass]="{'is-checked': entry.type=='area'}">
           <input type="radio"
             [id]="'conf-form-type-area-' + i"
             class="mdl-radio__button"
@@ -32,7 +32,7 @@
             [checked]="entry.type == 'area'">
           <span class="mdl-radio__label">文本区</span>
         </label>
-        <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" [attr.for]="'conf-form-type-radio-'+i">
+        <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" [attr.for]="'conf-form-type-radio-'+i" [ngClass]="{'is-checked': entry.type=='radio'}">
           <input type="radio"
             [id]="'conf-form-type-radio-' + i"
             class="mdl-radio__button"
@@ -40,7 +40,7 @@
             [checked]="entry.type == 'radio'">
           <span class="mdl-radio__label">单选</span>
         </label>
-        <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" [attr.for]="'conf-form-type-checkbox-'+i">
+        <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" [attr.for]="'conf-form-type-checkbox-'+i" [ngClass]="{'is-checked': entry.type=='checkbox'}">
           <input type="radio"
             [id]="'conf-form-type-checkbox-' + i"
             class="mdl-radio__button"
@@ -50,17 +50,17 @@
         </label>
       </div>
 
-      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" ci-mdl>
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" ci-mdl [ngClass]="{'is-dirty': entry.title && entry.title!=''}">
         <input class="mdl-textfield__input" type="text" [id]="'conf-form-title-' + i" [(ngModel)]="entry.title">
         <label class="mdl-textfield__label" [attr.for]="'conf-form-title-' + i">名称</label>
       </div>
 
-      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" ci-mdl>
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" ci-mdl [ngClass]="{'is-dirty': entry.desc && entry.desc!=''}">
         <textarea class="mdl-textfield__input" type="text" [id]="'conf-form-desc-' + i" rows="4" [(ngModel)]="entry.desc"></textarea>
         <label class="mdl-textfield__label" [attr.for]="'conf-form-desc-' + i">说明</label>
       </div>
 
-      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" ci-mdl>
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" ci-mdl [ngClass]="{'is-dirty': entry.choices && entry.choices!=''}">
         <textarea class="mdl-textfield__input" type="text" [id]="'conf-form-choices-' + i" rows="4" [(ngModel)]="entry.choices" [disabled]="entry.type == 'input' || entry.type == 'area'"></textarea>
         <label class="mdl-textfield__label" [attr.for]="'conf-form-choices-' + i">可用选项 (每行一个)</label>
       </div>

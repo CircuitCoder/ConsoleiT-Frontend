@@ -5,14 +5,14 @@
         <span class="ci-annotation">{{ i+1 }}</span> {{ entry.title }}
       </ci-card-title>
 
-      <div class="mdl-card__supporting-text">
+      <div class="mdl-card__supporting-text" *ngIf="entry.desc">
         {{ entry.desc }}
       </div>
 
       <!-- radios -->
       <div class="ci-radios" *ngIf = "entry.type == 'radio'">
         <template ngFor #choice [ngForOf]="entry.choices" #j = "index">
-          <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" [attr.for]="'conf-form-' + i + '-' + j">
+        <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" [attr.for]="'conf-form-' + i + '-' + j" ci-mdl [ngClass]="{'is-checked': data[i] == choice}">
             <input type="radio"
               [id]="'conf-form-' + i + '-' + j"
               class="mdl-radio__button"
@@ -27,7 +27,7 @@
       <!-- checkbox -->
       <div class="ci-radios" *ngIf = "entry.type == 'checkbox' && data[i]">
         <template ngFor #choice [ngForOf]="entry.choices" #j = "index">
-          <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" [attr.for]="'conf-form-' + i + '-' + j" ci-mdl>
+          <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" [attr.for]="'conf-form-' + i + '-' + j" ci-mdl [ngClass]="{'is-checked': data[i][choice]}">
             <input type="checkbox"
               [id]="'conf-form-' + i + '-' + j"
               class="mdl-checkbox__input"
@@ -39,14 +39,14 @@
       </div>
 
       <!-- input -->
-      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" ci-mdl *ngIf = "entry.type == 'input'">
-        <input class="mdl-textfield__input" type="text" [id]="'conf-form-'+i" [(ngModel)]="data[i]">
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" ci-mdl *ngIf = "entry.type == 'input'" [ngClass]="{'is-dirty': data[i] && data[i]!=''}">
+        <input class="mdl-textfield__input" type="text" [id]="'conf-form-'+i" [(ngModel)]="data[i]" ci-mdl-input>
         <label class="mdl-textfield__label" [attr.for]="'conf-form-'+i">回答</label>
       </div>
 
       <!-- textarea -->
-      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" ci-mdl *ngIf = "entry.type == 'area'">
-        <textarea class="mdl-textfield__input" type="text" [id]="'conf-form-'+i" rows="4" [(ngModel)]="data[i]"></textarea>
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" ci-mdl *ngIf = "entry.type == 'area'" [ngClass]="{'is-dirty': data[i] && data[i]!=''}">
+        <textarea class="mdl-textfield__input" type="text" [id]="'conf-form-'+i" rows="4" [(ngModel)]="data[i]" ></textarea>
         <label class="mdl-textfield__label" [attr.for]="'conf-form-'+i">回答</label>
       </div>
 
@@ -57,11 +57,16 @@
       <ci-card-title>
         {{ formName }}
       </ci-card-title>
+
       <div class="mdl-card__supporting-text">
-        <button class="mdl-button--raised mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+        状态: <strong>{{ statusText }}</strong>
+      </div>
+
+      <ci-card-actions>
+        <button class="mdl-button--raised mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" (click)="submit()">
           提交
         </button>
-      </div>
+      </ci-card-actions>
     </ci-card>
   </div>
 </div>
