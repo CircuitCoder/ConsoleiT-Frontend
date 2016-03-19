@@ -53,7 +53,6 @@ class CIConfApplication extends CICardView {
       if(this.formType == 'academic') this.formName = "学术团队申请";
       else if(this.formType == 'participant') this.formName = "代表报名";
       else this.formName = this.formType;
-      setInterval(() => console.log(this.data), 1000);
     }
 
   routerOnActivate() {
@@ -84,6 +83,10 @@ class CIConfApplication extends CICardView {
   submit() {
     this._conf.postApplication(this.formType, this.userId, this.data, (res) => {
       this._notifier.show(res.msg);
+      if(res.msg == "OperationSuccessful") {
+        this.statusText = "等待审核";
+        this.status = 1;
+      }
     });
   }
 }
