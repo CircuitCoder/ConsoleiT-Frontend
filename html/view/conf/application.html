@@ -64,7 +64,7 @@
 
       <ci-card-actions>
         <button class="mdl-button--raised mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" (click)="submit()">
-          提交
+          {{ status == 0? "提交" : "更新" }}
         </button>
       </ci-card-actions>
     </ci-card>
