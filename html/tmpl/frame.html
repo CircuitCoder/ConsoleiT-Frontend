@@ -22,7 +22,9 @@
   </header>
 
   <div class="mdl-layout__drawer ci-drawer" (click)="closeDrawer($event)">
-    <span class="mdl-layout-title">Console iT</span>
+    <span class="mdl-layout-title">
+      <img src="/assets/imgs/console.svg" class="ci-brand">
+    </span>
     <nav class="mdl-navigation">
       <a [routerLink]="['Dashboard']" class="mdl-navigation__link">主页</a>
 

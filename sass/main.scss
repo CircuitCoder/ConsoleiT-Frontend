@@ -72,6 +72,10 @@ ci-frame {
 
     padding-bottom: $profile-height + 1px; // For the border
 
+    .ci-brand {
+      height: 20px;
+    }
+
     .mdl-navigation__link {
       color: rgba(0,0,0,.87);
       transition: background 0.2s ease;
