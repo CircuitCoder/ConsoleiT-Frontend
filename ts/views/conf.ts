@@ -13,7 +13,7 @@ import * as CIUtil from '../util'
 
 @Component({
   templateUrl: 'view/conf/application-list.html',
-  directives: [CICard, ROUTER_DIRECTIVES],
+  directives: [CICard, ROUTER_DIRECTIVES, MDL],
   pipes: [CIFuncFilter]
 })
 
@@ -351,3 +351,28 @@ export class CIConf {
   }
 }
 
+@Component({
+  templateUrl: 'view/conf-list.html',
+  directives: [MDL, ROUTER_DIRECTIVES, CICard],
+  pipes: [CIFuncFilter]
+})
+
+export class CIConfList extends CICardView {
+  confs: any;
+
+  constructor(
+    _card: CICardService,
+    _frame: CIFrameService,
+    private _conf: CIConfService) {
+      super(_card);
+      _frame.setState("会议列表", []);
+    }
+
+  routerOnActivate() {
+    this._conf.getAvailList( res => {
+      this.confs = res;
+    });
+
+    return super.routerOnActivate();
+  }
+}

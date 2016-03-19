@@ -14,7 +14,7 @@ import {CIConfService} from './conf'
 import {CIDashboard} from './views/dashboard'
 import {CILogin} from './views/login'
 import {CIProfile} from './views/profile'
-import {CIConf} from './views/conf'
+import {CIConf, CIConfList} from './views/conf'
 import {CIAbout} from './views/misc'
 
 import * as CIUtil from './util'
@@ -57,6 +57,10 @@ declare var componentHandler: MDLHandler;
 
   /* Conf */
   {
+    path: "/conf/list",
+    name: 'ConfList',
+    component: CIConfList
+  }, {
     path: "/conf/:id/...",
     name: 'Conf',
     component: CIConf

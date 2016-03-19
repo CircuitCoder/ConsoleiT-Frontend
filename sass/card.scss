@@ -42,8 +42,15 @@ ci-card {
       .mdl-card--border:empty {
         display: none;
       }
-    }
 
+      ci-card-table {
+        > table {
+          width: 100%;
+          padding: 10px 0;
+          border: none;
+        }
+      }
+    }
 
     &.visible {
       .ci-card-content {

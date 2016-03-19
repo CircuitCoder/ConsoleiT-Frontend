@@ -28,6 +28,7 @@
 
       <a *ngFor="#conf of confs" class="mdl-navigation__link" [routerLink]="['Conf', {id: conf._id}]">{{ conf.title }}</a>
 
+      <a [routerLink]="['ConfList']" class="mdl-navigation__link">全部会议</a>
       <a [routerLink]="['About']" class="mdl-navigation__link">关于</a>
     </nav>
 

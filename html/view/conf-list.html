@@ -1,0 +1,23 @@
+<div class="ci-card-container" type="1-col">
+  <ci-card>
+    <ci-card-title>
+      正在进行中的会议
+    </ci-card-title>
+    <ci-card-table>
+      <table class="mdl-data-table mdl-js-data-table mdl-data-table">
+        <thead>
+          <tr>
+            <th class="mdl-data-table__cell--non-numeric">会议名称</th>
+            <th class="mdl-data-table__cell--non-numeric">状态</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="#conf of confs" [routerLink]="['Conf', {id: conf._id}]">
+            <td class="mdl-data-table__cell--non-numeric">{{ conf.title }}</td>
+            <td class="mdl-data-table__cell--non-numeric">哈哈</td>
+          </tr>
+        </tbody>
+      </table>
+    </ci-card-table>
+  </ci-card>
+</div>
