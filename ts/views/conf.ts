@@ -2,6 +2,7 @@ import {Inject, Component, OnInit} from 'angular2/core'
 import {Router, RouteConfig, RouteParams, ROUTER_DIRECTIVES, OnActivate, RouterOutlet} from 'angular2/router'
 
 import {CICardView, CICard, CICardService} from '../card'
+import {CIFrameService} from '../frame.service'
 import {CIConfService} from '../conf'
 import {CILoginService} from '../login'
 import {CINotifier} from '../notifier'
@@ -255,17 +256,20 @@ export class CIConf {
 
   confId: number;
 
-  constructor(routeParams: RouteParams, private _confService: CIConfService, @Inject(Router) private _router: Router) {
-    this.confId = +routeParams.get('id');
-  }
+  constructor(routeParams: RouteParams,
+    private _confService: CIConfService,
+    private _router: Router,
+    private _frame: CIFrameService) {
+      this.confId = +routeParams.get('id');
+    }
 
   routerOnActivate() {
     var outer = this;
 
     return new Promise<void>((resolve, reject) => {
       outer._confService.getData(outer.confId, (data) => {
-        console.log(data);
         outer._confService.registerConf(data);
+        this._frame.setState("会议 - " + data.conf.title, []);
         resolve();
       });
     });

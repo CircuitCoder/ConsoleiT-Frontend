@@ -1,7 +1,7 @@
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header" ci-mdl [ngClass]="{'ci-anonymous': user==null}" *ngIf="started">
-  <header class="mdl-layout__header">
+  <header class="mdl-layout__header" [ngClass]="{'ci-tabs': tab && tabs.length != 0, 'ci-tab-animating': tabAnimating, 'ci-title-animating': titleAnimating}">
     <div class="mdl-layout__header-row">
-      <span class="mdl-layout-title">主页</span>
+      <span class="mdl-layout-title">{{ title }}</span>
       <div class="mdl-layout-spacer"></div>
       <div class="mdl-naivgation">
         <button class="mdl-button mdl-js-button mdl-button--icon">
@@ -9,6 +9,10 @@
           <i class="material-icons" *ngIf="notif.length > 0">notifications_active</i>
         </button>
       </div>
+    </div>
+
+    <div class="mdl-layout__tab-bar mdl-js-ripple-effect" ci-mdl>
+      <a *ngFor="#tab of tabs" [routerLink]="tab.route">tab.title</a>
     </div>
   </header>
 

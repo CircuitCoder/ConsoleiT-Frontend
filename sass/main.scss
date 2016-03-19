@@ -22,6 +22,41 @@ ci-frame {
     transition-duration: 0.2s;
     transition-timing-function: ease-out;
     transform: translateY(0);
+
+    .mdl-layout__tab-bar-container {
+      transition-property: height, opacity;
+      transition-duration: 0.2s, 0.2s;
+      transition-timing-function: ease-out, ease-out;
+      opacity: 1;
+    }
+
+    .mdl-layout-title {
+      transition-property: opacity;
+      transition-duration: 0.2s;
+      transition-timing-function: ease-out;
+      opacity: 1;
+    }
+
+    &:not(.ci-tabs) {
+      .mdl-layout__tab-bar-container {
+        transition-timing-function: ease-in;
+        height: 0;
+      }
+    }
+
+    &.ci-tab-animating {
+      .mdl-layout__tab-bar-container {
+        transition-timing-function: ease-in;
+        opacity: 0;
+      }
+    }
+
+    &.ci-title-animating {
+      .mdl-layout-title {
+        transition-timing-function: ease-in;
+        opacity: 0;
+      }
+    }
   }
 
   .ci-anonymous {

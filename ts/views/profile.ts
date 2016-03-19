@@ -2,6 +2,7 @@ import {Injectable, Component} from 'angular2/core'
 
 import {CICard, CICardView, CICardService} from '../card'
 import {CILoginService, CIUser} from '../login'
+import {CIFrameService} from '../frame.service'
 import {CINotifier} from '../notifier'
 import {MDL} from '../mdl'
 
@@ -16,10 +17,14 @@ export class CIProfile extends CICardView {
 
   user: CIUser;
 
-  constructor(_cardService: CICardService, private _loginService: CILoginService, private _notifier: CINotifier) {
-    super(_cardService);
-    this.user = _loginService.getUser();
-  }
+  constructor(_cardService: CICardService,
+    private _loginService: CILoginService,
+    private _notifier: CINotifier
+    _frame: CIFrameService) {
+      super(_cardService);
+      this.user = _loginService.getUser();
+      _frame.setState("个人资料", []);
+    }
 
   updatePasswd() {
     if(!this.passwd || this.passwd == "") return this._notifier.show("InvalidInput");

@@ -2,6 +2,8 @@ import {Injectable, Component, ElementRef} from 'angular2/core'
 import {ROUTER_DIRECTIVES, RouteConfig, Router} from 'angular2/router'
 import {Http, Response, Headers, RequestOptions} from 'angular2/http'
 
+import {CIFrameService, CIFrameTabDefination} from './frame.service'
+
 import {CICardService} from './card'
 import {CINotifier} from './notifier'
 import {CIDataNotif} from './data'
@@ -21,7 +23,7 @@ import * as CIUtil from './util'
   selector: 'ci-frame',
   templateUrl: 'tmpl/frame.html',
   directives: [ROUTER_DIRECTIVES],
-  providers: [CILoginService, CINotifier, CIConfService, CICardService]
+  providers: [CILoginService, CINotifier, CIConfService, CICardService, CIFrameService]
 })
 
 @RouteConfig([
@@ -82,11 +84,17 @@ export class CIFrame {
   avatarUrl: string;
   started: boolean;
   confs: any[];
+  tabs: CIFrameTabDefination[];
+  title: string;
+
+  titleAnimating: boolean;
+  tabAnimating: boolean;
 
   constructor(private _loginService: CILoginService,
               private _router: Router,
               private _notifier: CINotifier,
               private _confService: CIConfService,
+              private _frameService: CIFrameService,
               private _http: Http,
               private _el: ElementRef) {
 
@@ -95,8 +103,12 @@ export class CIFrame {
     this.avatarUrl = "";
     this.started = false;
     this.confs = [];
+    this.titleAnimating = false;
+    this.tabAnimating = false;
 
     var outer = this;
+
+    _frameService.setFrame(this);
 
     _loginService.addListener({
       onLogin: (user: CIUser) => {
@@ -138,6 +150,26 @@ export class CIFrame {
 
   ngAfterViewInit() {
     this._loginService.doRestore();
+  }
+
+  setState(title: string, tabs: CIFrameTabDefination[]) {
+    console.log(title);
+    if(title) {
+      this.titleAnimating = true;
+      console.log("TITLE");
+      setTimeout(() => {
+        this.title = title;
+        this.titleAnimating = false;
+      }, 200)
+    }
+
+    if(tabs) {
+      this.tabAnimating = true;
+      setTimeout(() => {
+        this.title = title;
+        this.tabAnimating = false;
+      }, 200)
+    }
   }
 
   logout() {

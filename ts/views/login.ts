@@ -3,6 +3,7 @@ import {ROUTER_DIRECTIVES, RouteParams, RouteData, Router} from 'angular2/router
 import {Http, Response, Headers, RequestOptions} from 'angular2/http'
 
 import {CIUser, CILoginService} from '../login'
+import {CIFrameService} from '../frame.service'
 import {CICard, CICardView, CICardService} from '../card'
 import {MDL} from '../mdl'
 import {CILoginData} from '../data'
@@ -18,19 +19,22 @@ export class CILogin extends CICardView {
   @ViewChild(CICard) private loginCard:CICard;
 
   constructor(private _loginService: CILoginService,
-              _cardService: CICardService,
-              private _router: Router,
-              private _routeData: RouteData,
-              private _routeParams: RouteParams) {
-    super(_cardService);
+    _cardService: CICardService,
+    _frame: CIFrameService
+    private _router: Router,
+    private _routeData: RouteData,
+    private _routeParams: RouteParams) {
+      super(_cardService);
 
-    this.data = {
-      realname: "",
-      email: "",
-      passwd: ""
-    };
-    this.isRegister = this._routeData.get('action') == 'register';
-  }
+      _frame.setState("", []);
+
+      this.data = {
+        realname: "",
+        email: "",
+        passwd: ""
+      };
+      this.isRegister = this._routeData.get('action') == 'register';
+    }
 
   commit() {
     if(this.isRegister)
