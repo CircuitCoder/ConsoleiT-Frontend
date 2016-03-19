@@ -21,10 +21,6 @@ export class CIDashboard extends CICardView{
     _frame.setState("主页", []);
   }
 
-  gotoGithub() {
-    window.location.href="https://github.com/CircuitCoder/ConsoleiT-Frontend";
-  }
-
   gotoConsoleiT() {
     window.location.href="https://bjmun.org/console-it/client/"
   }
