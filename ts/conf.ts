@@ -51,6 +51,26 @@ export class CIConfService extends CIHttp {
     return CIConfService.STATUS_MAP[CIConfService.conf.status];
   }
 
+  hasPerm(uid: number, perm: string) {
+    let roleMap = this.getRoleMap();
+    let roleId = -1;
+    CIConfService.conf.members.forEach((e: any) => {
+      if(e._id == uid) roleId = e.role;
+    });
+    console.log(roleId);
+    let permObj = roleMap[roleId].perm;
+
+    let seg = perm.split('.');
+    for(let i = 0; i< seg.length; ++i) {
+      if(permObj.all) return true;
+      else if(!(seg[i] in permObj)) return false;
+      else {
+        permObj = permObj[seg[i]];
+        if(permObj instanceof Boolean) return true;
+      }
+    }
+  }
+
   getList(cb: (res: any) => void) {
     this.get('/', (err, res) => {
       if(err) {

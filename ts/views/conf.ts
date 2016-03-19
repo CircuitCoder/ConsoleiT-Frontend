@@ -249,6 +249,10 @@ class CIConfForm extends CICardView {
     path: '/settings/form/:type',
     name: 'Form',
     component: CIConfForm
+  }, {
+    path: '/settings',
+    name: 'Settings',
+    component: CIConfHome
   }
 ])
 
@@ -272,17 +276,36 @@ export class CIConf {
     return new Promise<void>((resolve, reject) => {
       outer._confService.getData(outer.confId, (data) => {
         outer._confService.registerConf(data);
-        this._frame.setState("会议 - " + data.conf.title, [
+        let tabs: any = [
           {
             title: "主页",
             route: ['/Conf', {id: this.confId}, 'Home'],
             router: this._router
-          }, {
+          }
+        ];
+
+        if(outer._confService.hasPerm(this.userId, 'form.academic.view')) {
+          tabs.push({
+            title: "学术团队报名结果",
+            route: ['/Conf', {id: this.confId}, 'ApplicationList', {type: 'academic'}],
+            router: this._router
+          });
+        } else {
+          tabs.push({
             title: "学术团队报名",
             route: ['/Conf', {id: this.confId}, 'Application', {type: 'academic', uid: this.userId}],
             router: this._router
-          }
-        ]);
+          });
+        }
+
+        if(outer._confService.hasPerm(this.userId, 'settings')) {
+          tabs.push({
+            title: "设置",
+            route: ['/Conf', {id: this.confId}, 'Settings'],
+            router: this._router
+          });
+        }
+        this._frame.setState("会议 - " + data.conf.title, tabs);
         resolve();
       });
     });
