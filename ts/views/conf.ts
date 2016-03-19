@@ -6,13 +6,15 @@ import {CIFrameService} from '../frame.service'
 import {CIConfService} from '../conf'
 import {CILoginService} from '../login'
 import {CINotifier} from '../notifier'
+import {CIFuncFilter} from '../pipes'
 import {MDL} from '../mdl'
 
 import * as CIUtil from '../util'
 
 @Component({
   templateUrl: 'view/conf/application-list.html',
-  directives: [CICard, ROUTER_DIRECTIVES]
+  directives: [CICard, ROUTER_DIRECTIVES],
+  pipes: [CIFuncFilter]
 })
 
 class CIConfApplicationList extends CICardView {
@@ -22,9 +24,12 @@ class CIConfApplicationList extends CICardView {
   membersMap: any;
   submissions: any[];
 
+  searchStr: string;
+
   constructor(_card: CICardService, private _conf: CIConfService, params: RouteParams) {
     super(_card);
     this.submissions = [];
+    this.searchStr = "";
     this.formType = params.get('type');
   }
 
@@ -40,6 +45,11 @@ class CIConfApplicationList extends CICardView {
     });
 
     return super.routerOnActivate();
+  }
+
+  flt(value: any, str: string, membersMap: any, getStatusText: any) {
+    if(str == "") return true;
+    else return getStatusText(value.status) == str || membersMap[value._id].realname.indexOf(str) != -1;
   }
 
   getStatusText(id: number) {
