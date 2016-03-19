@@ -371,6 +371,9 @@ export class CIConfList extends CICardView {
   routerOnActivate() {
     this._conf.getAvailList( res => {
       this.confs = res;
+      this.confs.forEach((e: any) => {
+        e.statusText = this._conf.getStatus(e);
+      });
     });
 
     return super.routerOnActivate();

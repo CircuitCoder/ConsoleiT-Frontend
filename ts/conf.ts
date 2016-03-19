@@ -47,8 +47,9 @@ export class CIConfService extends CIHttp {
     return CIConfService.group;
   }
 
-  getStatus() {
-    return CIConfService.STATUS_MAP[CIConfService.conf.status];
+  getStatus(conf?: any) {
+    if(conf) return CIConfService.STATUS_MAP[conf.status];
+    else return CIConfService.STATUS_MAP[CIConfService.conf.status];
   }
 
   hasPerm(uid: number, perm: string) {
