@@ -19,7 +19,7 @@ export class CIProfile extends CICardView {
 
   constructor(_cardService: CICardService,
     private _loginService: CILoginService,
-    private _notifier: CINotifier
+    private _notifier: CINotifier,
     _frame: CIFrameService) {
       super(_cardService);
       this.user = _loginService.getUser();

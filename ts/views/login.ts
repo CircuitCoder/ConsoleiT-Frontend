@@ -20,7 +20,7 @@ export class CILogin extends CICardView {
 
   constructor(private _loginService: CILoginService,
     _cardService: CICardService,
-    _frame: CIFrameService
+    _frame: CIFrameService,
     private _router: Router,
     private _routeData: RouteData,
     private _routeParams: RouteParams) {
