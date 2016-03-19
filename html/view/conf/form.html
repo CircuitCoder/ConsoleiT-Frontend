@@ -10,23 +10,43 @@
         </button>
       </ci-card-actions>
     </ci-card>
-    <ci-card *ngFor="#entry of data, #i = index">
+    <ci-card *ngFor="#entry of data, #i = index, #last = last">
       <ci-card-title>
         <span class="ci-annotation">{{ i+1 }}</span> {{ entry.title }}
       </ci-card-title>
 
       <div class="ci-radios">
         <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" [attr.for]="'conf-form-type-input-'+i">
-          <input type="radio" [id]="'conf-form-type-input-' + i" [attr.name]="'conf-form-type-'+i" class="mdl-radio__button" [(ngModel)]="entry.type" value="input">
+          <input type="radio"
+            [id]="'conf-form-type-input-' + i"
+            class="mdl-radio__button"
+            (click)="entry.type = 'input'"
+            [checked]="entry.type == 'input'">
           <span class="mdl-radio__label">文本</span>
         </label>
+        <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" [attr.for]="'conf-form-type-area-'+i">
+          <input type="radio"
+            [id]="'conf-form-type-area-' + i"
+            class="mdl-radio__button"
+            (click)="entry.type = 'area'"
+            [checked]="entry.type == 'area'">
+          <span class="mdl-radio__label">文本区</span>
+        </label>
         <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" [attr.for]="'conf-form-type-radio-'+i">
-          <input type="radio" [id]="'conf-form-type-radio-' + i" [attr.name]="'conf-form-type-'+i" class="mdl-radio__button" [(ngModel)]="entry.type" value="radio">
+          <input type="radio"
+            [id]="'conf-form-type-radio-' + i"
+            class="mdl-radio__button"
+            (click)="entry.type = 'radio'"
+            [checked]="entry.type == 'radio'">
           <span class="mdl-radio__label">单选</span>
         </label>
-        <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" [attr.for]="'conf-form-type-area-'+i">
-          <input type="radio" [id]="'conf-form-type-area-' + i" [attr.name]="'conf-form-type-'+i" class="mdl-radio__button" [(ngModel)]="entry.type" value="area">
-          <span class="mdl-radio__label">文本区</span>
+        <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" [attr.for]="'conf-form-type-checkbox-'+i">
+          <input type="radio"
+            [id]="'conf-form-type-checkbox-' + i"
+            class="mdl-radio__button"
+            (click)="entry.type = 'checkbox'"
+            [checked]="entry.type == 'checkbox'">
+          <span class="mdl-radio__label">复选</span>
         </label>
       </div>
 
@@ -36,13 +56,24 @@
       </div>
 
       <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" ci-mdl>
-        <textarea class="mdl-textfield__input" type="text" [id]="'conf-form-desc-' + i" rows="10" [(ngModel)]="entry.desc"></textarea>
+        <textarea class="mdl-textfield__input" type="text" [id]="'conf-form-desc-' + i" rows="4" [(ngModel)]="entry.desc"></textarea>
         <label class="mdl-textfield__label" [attr.for]="'conf-form-desc-' + i">说明</label>
+      </div>
+
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" ci-mdl>
+        <textarea class="mdl-textfield__input" type="text" [id]="'conf-form-choices-' + i" rows="4" [(ngModel)]="entry.choices" [disabled]="entry.type == 'input' || entry.type == 'area'"></textarea>
+        <label class="mdl-textfield__label" [attr.for]="'conf-form-choices-' + i">可用选项 (每行一个)</label>
       </div>
 
       <ci-card-actions>
         <button class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect" (click) = "deleteField(i)">
           <i class="material-icons">delete</i>
+        </button>
+        <button class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect" (click) = "moveDown(i)" [hidden]="last">
+          <i class="material-icons">arrow_downward</i>
+        </button>
+        <button class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect" (click) = "moveUp(i)" [hidden]="i == 0">
+          <i class="material-icons">arrow_upward</i>
         </button>
       </ci-card-actions>
 
@@ -54,7 +85,7 @@
         操作
       </ci-card-title>
       <div class="mdl-card__supporting-text">
-        <button class="mdl-button--raised mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+        <button class="mdl-button--raised mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" (click)="submit()">
           提交
         </button>
       </div>

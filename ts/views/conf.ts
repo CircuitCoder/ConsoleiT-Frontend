@@ -1,9 +1,10 @@
 import {Inject, Component, OnInit} from 'angular2/core'
-import {ComponentInstruction, CanActivate, Router,  AuxRoute, RouteConfig, RouteParams, ROUTER_DIRECTIVES, OnActivate, RouterOutlet} from 'angular2/router'
+import {Router, RouteConfig, RouteParams, ROUTER_DIRECTIVES, OnActivate, RouterOutlet} from 'angular2/router'
 
 import {CICardView, CICard, CICardService} from '../card'
 import {CIConfService} from '../conf'
 import {CILoginService} from '../login'
+import {CINotifier} from '../notifier'
 import {MDL} from '../mdl'
 
 import * as CIUtil from '../util'
@@ -33,11 +34,15 @@ class CIConfAcademic extends CICardView {
   data: any;
   userId: number;
 
-  constructor(_card: CICardService, private _conf: CIConfService, params: RouteParams) {
-    super(_card);
-    this.form = [];
-    this.userId = +params.get('uid');
-  }
+  constructor(_card: CICardService,
+    params: RouteParams,
+    private _router: Router,
+    private _conf: CIConfService,
+    private _notifier: CINotifier) {
+      super(_card);
+      this.form = [];
+      this.userId = +params.get('uid');
+    }
 
   routerOnActivate() {
     this._conf.getForm('academic', (form) => {
@@ -100,15 +105,19 @@ class CIConfForm extends CICardView {
   data: any;
   formName: any;
 
-  constructor(_card: CICardService, private _conf: CIConfService, params: RouteParams) {
-    super(_card);
-    this.formType = params.get('type');
-    this.data = [];
+  constructor(_card: CICardService,
+    params: RouteParams,
+    private _router: Router,
+    private _conf: CIConfService,
+    private _notifier: CINotifier) {
+      super(_card);
+      this.formType = params.get('type');
+      this.data = [];
 
-    if(this.formType == 'academic') this.formName = "学术团队申请";
-    else if(this.formType == 'participant') this.formName = "代表报名";
-    else this.formName = this.formType;
-  }
+      if(this.formType == 'academic') this.formName = "学术团队申请";
+      else if(this.formType == 'participant') this.formName = "代表报名";
+      else this.formName = this.formType;
+    }
 
   routerOnActivate() {
     this._conf.getForm(this.formType,(res) => {
@@ -128,6 +137,48 @@ class CIConfForm extends CICardView {
 
   deleteField(i: number) {
     this.data.splice(i,i+1);
+  }
+
+  moveUp(i: number) {
+    if(i == 0) return;
+    let tmp=this.data[i];
+    this.data[i] = this.data[i-1];
+    this.data[i-1] = tmp;
+  }
+
+  moveDown(i: number) {
+    if(i == this.data.length - 1) return;
+    let tmp=this.data[i];
+    this.data[i] = this.data[i+1];
+    this.data[i+1] = tmp;
+  }
+
+  submit() {
+    let result = this.data.map((e: any): any => {
+      let choices = e.choices ? e.choices.split("\n") : [];
+      if(e.type == "checkbox" || e.type == "radio") {
+        return {
+          title: e.title,
+          desc: e.desc,
+          type: e.type,
+          choices: choices
+        }
+      }
+      else {
+        return {
+          title: e.title,
+          desc: e.desc,
+          type: e.type
+        }
+      }
+    });
+
+    this._conf.postForm(this.formType, result, res => {
+      if(res.msg == "OperationSuccessful") {
+        this._notifier.show(res.msg);
+        this._router
+      }
+    });
   }
 }
 
@@ -165,9 +216,8 @@ export class CIConf {
     this.confId = +routeParams.get('id');
   }
 
-  routerOnActivate(next: ComponentInstruction) {
+  routerOnActivate() {
     var outer = this;
-    console.log(next);
 
     return new Promise<void>((resolve, reject) => {
       outer._confService.getData(outer.confId, (data) => {

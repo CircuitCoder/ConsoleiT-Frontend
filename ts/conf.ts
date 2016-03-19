@@ -109,7 +109,7 @@ export class CIConfService extends CIHttp {
 
   postForm(formType: string, data: any, cb: (result: any) => void) {
     let id = CIConfService.conf._id;
-    this.post('/' + id + '/' + formType + '/form', data, (err, res) => {
+    this.post('/' + id + '/' + formType + '/form', {form: data}, (err, res) => {
       if(err) {
         console.log(err);
         this._notifier.show("$Unknown");
