@@ -147,4 +147,8 @@ ci-card {
 
 .ci-radios {
   padding: 16px 0;
+
+  > label {
+    margin-bottom: 12px;
+  }
 }
