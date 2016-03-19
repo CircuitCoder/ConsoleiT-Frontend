@@ -16,11 +16,40 @@ import * as CIUtil from '../util'
 })
 
 class CIConfApplicationList extends CICardView {
-  results: any[];
 
-  constructor(_card: CICardService, private _conf: CIConfService) {
+  formType: string;
+
+  membersMap: any;
+  submissions: any[];
+
+  constructor(_card: CICardService, private _conf: CIConfService, params: RouteParams) {
     super(_card);
-    this.results = [];
+    this.submissions = [];
+    this.formType = params.get('type');
+  }
+
+  routerOnActivate() {
+    this._conf.getFormResults(this.formType, (res) => {
+      console.log(res.members);
+      this.membersMap = res.members.reduce((prev: any,e: any) => {
+        prev[e._id] = e;
+        return prev;
+      }, {});
+      console.log(this.membersMap);
+      this.submissions = res.list;
+    });
+
+    return super.routerOnActivate();
+  }
+
+  getStatusText(id: number) {
+    if(id == 1) {
+      return "等待审核";
+    } else if(id == 2) {
+      return "通过";
+    } else if(id == 3) {
+      return "拒绝";
+    } else return String(id);
   }
 }
 

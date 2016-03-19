@@ -5,13 +5,18 @@
         提交状态
       </ci-card-title>
       <div class="mdl-card__supporting-text ci-annotation">
-        {{ results.length == 0 ? "目前无人提交申请" : "目前有 " + results.length + " 人提交申请" }}
+        {{ submissions.length == 0 ? "目前无人提交申请" : "目前有 " + submissions.length + " 人提交申请" }}
       </div>
     </ci-card>
-    <ci-card *ngFor="#entry of results; #i = index">
+    <ci-card *ngFor="#entry of submissions; #i = index">
       <ci-card-title>
-        {{ index }} : {{ entry._id }}
+        {{ membersMap[entry._id].realname }}<span class="ci-annotation"> - {{ getStatusText(entry.status) }}</span> 
       </ci-card-title>
+      <ci-card-actions>
+        <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" [routerLink] = "['Application', {type: 'academic', uid: entry._id}]">
+          查看表单
+        </button>
+      </ci-card-actions>
     </ci-card>
   </div>
   <div class="ci-card-col narrow">
@@ -20,7 +25,7 @@
         操作
       </ci-card-title>
       <div class="mdl-card__supporting-text">
-        <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" [routerLink] = "['Form', {type: 'academic'}]">
+        <button class="mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect" [routerLink] = "['Form', {type: 'academic'}]">
           修改表单
         </button>
       </div>

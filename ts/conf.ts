@@ -164,6 +164,14 @@ export class CIConfService extends CIHttp {
     });
   }
 
-  getFormResults() {
+  getFormResults(formType: string, cb: (result: any) => void) {
+    this.get('/' + CIConfService.conf._id + '/' + formType + '/all', (err, res) => {
+      if(err) {
+        console.log(err);
+        this._notifier.show("$Unknown");
+      } else {
+        cb(res);
+      }
+    });
   }
 }
