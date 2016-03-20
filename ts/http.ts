@@ -3,7 +3,7 @@ import {Http, Response, Headers, RequestOptions} from 'angular2/http'
 import * as Config from './config'
 
 export class CIHttp {
-  private urlBase = 'http://' + Config.backend.host + ':' + Config.backend.port;
+  private urlBase = (Config.backend.https ? 'https://':'http://') + Config.backend.host + ':' + Config.backend.port;
   private reqOpt = new RequestOptions({
     headers: new Headers({
       'Content-Type': 'application/json'
