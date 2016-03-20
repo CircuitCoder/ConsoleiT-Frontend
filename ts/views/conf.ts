@@ -159,7 +159,7 @@ class CIConfHome extends CICardView {
     this.confRoles = this._conf.getRoleMap();
 
     console.log(this.confRoles);
-    this.confData.members.sort((a: any, b: any) => a.role < b.role );
+    this.confData.members.sort((a: any, b: any) => a.role < b.role ? -1 : 1 );
     Object.keys(this.confMembers).forEach((e: any) => {
       this.confMembers[e].gravatar = CIUtil.generateGravatar(this.confMembers[e].email);
     });
