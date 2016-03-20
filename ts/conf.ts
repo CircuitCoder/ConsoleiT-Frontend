@@ -79,7 +79,9 @@ export class CIConfService extends CIHttp {
         this._notifier.show("$Unknown");
       }
       else if(res.error) this._notifier.show(res.error);
-      else cb(res.confs);
+      else cb(res.confs.sort((a: any,b: any) => {
+        return ((!!a.pinned)!==(!!b.pinned)) ? a.pinned : a.title.localeCompare(b.title);
+      }));
     });
   }
 
