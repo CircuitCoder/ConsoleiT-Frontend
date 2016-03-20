@@ -266,21 +266,36 @@ class CIConfForm extends CICardView {
 }
 
 @Component({
-  templateUrl: 'view/conf/settings.html'
+  templateUrl: 'view/conf/settings.html',
+  directives: [MDL, CICard]
 })
 
 export class CIConfSettings extends CICardView {
 
   conf: any;
   memberMap: any;
+  settings: any;
 
   constructor(
     _card: CICardService,
-    _conf: CIConfService) {
+    private _notifier: CINotifier,
+    private _conf: CIConfService) {
       super(_card);
       this.conf = _conf.getConf();
       this.memberMap = _conf.getMemberMap();
+
+      this.settings = {
+        status: this.conf.status,
+        title: this.conf.title,
+        desc: this.conf.desc,
+      };
     }
+
+  updateSettings() {
+    this._conf.postSettings(this.conf._id, { settings: this.settings }, res => {
+      if(res.msg) this._notifier.show("更新成功, 您可能需要刷新才能看到效果");
+    });
+  }
 }
 
 @Component({
@@ -309,7 +324,7 @@ export class CIConfSettings extends CICardView {
   }, {
     path: '/settings',
     name: 'Settings',
-    component: CIConfHome
+    component: CIConfSettings
   }
 ])
 

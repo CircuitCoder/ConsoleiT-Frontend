@@ -108,6 +108,17 @@ export class CIConfService extends CIHttp {
   }
 
   /* Settings */
+  postSettings(id: number, settings: any, cb: (res: any) => void) {
+    this.post('/' + id, settings, (err, res) => {
+      if(err) {
+        console.log(err);
+        this._notifier.show("$Unknown");
+      }
+      else if(res.error) this._notifier.show(res.error);
+      else cb(res);
+    });
+  }
+
   updateMember(id: number, role: number) {
   }
 
@@ -115,8 +126,6 @@ export class CIConfService extends CIHttp {
   }
 
   /* Forms */
-  updateForm() {
-  }
 
   getForm(formType: string, cb: (form: any) => void) {
     let id = CIConfService.conf._id;
