@@ -12,6 +12,26 @@
       <textarea class="mdl-textfield__input" rows="4" id="ci-conf-settings-desc" [(ngModel)]="settings.desc"></textarea>
       <label class="mdl-textfield__label" for="ci-conf-settings-desc">会议简介</label>
     </div>
+
+    <div class="ci-radios">
+      <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="conf-settings-status-0" [ngClass]="{'is-checked': settings.status==0}">
+        <input type="radio"
+          id="conf-settings-status-0"
+          class="mdl-radio__button"
+          (click)="settings.status = 0"
+          [checked]="settings.status == 0">
+        <span class="mdl-radio__label">准备中</span>
+      </label>
+      <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="conf-settings-status-1" [ngClass]="{'is-checked': settings.status==1}">
+        <input type="radio"
+          id="conf-settings-status-1"
+          class="mdl-radio__button"
+          (click)="settings.status = 1"
+          [checked]="settings.status == 1">
+        <span class="mdl-radio__label">招募学术团队</span>
+      </label>
+    </div>
+
     <ci-card-actions>
       <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--colored mdl-button--raised" (click)="updateSettings()">
         更新
