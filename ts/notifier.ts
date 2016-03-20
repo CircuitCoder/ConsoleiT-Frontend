@@ -30,10 +30,9 @@ export class CINotifier {
   }
 
   show(key: string) {
-    if(!(key in CINotifier.msgMap)) key = "$Unknown";
     if(CINotifier.container.MaterialSnackbar) {
       CINotifier.container.MaterialSnackbar.showSnackbar({
-        message: CINotifier.msgMap[key],
+        message: (key in CINotifier.msgMap ? CINotifier.msgMap[key] : key),
         timeout: 2000
       });
     }
