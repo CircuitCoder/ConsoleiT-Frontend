@@ -12,7 +12,7 @@
     </ci-card>
     <ci-card *ngFor="#entry of data, #i = index, #last = last">
       <ci-card-title>
-        <span class="ci-annotation">{{ i+1 }}</span> {{ entry.title }}
+        <span class="ci-annotation-normal">{{ i+1 }}</span> {{ entry.title }} <span class="ci-warning" *ngIf="entry.required">*</span>
       </ci-card-title>
 
       <div class="ci-radios" ci-mdl>
