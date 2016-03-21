@@ -17,7 +17,7 @@
         {{ membersMap[entry._id].realname }}<span class="ci-annotation"> - {{ getStatusText(entry.status) }}</span> 
       </ci-card-title>
       <ci-card-actions>
-        <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" [routerLink] = "['Application', {type: 'academic', uid: entry._id}]">
+        <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" [routerLink] = "['Application', {type: formType, uid: entry._id}]">
           查看表单
         </button>
       </ci-card-actions>
@@ -29,7 +29,7 @@
         操作
       </ci-card-title>
       <div class="mdl-card__supporting-text">
-        <button class="mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect" [routerLink] = "['Form', {type: 'academic'}]">
+        <button class="mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect" [routerLink] = "['Form', {type: formType}]">
           修改表单
         </button>
       </div>

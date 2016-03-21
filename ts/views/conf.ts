@@ -379,14 +379,24 @@ export class CIConf {
 
         if(outer._confService.hasPerm(this.userId, 'form.academic.view')) {
           tabs.push({
-            title: "学术团队报名结果",
-            route: ['/Conf', {id: this.confId}, 'ApplicationList', {type: 'academic'}],
+            title: "学术团队报名结果 - 中文",
+            route: ['/Conf', {id: this.confId}, 'ApplicationList', {type: 'academic-zh'}],
+            router: this._router
+          });
+          tabs.push({
+            title: "学术团队报名结果 - 英文",
+            route: ['/Conf', {id: this.confId}, 'ApplicationList', {type: 'academic-en'}],
             router: this._router
           });
         } else {
           tabs.push({
-            title: "学术团队报名",
-            route: ['/Conf', {id: this.confId}, 'Application', {type: 'academic', uid: this.userId}],
+            title: "学术团队报名 - 中文",
+            route: ['/Conf', {id: this.confId}, 'Application', {type: 'academic-zh', uid: this.userId}],
+            router: this._router
+          });
+          tabs.push({
+            title: "学术团队报名 - 英文",
+            route: ['/Conf', {id: this.confId}, 'Application', {type: 'academic-en', uid: this.userId}],
             router: this._router
           });
         }
