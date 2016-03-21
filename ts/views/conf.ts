@@ -121,13 +121,31 @@ class CIConfApplication extends CICardView {
   }
 
   submit() {
-    this._conf.postApplication(this.formType, this.userId, this.data, (res) => {
-      this._notifier.show(res.msg);
-      if(res.msg == "OperationSuccessful") {
-        this.statusText = "等待审核";
-        this.status = 1;
+    /* Check for required fields */
+    let invalids: any = [];
+    
+    this.form.forEach((e: any, i: any) => {
+      if(e.required) {
+        if(e.type == "checkbox") {
+          let flag = false;
+          for(let field in this.data[i]) if(this.data[i][field]) flag = true;
+          if(!flag) invalids.push(i+1);
+        } else {
+          if(!this.data[i] || this.data[i] == "") invalids.push(i+1);
+        }
       }
     });
+
+    if(invalids.length > 0) this._notifier.show("非法字段: " + invalids.join(", "));
+    else {
+      this._conf.postApplication(this.formType, this.userId, this.data, (res) => {
+        this._notifier.show(res.msg);
+        if(res.msg == "OperationSuccessful") {
+          this.statusText = "等待审核";
+          this.status = 1;
+        }
+      });
+    }
   }
 }
 
@@ -200,7 +218,8 @@ class CIConfForm extends CICardView {
           title: e.title,
           desc: e.desc,
           type: e.type,
-          choices: e.choices ? e.choices.join("\n") : ""
+          choices: e.choices ? e.choices.join("\n") : "",
+          required: e.required
         }
       });
 
@@ -244,14 +263,16 @@ class CIConfForm extends CICardView {
           title: e.title,
           desc: e.desc,
           type: e.type,
-          choices: choices
+          choices: choices,
+          required: e.required
         }
       }
       else {
         return {
           title: e.title,
           desc: e.desc,
-          type: e.type
+          type: e.type,
+          required: e.required
         }
       }
     });
