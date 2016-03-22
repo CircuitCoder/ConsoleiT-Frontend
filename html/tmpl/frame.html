@@ -4,10 +4,13 @@
       <span class="mdl-layout-title">{{ title }}</span>
       <div class="mdl-layout-spacer"></div>
       <div class="mdl-naivgation">
-        <button class="mdl-button mdl-js-button mdl-button--icon">
+        <button class="mdl-button mdl-js-button mdl-button--icon" id="ci-notif-badge">
           <i class="material-icons" *ngIf="notif.length == 0">notifications_none</i>
           <i class="material-icons" *ngIf="notif.length > 0">notifications_active</i>
         </button>
+        <div class="mdl-tooltip" for="ci-notif-badge">
+          通知功能暂未实现
+        </div>
       </div>
     </div>
 
