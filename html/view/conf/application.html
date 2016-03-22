@@ -2,7 +2,7 @@
   <div class="ci-card-col wide">
     <ci-card *ngFor="#entry of form, #i = index">
       <ci-card-title>
-        <span class="ci-annotation-normal">{{ i+1 }}</span> {{ entry.title }} <span class="ci-warning" *ngIf="entry.required">*</span>
+        <span class="ci-annotation-normal">{{ i+1 }}</span> <span [style.font-weight]="entry.type == 'title' ? 'bold' : 'inherit'">{{ entry.title }}</span> <span class="ci-warning" *ngIf="entry.required">*</span>
       </ci-card-title>
 
       <div class="mdl-card__supporting-text" *ngIf="entry.desc">
