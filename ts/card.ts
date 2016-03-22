@@ -32,7 +32,7 @@ export class CICardService {
           c.setVisible(visible).then(() => {
             return resolve();
           });
-        }, (p.top*2+p.left-startPoint)/CICardService.animationSpeed);
+        }, CICardService.cards.length > 10 ? 0 : (p.top*2+p.left-startPoint)/CICardService.animationSpeed);
       })
     }));
   }
