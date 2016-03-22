@@ -16,11 +16,19 @@ export class CIAbout extends CICardView {
     _frame.setState("关于", []);
   }
 
+  gotoJoin() {
+    window.open("//bjmun.org/tt/join");
+  }
+
   gotoGithubFrontend() {
-    window.location.href = "//github.com/CircuitCoder/ConsoleiT-Frontend";
+    window.open("//github.com/CircuitCoder/ConsoleiT-Frontend");
   }
 
   gotoGithubBackend() {
-    window.location.href = "//github.com/CircuitCoder/ConsoleiT-Backend";
+    window.open("//github.com/CircuitCoder/ConsoleiT-Backend");
+  }
+
+  gotoAuthor() {
+    window.open("//github.com/CircuitCoder");
   }
 }
