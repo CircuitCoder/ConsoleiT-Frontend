@@ -11,8 +11,6 @@
   }
 
   .conf-member-info {
-    float: left;
-
     .conf-member-name {
       line-height: 25px;
       font-size: 20px;
@@ -25,7 +23,19 @@
       font-size: 16px;
       margin-top: 5px;
       color: rgba(0,0,0,.54);
+      height: 20px;
+      white-space: nowrap;
     }
+  }
+
+  .masker {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 40px;
+
+    background: linear-gradient(90deg, rgba(255,255,255,0) 0%, white 75%, white 100%);
   }
 
   &:last-child {

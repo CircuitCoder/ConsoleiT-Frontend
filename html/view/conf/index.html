@@ -33,14 +33,15 @@
     </ci-card>
     <ci-card>
       <ci-card-title>
-        组委成员
+        组织团队
       </ci-card-title>
       <div class="conf-member-list" *ngFor="#member of confData.members">
         <img [src]="confMembers[member._id].gravatar" class="mdl-shadow--2dp">
         <div class="conf-member-info">
           <div class="conf-member-name">{{confMembers[member._id].realname}}</div>
-          <div class="conf-member-role">{{confRoles[member.role].title}}</div>
+          <div class="conf-member-role" [title]="confRoles[member.role].title">{{confRoles[member.role].title}}</div>
         </div>
+        <div class="masker"></div>
       </div>
     </ci-card>
   </div>
