@@ -67,9 +67,11 @@ export class CIConfService extends CIHttp {
       else if(!(seg[i] in permObj)) return false;
       else {
         permObj = permObj[seg[i]];
-        if(permObj instanceof Boolean) return true;
+        if(typeof permObj == "boolean") return permObj;
       }
     }
+
+    return false;
   }
 
   getList(cb: (res: any) => void) {
