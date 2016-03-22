@@ -73,6 +73,9 @@ class CIConfApplication extends CICardView {
   formType: any;
   formName: string;
   userId: number;
+  operatorId: number;
+
+  canModify: boolean;
 
   form: any;
   data: any;
@@ -83,12 +86,17 @@ class CIConfApplication extends CICardView {
     params: RouteParams,
     private _router: Router,
     private _conf: CIConfService,
+    private _login: CILoginService,
     private _notifier: CINotifier) {
       super(_card);
       this.form = [];
       this.data = {};
       this.userId = +params.get('uid');
       this.formType = params.get('type');
+      this.operatorId = _login.getUser()._id;
+      if(_conf.hasPerm(this.operatorId, 'registrant.' + this.formType + '.modify')) this.canModify = true;
+      else this.canModify = this.operatorId == this.userId;
+      
 
       if(this.formType == 'academic') this.formName = "学术团队申请";
       else if(this.formType == 'participant') this.formName = "代表报名";
@@ -377,15 +385,10 @@ export class CIConf {
           }
         ];
 
-        if(outer._confService.hasPerm(this.userId, 'form.academic.view')) {
+        if(outer._confService.hasPerm(this.userId, 'registrant.academicZh.view')) {
           tabs.push({
             title: "学术团队报名结果 - 中文",
             route: ['/Conf', {id: this.confId}, 'ApplicationList', {type: 'academic-zh'}],
-            router: this._router
-          });
-          tabs.push({
-            title: "学术团队报名结果 - 英文",
-            route: ['/Conf', {id: this.confId}, 'ApplicationList', {type: 'academic-en'}],
             router: this._router
           });
         } else {
@@ -394,6 +397,15 @@ export class CIConf {
             route: ['/Conf', {id: this.confId}, 'Application', {type: 'academic-zh', uid: this.userId}],
             router: this._router
           });
+        }
+
+        if(outer._confService.hasPerm(this.userId, 'registrant.academicEn.view')) {
+          tabs.push({
+            title: "学术团队报名结果 - 英文",
+            route: ['/Conf', {id: this.confId}, 'ApplicationList', {type: 'academic-en'}],
+            router: this._router
+          });
+        } else {
           tabs.push({
             title: "学术团队报名 - 英文",
             route: ['/Conf', {id: this.confId}, 'Application', {type: 'academic-en', uid: this.userId}],
