@@ -17,7 +17,7 @@
               [id]="'conf-form-' + i + '-' + j"
               class="mdl-radio__button"
               (click)="data[i] = choice"
-              [disabled]="canModify"
+              [disabled]="!canModify"
               [checked]="data[i] == choice">
             <span class="mdl-radio__label">{{choice}}</span>
           </label>
@@ -32,7 +32,7 @@
             <input type="checkbox"
               [id]="'conf-form-' + i + '-' + j"
               class="mdl-checkbox__input"
-              [disabled]="canModify"
+              [disabled]="!canModify"
               [(ngModel)]="data[i][choice]">
             <span class="mdl-checkbox__label">{{choice}}</span>
           </label>
@@ -42,13 +42,13 @@
 
       <!-- input -->
       <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" ci-mdl *ngIf = "entry.type == 'input'" [ngClass]="{'is-dirty': data[i] && data[i]!=''}">
-        <input class="mdl-textfield__input" type="text" [id]="'conf-form-'+i" [(ngModel)]="data[i]" ci-mdl-input [disabled]="canModify">
+        <input class="mdl-textfield__input" type="text" [id]="'conf-form-'+i" [(ngModel)]="data[i]" ci-mdl-input [disabled]="!canModify">
         <label class="mdl-textfield__label" [attr.for]="'conf-form-'+i">回答</label>
       </div>
 
       <!-- textarea -->
       <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" ci-mdl *ngIf = "entry.type == 'area'" [ngClass]="{'is-dirty': data[i] && data[i]!=''}">
-        <textarea class="mdl-textfield__input" type="text" [id]="'conf-form-'+i" rows="4" [(ngModel)]="data[i]" [disabled]="canModify" ci-mdl-input></textarea>
+        <textarea class="mdl-textfield__input" type="text" [id]="'conf-form-'+i" rows="4" [(ngModel)]="data[i]" [disabled]="!canModify" ci-mdl-input></textarea>
         <label class="mdl-textfield__label" [attr.for]="'conf-form-'+i">回答</label>
       </div>
 
@@ -65,7 +65,7 @@
       </div>
 
       <ci-card-actions>
-        <button class="mdl-button--raised mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" (click)="submit()" *ngIf="canModify">
+        <button class="mdl-button--raised mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" (click)="submit()">
           {{ status == 0? "提交" : "更新" }}
         </button>
       </ci-card-actions>

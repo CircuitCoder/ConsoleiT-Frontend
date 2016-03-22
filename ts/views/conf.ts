@@ -96,6 +96,7 @@ class CIConfApplication extends CICardView {
       this.operatorId = _login.getUser()._id;
       if(_conf.hasPerm(this.operatorId, 'registrant.' + this.formType + '.modify')) this.canModify = true;
       else this.canModify = this.operatorId == this.userId;
+      console.log(this.operatorId==this.userId);
       
 
       if(this.formType == 'academic') this.formName = "学术团队申请";
