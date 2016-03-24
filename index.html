@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Console iT</title>
+    <script src="/js/bundle-dep-9c882d828a.js"></script>
+    <script src="/js/bundle-8f5d38f3a2.js"></script>
+
+    <link rel="stylesheet" href="/css/main-71bd4cdfed.css">
+  </head>
+  <base href="/"></base>
+  <body>
+    <ci-frame></ci-frame>
+    <div id="ci-snackbar" class="mdl-js-snackbar mdl-snackbar">
+      <div class="mdl-snackbar__text"></div>
+      <button class="mdl-snackbar__action" type="button"></button>
+    </div>
+
+    <script>
+      System.import('main').then(function(module) {
+        console.log(module);
+        module.start();
+      });
+    </script>
+  </body>
+</html>
