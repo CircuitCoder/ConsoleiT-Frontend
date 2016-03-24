@@ -1,5 +1,5 @@
 import {Inject, Component, OnInit} from 'angular2/core'
-import {Router, RouteConfig, RouteParams, ROUTER_DIRECTIVES, OnActivate, RouterOutlet} from 'angular2/router'
+import {CanDeactivate, Router, RouteConfig, RouteParams, ROUTER_DIRECTIVES, RouterOutlet} from 'angular2/router'
 
 import {CICardView, CICard, CICardService} from '../card'
 import {CIFrameService} from '../frame.service'
@@ -68,7 +68,7 @@ class CIConfApplicationList extends CICardView {
   directives: [CICard, MDL, ROUTER_DIRECTIVES]
 })
 
-class CIConfApplication extends CICardView {
+class CIConfApplication extends CICardView implements CanDeactivate {
 
   formType: any;
   formName: string;
@@ -126,7 +126,20 @@ class CIConfApplication extends CICardView {
       });
     });
 
+    window.onbeforeunload = function() {
+      return "请确认已保存";
+    }
+
     return super.routerOnActivate();
+  }
+
+  routerOnDeactivate() {
+    delete window.onbeforeunload;
+    return super.routerOnDeactivate();
+  }
+
+  routerCanDeactivate() {
+    return confirm("请确认已保存");
   }
 
   submit() {
