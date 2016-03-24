@@ -50,6 +50,10 @@ ci-card {
           padding: 10px 0;
           border: none;
         }
+
+        &.ci-entry-table tbody > tr {
+          cursor: pointer;
+        }
       }
     }
 
