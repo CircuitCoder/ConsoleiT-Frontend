@@ -186,19 +186,19 @@ gulp.task('clean:css', function() {
 });
 
 gulp.task('clean:dep', function() {
-  return del('dist/js/bundle-dep-*.*', 'build/js/bundle-dep-*.*');
+  return del(['dist/js/bundle-dep-*.*', 'build/js/bundle-dep-*.*']);
 });
 
 gulp.task('clean:font', function() {
-  return del('dist/fonts/**/*.*', 'build/fonts/**/*.*');
+  return del(['dist/fonts/**/*.*', 'build/fonts/**/*.*']);
 });
 
 gulp.task('clean:assets', function() {
-  return del('dist/assets/**/*.*', 'build/assets/**/*.*');
+  return del(['dist/assets/**/*.*', 'build/assets/**/*.*']);
 });
 
 gulp.task('clean:index', function() {
-  return del('dist/index.html');
+  return del(['dist/index.html']);
 });
 
 gulp.task('build:js', gulp.series('clean:js', buildjs));
