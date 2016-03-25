@@ -134,7 +134,7 @@ class CIConfApplication extends CICardView implements CanDeactivate {
   }
 
   routerOnDeactivate() {
-    delete window.onbeforeunload;
+    window.onbeforeunload = function() {};
     return super.routerOnDeactivate();
   }
 
