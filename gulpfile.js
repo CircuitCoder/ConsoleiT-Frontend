@@ -83,7 +83,7 @@ function buildjs(bundler) {
       .pipe(inlineNg2Template({ removeLineBreaks: true, base: '/html' })) // Currently doesn't support source maps
       .pipe(sourcemaps.init())
       .pipe(typescript(tsProject))
-      .pipe(gulpif(production, uglify({mangle: false})))
+      //.pipe(gulpif(production, uglify({mangle: false})))
       .pipe(gulpif(!production, sourcemaps.write('./')))
       .pipe(rev())
       .pipe(gulp.dest('./build/js'))
@@ -102,7 +102,7 @@ function buildcss() {
       .pipe(sass().on('error', sass.logError))
       .pipe(gulp.src('./lib/*.css', {passthrough: true}))
       .pipe(concat('main.css'))
-      .pipe(gulpif(production, cssmin()))
+      //.pipe(gulpif(production, cssmin()))
       .pipe(gulpif(!production, sourcemaps.write('./')))
       .pipe(rev())
       .pipe(gulp.dest('./build/css'))
