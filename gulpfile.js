@@ -58,6 +58,7 @@ var depList = [
   'lib/fix.js',
   'lib/md5.js',
   'lib/material.min.js',
+  'node_modules/marked/marked.min.js',
   'node_modules/es6-shim/es6-shim.js',
   'node_modules/systemjs/dist/system-polyfills.js',
   'node_modules/angular2/bundles/angular2-polyfills.min.js',

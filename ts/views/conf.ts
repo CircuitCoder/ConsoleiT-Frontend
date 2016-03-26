@@ -180,10 +180,13 @@ class CIConfApplication extends CICardView implements CanDeactivate {
 class CIConfHome extends CICardView {
 
   confData: any;
+  confDescs: any;
+  confDescTitles: any;
   confStatus: string;
   confGroup: any;
   confMembers: any;
   confRoles: any;
+  
 
   userId: number;
 
@@ -203,6 +206,11 @@ class CIConfHome extends CICardView {
     this.confData.members.sort((a: any, b: any) => a.role < b.role ? -1 : 1 );
     Object.keys(this.confMembers).forEach((e: any) => {
       this.confMembers[e].gravatar = CIUtil.generateGravatar(this.confMembers[e].email);
+    });
+
+    CIUtil.cardMarked(this.confData.desc, (titles, bodies) => {
+      this.confDescs = bodies;
+      this.confDescTitles = titles;
     });
 
     return super.routerOnActivate();
