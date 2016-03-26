@@ -99,7 +99,8 @@ class CIConfApplication extends CICardView implements CanDeactivate {
       console.log(this.operatorId==this.userId);
       
 
-      if(this.formType == 'academic') this.formName = "学术团队申请";
+      if(this.formType == 'academic-en') this.formName = "学术团队申请 - 英文";
+      else if(this.formType == 'academic-zh') this.formName = "学术团队申请 - 中文";
       else if(this.formType == 'participant') this.formName = "代表报名";
       else this.formName = this.formType;
     }
@@ -228,7 +229,8 @@ class CIConfForm extends CICardView {
       this.formType = params.get('type');
       this.data = [];
 
-      if(this.formType == 'academic') this.formName = "学术团队申请";
+      if(this.formType == 'academic-en') this.formName = "学术团队申请 - 英文";
+      else if(this.formType == 'academic-zh') this.formName = "学术团队申请 - 中文";
       else if(this.formType == 'participant') this.formName = "代表报名";
       else this.formName = this.formType;
     }
