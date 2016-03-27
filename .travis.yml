@@ -19,6 +19,7 @@ deploy:
   api_key:
     secure: TDe03bO18o2x+YFNQi6J92Khh8SOASj49278ZeR3m1T0sRJ/KhCIwLFzBp90W+2oFNrLWWbfD3ybijIv9apbL0RrlnBq9C/ZpEfShL+SKkDkJvivzAAffv+PhWFz9Z5FMH+7UHjoRcaUlljrjdKHGEqwecutqWhPgQb9eMLdZiuc+z2It1FPFxG1i1Lu+VFCrdzyIYhqJly8p63CAhr+2jYEEii9aauZEmo97lS31QgYDwAS6QzbE2ag+vQj0gQBf/VKEzvZ/bo98x7ln/OlZXjWN32txgm3hQX7yNP6CpL1DBUz9YZyaCBL58YeuPmeNkSIi7gMfmxMWy0Twk3QI4eUHteKRFySKziP3L0L385ntVTkKVJwm0Og0nXwQmIzje75/V2pGPlCUxF+G9f49uJEwyzW+b7wZ8s4tCBbSqfrg+zUPyiFfZCtVEdCJoPPkc4fUyQh6mMUJh+5qg8rkpNf12saA6lmZWKw1QfQTcsP0u+H9ybFTrCbmoIUjciw1rmPJPnqSZr8FviEP0w6AtoanG/tAMhi+2xBdtXc0JSnvPB7DU0tnhN+/VDTFxBDC3rX6d/48ZH60yDMwvFZ71Vp80v4hlera+6GzHFapkQb2i/zpcabwRmtgFO4Hbg8F3OLUkRuzf4QSdA/FdmjfL1plW3wLpIGcGWzuSerh7g=
   on:
+    tags: true
     repo: CircuitCoder/ConsoleiT-Frontend
   file:
     - artifacts/webpack.tar.gz
