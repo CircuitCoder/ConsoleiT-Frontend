@@ -36,6 +36,6 @@ export class CIProfile extends CICardView {
   }
 
   gotoGravatar() {
-    window.location.href="//gravatar.lug.ustc.edu.cn/";
+    window.open("//gravatar.lug.ustc.edu.cn/");
   }
 }
