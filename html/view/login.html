@@ -7,15 +7,15 @@
       {{ isRegister ? "注册" : "登陆" }}
     </ci-card-title>
     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" ci-mdl>
-      <input class="mdl-textfield__input" type="text" id="ci-login-email" [(ngModel)]="data.email">
+      <input class="mdl-textfield__input" type="text" id="ci-login-email" [(ngModel)]="data.email" (keyup.enter)="commit()">
       <label class="mdl-textfield__label" for="ci-login-email">邮箱</label>
     </div>
     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" ci-mdl *ngIf="!isRegister">
-      <input class="mdl-textfield__input" type="password" id="ci-login-passwd" [(ngModel)]="data.passwd">
+      <input class="mdl-textfield__input" type="password" id="ci-login-passwd" [(ngModel)]="data.passwd" (keyup.enter)="commit()">
       <label class="mdl-textfield__label" for="ci-login-passwd">密码</label>
     </div>
     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" ci-mdl *ngIf="isRegister">
-      <input class="mdl-textfield__input" type="text" id="ci-login-realname" [(ngModel)]="data.realname">
+      <input class="mdl-textfield__input" type="text" id="ci-login-realname" [(ngModel)]="data.realname" (keyup.enter)="commit()">
       <label class="mdl-textfield__label" for="ci-login-realname">真实姓名</label>
     </div>
     <ci-card-actions>
