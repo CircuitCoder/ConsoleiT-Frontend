@@ -38,14 +38,14 @@
     "typings": "^0.7.8"
   },
   "dependencies": {
-    "angular2": "^2.0.0-beta.11",
-    "es6-promise": "^3.1.2",
-    "es6-shim": "^0.35.0",
+    "angular2": "^2.0.0-beta.12",
+    "es6-promise": "3.1.2",
+    "es6-shim": "0.35.0",
     "marked": "^0.3.5",
     "material-design-icons": "^2.2.1",
-    "reflect-metadata": "^0.1.2",
+    "reflect-metadata": "0.1.2",
     "rxjs": "5.0.0-beta.2",
-    "systemjs": "^0.19.22",
+    "systemjs": "0.19.22",
     "zone.js": "0.6.4"
   }
 }
