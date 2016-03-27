@@ -1,4 +1,5 @@
 node_modules
+artifacts
 dist
 typings
 build
@@ -8,3 +9,6 @@ build
 *.log
 
 ts/config.ts
+
+.travis/deploy_key
+.travis/deploy_key.pub

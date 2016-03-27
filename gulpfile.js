@@ -2,30 +2,24 @@
 
 var readFileSync = require('fs').readFileSync;
 
-var assign = require('lodash.assign');
-
 var gulp = require('gulp');
-var gulpif = require('gulp-if');
-var rename = require('gulp-rename');
-var util = require('gulp-util');
-var vinylSource = require('vinyl-source-stream');
-var vinylBuffer = require('vinyl-buffer');
-var uglify = require('gulp-uglify');
-var sourcemaps = require('gulp-sourcemaps');
-var typescript = require('gulp-typescript');
-var sass = require('gulp-sass');
-var htmlmin = require('gulp-htmlmin');
-var cssmin = require('gulp-cssmin');
-var connect = require('gulp-connect');
-var concat = require('gulp-concat');
-var inlineNg2Template = require('gulp-inline-ng2-template');
 
+var concat = require('gulp-concat');
+var connect = require('gulp-connect');
+var cssmin = require('gulp-cssmin');
+var del = require('del');
+var gulpif = require('gulp-if');
+var htmlmin = require('gulp-htmlmin');
+var inlineNg2Template = require('gulp-inline-ng2-template');
+var rename = require('gulp-rename');
 var rev = require('gulp-rev');
 var revReplace = require('gulp-rev-replace');
-
-var del = require('del');
-
-var sequence = require('run-sequence');
+var sass = require('gulp-sass');
+var shell = require('gulp-shell');
+var sourcemaps = require('gulp-sourcemaps');
+var typescript = require('gulp-typescript');
+var uglify = require('gulp-uglify');
+var util = require('gulp-util');
 
 var production = false;
 var webserver = false;
