@@ -14,6 +14,8 @@ export function generateGravatar(email: string) {
  * Custom markdown rendering
  */
 export function cardMarked(text: string, cb: (titles: string[], bodies: string[]) => void) {
+  if(!text) return cb([], ['']);
+
   var renderer = new marked.Renderer();
   renderer.heading = function(text: string, level: number) {
     if(level == 1)

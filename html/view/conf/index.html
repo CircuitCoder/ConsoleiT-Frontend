@@ -5,7 +5,7 @@
         {{ i == 0 ? confData.title : confDescTitles[i-1] }}
       </ci-card-title>
       <div [innerHTML]="body"></div>
-      <div class="mdl-card__supporting-text" class="ci-annotation" *ngIf = "body == '' && i == 0">
+      <div class="mdl-card__supporting-text ci-annotation" *ngIf = "body == '' && i == 0">
         组委并未为此会议添加简介
       </div>
     </ci-card>
