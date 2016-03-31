@@ -136,8 +136,7 @@ export class CIFrame {
       onRestore: (error: string, user: CIUser) => {
         if(error) {
           console.log(error);
-          if(!this.isRouteActive(['Login']) && 
-             !this.isRouteActive(['Register'])) {
+          if(!this.isComponentActive(CILogin)) {
             outer._notifier.show(error);
             outer._router.navigate(['Login']);
           }
@@ -145,8 +144,7 @@ export class CIFrame {
           outer.user = user
           outer.avatarUrl = CIUtil.generateGravatar(user.email);
           console.log(outer.avatarUrl);
-          if(this.isRouteActive(['Login']) ||
-             this.isRouteActive(['Register'])) {
+          if(this.isComponentActive(CILogin)) {
             outer._notifier.show("AlreadyLoggedIn");
             outer._router.navigate(['Dashboard']);
           }
@@ -188,6 +186,10 @@ export class CIFrame {
   isRouteActive(route: any, router?: any) {
     if(router) return router.isRouteActive(router.generate(route));
     else return this._router.isRouteActive(this._router.generate(route));
+  }
+
+  isComponentActive(comp: any, router?: any) {
+    return (router ? router:this._router).currentInstruction.component.componentType == comp;
   }
 
   logout() {
