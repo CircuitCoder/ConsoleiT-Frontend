@@ -153,7 +153,7 @@ export class CIFrame {
         }
 
         outer.started = true;
-        this.updateSidebar();
+        if(outer.user) this.updateSidebar();
       }
     });
   }
