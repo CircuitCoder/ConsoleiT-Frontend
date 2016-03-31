@@ -183,7 +183,7 @@ export class CIFrame {
     }
   }
 
-  isRouteActive(route: any, router?: any) {
+  isRouteActive(route: any[], router?: any) {
     return (router ? router:this._router).isRouteActive(router.generate(route));
   }
 

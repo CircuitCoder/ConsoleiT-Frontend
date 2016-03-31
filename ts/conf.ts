@@ -99,7 +99,7 @@ export class CIConfService extends CIHttp {
   }
 
   getData(id: number, cb: (res: any) => void) {
-    this.get('/' + id, (err, res) => {
+    this.get(`/${id}`, (err, res) => {
       if(err) {
         console.log(err);
         this._notifier.show("$Unknown");
@@ -111,7 +111,7 @@ export class CIConfService extends CIHttp {
 
   /* Settings */
   postSettings(id: number, settings: any, cb: (res: any) => void) {
-    this.post('/' + id, settings, (err, res) => {
+    this.post(`/${id}`, settings, (err, res) => {
       if(err) {
         console.log(err);
         this._notifier.show("$Unknown");
@@ -131,7 +131,7 @@ export class CIConfService extends CIHttp {
 
   getForm(formType: string, cb: (form: any) => void) {
     let id = CIConfService.conf._id;
-    this.get('/' + id + '/' + formType + '/form', (err, res) => {
+    this.get(`/${id}/${formType}/form`, (err, res) => {
       if(err) {
         console.log(err);
         this._notifier.show("$Unknown");
@@ -143,7 +143,7 @@ export class CIConfService extends CIHttp {
 
   postForm(formType: string, data: any, cb: (result: any) => void) {
     let id = CIConfService.conf._id;
-    this.post('/' + id + '/' + formType + '/form', {form: data}, (err, res) => {
+    this.post(`/${id}/${formType}/form`, {form: data}, (err, res) => {
       if(err) {
         console.log(err);
         this._notifier.show("$Unknown");
@@ -154,7 +154,7 @@ export class CIConfService extends CIHttp {
   }
 
   getFormResult(formType: string, uid: number, cb: (result: any) => void) {
-    this.get('/' + CIConfService.conf._id + '/' + formType + '/' + uid, (err, res) => {
+    this.get(`/${CIConfService.conf._id}/${formType}/${uid}`, (err, res) => {
       if(err) {
         console.log(err);
         this._notifier.show("$Unknown");
@@ -168,7 +168,7 @@ export class CIConfService extends CIHttp {
   }
 
   postApplication(formType: string, uid: number, data: any, cb: (result: any) => void) {
-    this.post('/' + CIConfService.conf._id + '/' + formType + '/' + uid, {content: data}, (err, res) => {
+    this.post(`/${CIConfService.conf._id}/${formType}/${uid}`, {content: data}, (err, res) => {
       if(err) {
         console.log(err);
         this._notifier.show("$Unknown");
@@ -179,7 +179,7 @@ export class CIConfService extends CIHttp {
   }
 
   getFormResults(formType: string, cb: (result: any) => void) {
-    this.get('/' + CIConfService.conf._id + '/' + formType + '/all', (err, res) => {
+    this.get(`/${CIConfService.conf._id}/${formType}/all`, (err, res) => {
       if(err) {
         console.log(err);
         this._notifier.show("$Unknown");

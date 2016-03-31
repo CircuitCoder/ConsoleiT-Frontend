@@ -7,7 +7,7 @@ declare var marked: any;
  * Generate gravatar url from email
  */
 export function generateGravatar(email: string) {
-  return "https://gravatar.lug.ustc.edu.cn/avatar/" + md5(email) + "?d=mm&r=g";
+  return `https://gravatar.lug.ustc.edu.cn/avatar/${md5(email)}?d=mm&r=g`;
 }
 
 /**
@@ -19,13 +19,13 @@ export function cardMarked(text: string, cb: (titles: string[], bodies: string[]
   var renderer = new marked.Renderer();
   renderer.heading = function(text: string, level: number) {
     if(level == 1)
-      return '#' + text + "\n";
+      return `#${text}\n`;
     else
-      return '<h' + level + '>' + text + '</h' + level + '>';
+      return `<h${level}>${text}</h${level}>`;
   };
 
   renderer.paragraph = function(text: string) {
-    return '<div class="mdl-card__supporting-text">' + text + '</div>'
+    return `<div class="mdl-card__supporting-text">${text}</div>`
   }
 
   //TODO: tables

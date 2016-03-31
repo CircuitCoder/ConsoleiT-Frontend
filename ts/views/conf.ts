@@ -94,7 +94,7 @@ class CIConfApplication extends CICardView implements CanDeactivate {
       this.userId = +params.get('uid');
       this.formType = params.get('type');
       this.operatorId = _login.getUser()._id;
-      if(_conf.hasPerm(this.operatorId, 'registrant.' + this.formType + '.modify')) this.canModify = true;
+      if(_conf.hasPerm(this.operatorId, `registrant.${this.formType}.modify`)) this.canModify = true;
       else this.canModify = this.operatorId == this.userId;
       console.log(this.operatorId==this.userId);
       
@@ -159,7 +159,7 @@ class CIConfApplication extends CICardView implements CanDeactivate {
       }
     });
 
-    if(invalids.length > 0) this._notifier.show("非法字段: " + invalids.join(", "));
+    if(invalids.length > 0) this._notifier.show(`非法字段: ${invalids.join(", ")}`);
     else {
       this._conf.postApplication(this.formType, this.userId, this.data, (res) => {
         this._notifier.show(res.msg);
@@ -444,7 +444,7 @@ export class CIConf {
             router: this._router
           });
         }
-        this._frame.setState("会议 - " + data.conf.title, tabs);
+        this._frame.setState(`会议 - ${data.conf.title}`, tabs);
         resolve();
       });
     });
