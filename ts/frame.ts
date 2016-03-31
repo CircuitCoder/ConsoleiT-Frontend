@@ -135,8 +135,9 @@ export class CIFrame {
 
       onRestore: (error: string, user: CIUser) => {
         if(error) {
-          if(!outer._router.isRouteActive(outer._router.generate(['Login'])) && 
-             !outer._router.isRouteActive(outer._router.generate(['Register']))) {
+          console.log(error);
+          if(!this.isRouteActive(['Login']) && 
+             !this.isRouteActive(['Register'])) {
             outer._notifier.show(error);
             outer._router.navigate(['Login']);
           }
@@ -144,8 +145,8 @@ export class CIFrame {
           outer.user = user
           outer.avatarUrl = CIUtil.generateGravatar(user.email);
           console.log(outer.avatarUrl);
-          if(outer._router.isRouteActive(outer._router.generate(['Login'])) ||
-             outer._router.isRouteActive(outer._router.generate(['Register']))) {
+          if(this.isRouteActive(['Login']) ||
+             this.isRouteActive(['Register'])) {
             outer._notifier.show("AlreadyLoggedIn");
             outer._router.navigate(['Dashboard']);
           }
@@ -212,6 +213,4 @@ export class CIFrame {
       console.log(res);
     });
   }
-
-  gotoConf(id: Number) { }
 }

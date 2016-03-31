@@ -108,6 +108,20 @@ export class CILoginService extends CIHttp {
     });
   }
 
+  doRequestReset(email: String, next: () => void) {
+    this.post('/settings/passwd/reset/request', { email }, (err, res) => {
+      if(err) {
+        console.log(err);
+        this._notifier.show("$Unknown");
+      } else if(res.error) {
+          this._notifier.show(res.error);
+      } else {
+        this._notifier.show(res.msg);
+        return next();
+      }
+    });
+  }
+
   getUser() {
     return CILoginService.user;
   }

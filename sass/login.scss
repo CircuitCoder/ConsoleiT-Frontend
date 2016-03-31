@@ -15,4 +15,15 @@
   .state-button {
     float: right;
   }
+
+  .login-extra {
+    text-align: center;
+    margin-top: 24px;
+    color: rgba(0,0,0,.30);
+
+    a {
+      color: rgba(0,0,0,.30);
+      cursor: pointer;
+    }
+  }
 }

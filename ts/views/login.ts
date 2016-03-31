@@ -7,6 +7,7 @@ import {CIFrameService} from '../frame.service'
 import {CICard, CICardView, CICardService} from '../card'
 import {MDL} from '../mdl'
 import {CILoginData} from '../data'
+import {CINotifier} from '../notifier'
 
 @Component({
   templateUrl: 'view/login.html',
@@ -18,9 +19,11 @@ export class CILogin extends CICardView {
   data: CILoginData;
   @ViewChild(CICard) private loginCard:CICard;
 
-  constructor(private _loginService: CILoginService,
+  constructor(
     _cardService: CICardService,
     _frame: CIFrameService,
+    private _loginService: CILoginService,
+    private _notifier: CINotifier,
     private _router: Router,
     private _routeData: RouteData,
     private _routeParams: RouteParams) {
@@ -34,6 +37,9 @@ export class CILogin extends CICardView {
         passwd: ""
       };
       this.isRegister = this._routeData.get('action') == 'register';
+
+      let msg = this._routeData.get('msg');
+      if(msg) this._notifier.show(msg);
     }
 
   commit() {
@@ -51,5 +57,10 @@ export class CILogin extends CICardView {
       this.isRegister = !this.isRegister;
       this.loginCard.toggleContent();
     });
+  }
+
+  requestReset() {
+    if(!this.data.email || this.data.email == "") this._notifier.show("请输入邮箱");
+    else this._loginService.doRequestReset(this.data.email, () => {});
   }
 }

@@ -19,7 +19,7 @@
       <label class="mdl-textfield__label" for="ci-login-realname">真实姓名</label>
     </div>
     <ci-card-actions>
-      <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" (click) = "commit()" ci-mdl>
+      <button class="mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect" (click) = "commit()" ci-mdl>
         {{ isRegister ? "注册" : "登陆" }}
       </button>
       <button class="mdl-button mdl-js-button mdl-js-ripple-effect state-button" (click)="switchState()" ci-mdl>
@@ -27,4 +27,8 @@
       </button>
     </ci-card-actions>
   </ci-card>
+
+  <div class="login-extra">
+    <a (click)="requestReset()">重置密码</a>
+  </div>
 </div>
