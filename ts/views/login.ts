@@ -16,6 +16,7 @@ import {CINotifier} from '../notifier'
 
 export class CILogin extends CICardView {
   isRegister: boolean;
+  isStarted: boolean;
   data: CILoginData;
   @ViewChild(CICard) private loginCard:CICard;
 
@@ -40,7 +41,14 @@ export class CILogin extends CICardView {
 
       let msg = this._routeParams.get('msg');
       if(msg) setTimeout(() => this._notifier.show(msg), 0);
+
+      this.isStarted = false;
     }
+
+  routerOnActivate() {
+    setTimeout(() => this.isStarted = true, 0);
+    super.routerOnActivate();
+  }
 
   commit() {
     if(this.isRegister)

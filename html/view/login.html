@@ -28,7 +28,9 @@
     </ci-card-actions>
   </ci-card>
 
-  <div class="login-extra">
+  <div class="login-extra" [style.opacity]="isStarted ? 1 : 0">
     <a (click)="requestReset()">重置密码</a>
+    <br><br>
+    在新用户注册时，初始密码会发至您的注册邮箱
   </div>
 </div>
