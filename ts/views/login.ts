@@ -38,8 +38,8 @@ export class CILogin extends CICardView {
       };
       this.isRegister = this._routeData.get('action') == 'register';
 
-      let msg = this._routeData.get('msg');
-      if(msg) this._notifier.show(msg);
+      let msg = this._routeParams.get('msg');
+      if(msg) setTimeout(() => this._notifier.show(msg), 0);
     }
 
   commit() {
