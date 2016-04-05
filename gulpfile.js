@@ -51,6 +51,7 @@ var tsOpt= {
 var depList = [
   'lib/fix.js',
   'lib/md5.js',
+  'lib/FileSaver.min.js',
   'lib/material.min.js',
   'node_modules/angular2/es6/dev/src/testing/shims_for_IE.js',
   'node_modules/marked/marked.min.js',

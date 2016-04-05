@@ -1,4 +1,4 @@
-import {Inject, Component, OnInit} from 'angular2/core'
+import {ViewChild, Inject, Component, OnInit} from 'angular2/core'
 import {CanDeactivate, Router, RouteConfig, RouteParams, ROUTER_DIRECTIVES, RouterOutlet} from 'angular2/router'
 
 import {CICardView, CICard, CICardService} from '../card'
@@ -81,6 +81,8 @@ class CIConfApplication extends CICardView implements CanDeactivate {
   data: any;
   status: number;
   statusText: string;
+
+  @ViewChild("importer") importer: any;
 
   constructor(_card: CICardService,
     params: RouteParams,
@@ -169,6 +171,35 @@ class CIConfApplication extends CICardView implements CanDeactivate {
         }
       });
     }
+  }
+
+  exportForm() {
+    try {
+      CIUtil.saveFile(this.formName, [CIUtil.exportForm(this.form, this.formName)]);
+    } catch(e) {
+      this._notifier.show("抱歉，您所使用的浏览区不支持导出");
+    }
+  }
+
+  showImportForm() {
+    var e = new Event('click');
+    this.importer.nativeElement.dispatchEvent(e);
+  }
+
+  importForm() {
+    var fr = new FileReader();
+
+    fr.onerror = () => {
+      this._notifier.show("加载失败");
+    }
+
+    fr.onload = () => {
+      this.data = CIUtil.parseForm(this.form, fr.result);
+      this._notifier.show("导入成功");
+    }
+
+    var file = this.importer.nativeElement.files[0];
+    fr.readAsText(file);
   }
 }
 
