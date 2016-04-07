@@ -61,11 +61,17 @@
       </ci-card-title>
 
       <div class="mdl-card__supporting-text">
-        状态: <strong>{{ statusText }}</strong>
+        状态: <strong>{{ statusText }}{{ locked ? "，已锁定":"" }}</strong>
+      </div>
+
+      <div class="mdl-card__supporting-text" *ngIf="isAdmin">
+        <button class="mdl-button mdl-js-button mdl-button--icon" (click)="locked?unlock():lock()">
+          <i class="material-icons">{{ locked? "lock_open": "lock_outline" }}</i>
+        </button>
       </div>
 
       <ci-card-actions>
-        <button class="mdl-button--raised mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" (click)="submit()">
+        <button class="mdl-button--raised mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" (click)="submit()" *ngIf="canModify" [disabled]="(!isAdmin) && locked">
           {{ status == 0? "提交" : "更新" }}
         </button>
         <button class="mdl-button mdl-js-button mdl-js-ripple-effect" (click)="exportForm()" *ngIf="canModify">

@@ -14,7 +14,8 @@
     </ci-card>
     <ci-card *ngFor="#entry of submissions | funcFilter:flt:searchStr:membersMap:getStatusText">
       <ci-card-title>
-        {{ membersMap[entry._id].realname }}<span class="ci-annotation"> - {{ getStatusText(entry.status) }}</span> 
+        {{ membersMap[entry._id].realname }}<span class="ci-annotation"> - {{ getStatusText(entry.status) }}</span>
+        <i *ngIf="entry.locked" class="material-icons">lock</i>
       </ci-card-title>
       <ci-card-actions>
         <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" [routerLink] = "['Application', {type: formType, uid: entry._id}]">

@@ -6,6 +6,7 @@ export class CINotifier {
     $Unknown: "未知错误",
     AlreadyLoggedIn: "您已登陆",
     CredentialRejected: "凭证错误",
+    DocumentLocked: "已锁定",
     DuplicatedEmail: "邮箱已占用",
     InvalidCondition: "非法操作",
     InvalidInput: "非法输入",

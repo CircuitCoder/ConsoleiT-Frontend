@@ -27,6 +27,20 @@ export class CIHttp {
     });
   }
 
+  protected put(action: string, data: any, cb: (err: any, res: any) => void) {
+    let req = this._http.put(
+      this.urlBase + action,
+      JSON.stringify(data),
+      this.reqOpt
+    );
+
+    req.subscribe((res) => {
+      cb(false, res.json());
+    }, (error) => {
+      cb(error, null);
+    });
+  }
+
   protected post(action: string, data: any, cb: (err: any, res: any) => void) {
     let req = this._http.post(
       this.urlBase + action,
@@ -39,4 +53,18 @@ export class CIHttp {
       cb(error, null);
     });
   }
+
+  protected delete(action: string, cb: (err: any, res: any) => void) {
+    let req = this._http.delete(
+      this.urlBase + action,
+      this.reqOpt
+    );
+
+    req.subscribe((res) => {
+      cb(false, res.json());
+    }, (error) => {
+      cb(error, null);
+    });
+  }
+
 }

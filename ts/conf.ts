@@ -161,8 +161,42 @@ export class CIConfService extends CIHttp {
       } else {
         cb({
           status: res.status?res.status:0,
+          locked: res.locked,
           submission: res.submission?JSON.parse(res.submission):{}
         });
+      }
+    });
+  }
+
+  lockFormResult(formType: string, uid: number, cb: (result: any) => void) {
+    this.put(`/${CIConfService.conf._id}/${formType}/${uid}/lock`, {}, (err, res) => {
+      if(err) {
+        console.log(err);
+        this._notifier.show("$Unknown");
+      } else {
+        cb(res);
+      }
+    });
+  }
+
+  unlockFormResult(formType: string, uid: number, cb: (result: any) => void) {
+    this.delete(`/${CIConfService.conf._id}/${formType}/${uid}/lock`, (err, res) => {
+      if(err) {
+        console.log(err);
+        this._notifier.show("$Unknown");
+      } else {
+        cb(res);
+      }
+    });
+  }
+
+  deleteFormResult(formType: string, uid: number, cb: (result: any) => void) {
+    this.delete(`/${CIConfService.conf._id}/${formType}/${uid}`, (err, res) => {
+      if(err) {
+        console.log(err);
+        this._notifier.show("$Unknown");
+      } else {
+        cb(res);
       }
     });
   }

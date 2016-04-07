@@ -76,6 +76,8 @@ class CIConfApplication extends CICardView implements CanDeactivate {
   operatorId: number;
 
   canModify: boolean;
+  isAdmin: boolean;
+  locked: boolean;
 
   form: any;
   data: any;
@@ -96,10 +98,9 @@ class CIConfApplication extends CICardView implements CanDeactivate {
       this.userId = +params.get('uid');
       this.formType = params.get('type');
       this.operatorId = _login.getUser()._id;
-      if(_conf.hasPerm(this.operatorId, `registrant.${this.formType}.modify`)) this.canModify = true;
+      this.isAdmin = _conf.hasPerm(this.operatorId, `registrant.${this.formType}.modify`)
+      if(this.isAdmin)  this.canModify = true;
       else this.canModify = this.operatorId == this.userId;
-      console.log(this.operatorId==this.userId);
-      
 
       if(this.formType == 'academic-en') this.formName = "学术团队申请 - 英文";
       else if(this.formType == 'academic-zh') this.formName = "学术团队申请 - 中文";
@@ -115,6 +116,8 @@ class CIConfApplication extends CICardView implements CanDeactivate {
           if(e.type == "checkbox" && !data.submission[i]) data.submission[i] = {};
         });
         this.data = data.submission;
+        this.locked = data.locked;
+        console.log(data);
 
         this.status = data.status;
         if(this.status == 0)
@@ -164,13 +167,33 @@ class CIConfApplication extends CICardView implements CanDeactivate {
     if(invalids.length > 0) this._notifier.show(`非法字段: ${invalids.join(", ")}`);
     else {
       this._conf.postApplication(this.formType, this.userId, this.data, (res) => {
-        this._notifier.show(res.msg);
         if(res.msg == "OperationSuccessful") {
+          this._notifier.show(res.msg);
           this.statusText = "等待审核";
           this.status = 1;
-        }
+        } else if(res.error) this._notifier.show(res.error);
       });
     }
+  }
+
+  lock() {
+    this._conf.lockFormResult(this.formType, this.userId, (res) => {
+      if(res.error) this._notifier.show(res.error);
+      else {
+        this._notifier.show(res.msg);
+        this.locked = true;
+      }
+    });
+  }
+
+  unlock() {
+    this._conf.unlockFormResult(this.formType, this.userId, (res) => {
+      if(res.error) this._notifier.show(res.error);
+      else {
+        this._notifier.show(res.msg);
+        this.locked = false;
+      }
+    });
   }
 
   exportForm() {
