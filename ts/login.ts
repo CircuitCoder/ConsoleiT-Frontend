@@ -80,8 +80,7 @@ export class CILoginService extends CIHttp {
   doRestore() {
     this.get('/restore', (err, res) => {
       if(err) {
-        console.log(err);
-        this._notifier.show('$Unknown');
+        window.location.href = "/offline.html";
       } else {
         if(res.user) {
           CILoginService.user = res.user;

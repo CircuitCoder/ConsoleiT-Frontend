@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Meow</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <script src="/js/bundle-dep.js"></script>
+    <style>
+      body {
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      .content-wrapper {
+        box-sizing: border-box;
+        height: 675px;
+        width: 100%;
+
+        position: absolute;
+        top: 50%;
+        margin-top: -337.5px;
+      }
+
+      .content {
+        background: url("assets/imgs/offline-bg.png");
+        background-repeat: no-repeat;
+        background-size: cover;
+        height: 675px;
+        width: 1050px;
+        margin: 0 auto;
+        position: relative;
+      }
+
+      .header {
+        font-size: 54px;
+        line-height: 60px;
+        position: absolute;
+        top: 200px;
+        left: 120px;
+      }
+
+      .contact {
+        position: absolute;
+        top: 300px;
+        left: 120px;
+        font-size: 24px;
+        color: #888;
+      }
+
+      .retry {
+        position: absolute;
+        top: 350px;
+        left: 120px;
+      }
+
+      a {
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="header">
+          我们马上回来
+        </div>
+        <div class="contact">
+          如有急需，请联系liuxiaoyi@bjmun.org
+        </div>
+        <div class="retry">
+          <a href="/">
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised">
+              再试一下
+            </button>
+          </a>
+
+          <a href="//github.com/CircuitCoder/ConsoleiT-Backend/issues">
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect">
+              前往 Github 提交 Issue
+            </button>
+          </a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
