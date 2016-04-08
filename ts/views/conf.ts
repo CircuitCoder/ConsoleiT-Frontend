@@ -35,13 +35,9 @@ class CIConfApplicationList extends CICardView {
 
   routerOnActivate() {
     this._conf.getFormResults(this.formType, (res) => {
-      console.log(res.members);
-      this.membersMap = res.members.reduce((prev: any,e: any) => {
-        prev[e._id] = e;
-        return prev;
-      }, {});
-      console.log(this.membersMap);
-      this.submissions = res.list;
+      this._conf.registerSubmissions(res);
+      this.submissions = this._conf.getSubmissions();
+      this.membersMap = this._conf.getApplicantMap();
     });
 
     return super.routerOnActivate();
@@ -84,6 +80,9 @@ class CIConfApplication extends CICardView implements CanDeactivate {
   status: number;
   statusText: string;
 
+  submissions: any;
+  applicants: any;
+
   @ViewChild("importer") importer: any;
 
   constructor(_card: CICardService,
@@ -106,6 +105,18 @@ class CIConfApplication extends CICardView implements CanDeactivate {
       else if(this.formType == 'academic-zh') this.formName = "学术团队申请 - 中文";
       else if(this.formType == 'participant') this.formName = "代表报名";
       else this.formName = this.formType;
+
+      if(this.isAdmin) {
+        this.submissions = this._conf.getSubmissions();
+        if(!this.submissions) { // Directly routed to this page
+          this._conf.getFormResults(this.formType, (res) => {
+            this._conf.registerSubmissions(res);
+            this.submissions = this._conf.getSubmissions();
+            this.applicants = this._conf.getApplicantMap();
+          });
+        }
+        else this.applicants = this._conf.getApplicantMap();
+      }
     }
 
   routerOnActivate() {

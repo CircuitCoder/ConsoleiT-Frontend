@@ -10,52 +10,71 @@ export class CIConfService extends CIHttp {
     super(_http, '/conf');
   }
 
-  private static conf: any;
-  private static members: any;
-  private static group: any;
+  private conf: any;
+  private members: any;
+  private group: any;
 
-  private static STATUS_MAP: {[id: number]: string;} = {
+  private submissions: any;
+  private applicants: any;
+
+  private STATUS_MAP: {[id: number]: string;} = {
     0: "进行准备",
     1: "招募学术团队",
   };
 
   registerConf(data: any) {
-    CIConfService.conf = data.conf;
-    CIConfService.members = data.members;
-    CIConfService.group = data.group;
+    this.conf = data.conf;
+    this.members = data.members;
+    this.group = data.group;
   }
 
   getConf() {
-    return CIConfService.conf;
+    return this.conf;
   }
 
   getMemberMap() {
-    return CIConfService.members.reduce((prev: any, e: any) => {
+    return this.members.reduce((prev: any, e: any) => {
       prev[e._id] = e;
       return prev;
     }, {});
   }
 
   getRoleMap() {
-    return CIConfService.conf.roles.reduce((prev: any, e: any) => {
+    return this.conf.roles.reduce((prev: any, e: any) => {
       prev[e._id] = e;
       return prev;
     }, {});
   }
 
   getGroup() {
-    return CIConfService.group;
+    return this.group;
+  }
+
+  registerSubmissions(data: any) {
+    this.submissions = data.list;
+    this.applicants = data.members;
+  }
+
+  getApplicantMap() {
+    return this.applicants.reduce((prev: any,e: any) => {
+      prev[e._id] = e;
+      return prev;
+    }, {});
+  }
+
+  getSubmissions() {
+    return this.submissions;
   }
 
   getStatus(conf?: any) {
-    if(conf) return CIConfService.STATUS_MAP[conf.status];
-    else return CIConfService.STATUS_MAP[CIConfService.conf.status];
+    if(conf) return this.STATUS_MAP[conf.status];
+    else return this.STATUS_MAP[this.conf.status];
   }
 
   hasPerm(uid: number, perm: string) {
     let roleMap = this.getRoleMap();
     let roleId = -1;
-    CIConfService.conf.members.forEach((e: any) => {
+    this.conf.members.forEach((e: any) => {
       if(e._id == uid) roleId = e.role;
     });
     if(roleId == -1) return false;
@@ -130,7 +149,7 @@ export class CIConfService extends CIHttp {
   /* Forms */
 
   getForm(formType: string, cb: (form: any) => void) {
-    let id = CIConfService.conf._id;
+    let id = this.conf._id;
     this.get(`/${id}/${formType}/form`, (err, res) => {
       if(err) {
         console.log(err);
@@ -142,7 +161,7 @@ export class CIConfService extends CIHttp {
   }
 
   postForm(formType: string, data: any, cb: (result: any) => void) {
-    let id = CIConfService.conf._id;
+    let id = this.conf._id;
     this.post(`/${id}/${formType}/form`, {form: data}, (err, res) => {
       if(err) {
         console.log(err);
@@ -154,7 +173,7 @@ export class CIConfService extends CIHttp {
   }
 
   getFormResult(formType: string, uid: number, cb: (result: any) => void) {
-    this.get(`/${CIConfService.conf._id}/${formType}/${uid}`, (err, res) => {
+    this.get(`/${this.conf._id}/${formType}/${uid}`, (err, res) => {
       if(err) {
         console.log(err);
         this._notifier.show("$Unknown");
@@ -169,7 +188,7 @@ export class CIConfService extends CIHttp {
   }
 
   lockFormResult(formType: string, uid: number, cb: (result: any) => void) {
-    this.put(`/${CIConfService.conf._id}/${formType}/${uid}/lock`, {}, (err, res) => {
+    this.put(`/${this.conf._id}/${formType}/${uid}/lock`, {}, (err, res) => {
       if(err) {
         console.log(err);
         this._notifier.show("$Unknown");
@@ -180,7 +199,7 @@ export class CIConfService extends CIHttp {
   }
 
   unlockFormResult(formType: string, uid: number, cb: (result: any) => void) {
-    this.delete(`/${CIConfService.conf._id}/${formType}/${uid}/lock`, (err, res) => {
+    this.delete(`/${this.conf._id}/${formType}/${uid}/lock`, (err, res) => {
       if(err) {
         console.log(err);
         this._notifier.show("$Unknown");
@@ -191,7 +210,7 @@ export class CIConfService extends CIHttp {
   }
 
   deleteFormResult(formType: string, uid: number, cb: (result: any) => void) {
-    this.delete(`/${CIConfService.conf._id}/${formType}/${uid}`, (err, res) => {
+    this.delete(`/${this.conf._id}/${formType}/${uid}`, (err, res) => {
       if(err) {
         console.log(err);
         this._notifier.show("$Unknown");
@@ -202,7 +221,7 @@ export class CIConfService extends CIHttp {
   }
 
   postApplication(formType: string, uid: number, data: any, cb: (result: any) => void) {
-    this.post(`/${CIConfService.conf._id}/${formType}/${uid}`, {content: data}, (err, res) => {
+    this.post(`/${this.conf._id}/${formType}/${uid}`, {content: data}, (err, res) => {
       if(err) {
         console.log(err);
         this._notifier.show("$Unknown");
@@ -213,7 +232,7 @@ export class CIConfService extends CIHttp {
   }
 
   getFormResults(formType: string, cb: (result: any) => void) {
-    this.get(`/${CIConfService.conf._id}/${formType}/all`, (err, res) => {
+    this.get(`/${this.conf._id}/${formType}/all`, (err, res) => {
       if(err) {
         console.log(err);
         this._notifier.show("$Unknown");
