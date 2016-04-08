@@ -133,7 +133,8 @@ class CIConfApplication extends CICardView implements CanDeactivate {
     });
 
     window.onbeforeunload = function() {
-      return "请确认已保存";
+      if(this.canModify && (this.isAdmin || !this.locked)) return "请确认已保存";
+      else return null;
     }
 
     return super.routerOnActivate();
@@ -145,7 +146,8 @@ class CIConfApplication extends CICardView implements CanDeactivate {
   }
 
   routerCanDeactivate() {
-    return confirm("请确认已保存");
+    if(this.canModify && (this.isAdmin || !this.locked)) return confirm("请确认已保存");
+    else return true;
   }
 
   submit() {
@@ -469,7 +471,7 @@ export class CIConf {
             route: ['/Conf', {id: this.confId}, 'ApplicationList', {type: 'academic-zh'}],
             router: this._router
           });
-        } else {
+        } else if(data.status == 1 || data.forms.indexOf('academic-zh') != -1) {
           tabs.push({
             title: "学术团队报名 - 中文",
             route: ['/Conf', {id: this.confId}, 'Application', {type: 'academic-zh', uid: this.userId}],
@@ -483,7 +485,7 @@ export class CIConf {
             route: ['/Conf', {id: this.confId}, 'ApplicationList', {type: 'academic-en'}],
             router: this._router
           });
-        } else {
+        } else if(data.status == 1 || data.forms.indexOf('academic-en') != -1) {
           tabs.push({
             title: "学术团队报名 - 英文",
             route: ['/Conf', {id: this.confId}, 'Application', {type: 'academic-en', uid: this.userId}],
