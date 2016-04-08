@@ -20,6 +20,7 @@ export class CIConfService extends CIHttp {
   private STATUS_MAP: {[id: number]: string;} = {
     0: "进行准备",
     1: "招募学术团队",
+    2: "审核学术团队",
   };
 
   registerConf(data: any) {
