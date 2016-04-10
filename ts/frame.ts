@@ -7,7 +7,7 @@ import {CIFrameService, CIFrameTabDefination} from './frame.service'
 import {CICardService} from './card'
 import {CINotifier} from './notifier'
 import {CIDataNotif} from './data'
-import {MDL, MDLHandler} from './mdl'
+import {MDL} from './mdl'
 import {CIUser, CILoginService} from './login'
 import {CIConfService} from './conf'
 
@@ -18,8 +18,6 @@ import {CIConf, CIConfList} from './views/conf'
 import {CIAbout} from './views/misc'
 
 import * as CIUtil from './util'
-
-declare var componentHandler: MDLHandler;
 
 @Component({
   selector: 'ci-frame',
@@ -175,9 +173,8 @@ export class CIFrame {
       setTimeout(() => {
         this.tabs = tabs;
         this.tabAnimating = false;
-        componentHandler.downgradeElements(this._el.nativeElement.getElementsByClassName("mdl-layout__tab-bar")[0]);
         setTimeout(() => {
-          componentHandler.upgradeElements(this._el.nativeElement.getElementsByClassName("mdl-layout__tab-bar")[0]);
+          CIUtil.upgradeMDL(this._el.nativeElement.getElementsByClassName("mdl-layout")[0]);
         }, 0);
       }, 200)
     }

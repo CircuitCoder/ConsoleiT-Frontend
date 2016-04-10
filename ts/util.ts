@@ -1,8 +1,15 @@
 // Utitlities
 
+export interface MDLHandler {
+  upgradeElements(el: any): void;
+  upgradeDom(): void;
+  downgradeElements(el: any): void;
+}
+
 declare var md5: any;
 declare var marked: any;
 declare var saveAs: any;
+declare var componentHandler: MDLHandler;
 
 /**
  * Generate gravatar url from email
@@ -103,4 +110,19 @@ export function parseForm(formFields: any[], formStr: string) {
  */
 export function saveFile(name: string, texts: string[]) {
   saveAs(new Blob(texts, { type: "text/plain;charset=utf-8" }), name);
+}
+
+/**
+ * Upgrade MDL components
+ */
+export function upgradeMDL(elem?: any) {
+  if(elem) componentHandler.upgradeElements(elem);
+  else componentHandler.upgradeDom();
+}
+
+/**
+ * Downgrade MDL components
+ */
+export function downgradeMDL(elem: any) {
+  componentHandler.downgradeElements(elem);
 }
