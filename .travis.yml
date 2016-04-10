@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-- '5.8'
+- '5'
 - '4'
 env:
 - "DEPLOY_DEST=consoleit@console.bjmun.org:frontend"
@@ -24,7 +24,7 @@ deploy:
   on:
     tags: true
     repo: CircuitCoder/ConsoleiT-Frontend
-    node: "5.8"
+    node: "5"
   file:
     - artifacts/webpack.tar.gz
     - artifacts/webpack.zip
@@ -35,5 +35,5 @@ deploy:
   on:
     repo: CircuitCoder/ConsoleiT-Frontend
     tags: true
-    node: "5.8"
+    node: "5"
 
