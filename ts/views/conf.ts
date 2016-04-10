@@ -120,27 +120,39 @@ class CIConfApplication extends CICardView implements CanDeactivate {
     }
 
   routerOnActivate() {
-    this._conf.getForm(this.formType, (form) => {
-      this.form = form;
-      this._conf.getFormResult(this.formType, this.userId, (data) => {
-        this.form.forEach((e: any,i: number) => {
-          if(e.type == "checkbox" && !data.submission[i]) data.submission[i] = {};
-        });
-        this.data = data.submission;
-        this.locked = data.locked;
-        console.log(data);
-
-        this.status = data.status;
-        if(this.status == 0)
-          this.statusText = "未提交";
-        else if(this.status == 1)
-          this.statusText = "等待审核";
-        else if(this.status == 2)
-          this.statusText = "通过";
-        else if(this.status == 3)
-          this.statusText = "拒绝";
-        else this.statusText = this.status.toString();
+    let formPromise = new Promise((resolve, reject) => {
+      this._conf.getForm(this.formType, (form) => {
+        resolve(form);
       });
+    });
+    
+    let resultPromise = new Promise((resolve, reject) => {
+      this._conf.getFormResult(this.formType, this.userId, (data) => {
+        resolve(data);
+      }
+    });
+
+    Promise.all([formPromise, resultPromise]).then((results) => {
+      this.form = results[0];
+      return results[1];
+    }).then((data) => {
+      this.form.forEach((e: any,i: number) => {
+        if(e.type == "checkbox" && !data.submission[i]) data.submission[i] = {};
+      });
+      this.data = data.submission;
+      this.locked = data.locked;
+      console.log(data);
+
+      this.status = data.status;
+      if(this.status == 0)
+        this.statusText = "未提交";
+      else if(this.status == 1)
+        this.statusText = "等待审核";
+      else if(this.status == 2)
+        this.statusText = "通过";
+      else if(this.status == 3)
+        this.statusText = "拒绝";
+      else this.statusText = this.status.toString();
     });
 
     window.onbeforeunload = function() {
