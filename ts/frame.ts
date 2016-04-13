@@ -2,7 +2,7 @@ import {Injectable, Component, ElementRef} from 'angular2/core'
 import {ROUTER_DIRECTIVES, RouteConfig, Router} from 'angular2/router'
 import {Http, Response, Headers, RequestOptions} from 'angular2/http'
 
-import {CIFrameService, CIFrameTabDefination} from './frame.service'
+import {CIFrameService, CIFrameTabDefination, CIFrameFabDefination} from './frame.service'
 
 import {CICardService} from './card'
 import {CINotifier} from './notifier'
@@ -89,10 +89,12 @@ export class CIFrame {
   started: boolean;
   confs: any[];
   tabs: CIFrameTabDefination[];
+  fab: CIFrameFabDefination;
   title: string;
 
   titleAnimating: boolean;
   tabAnimating: boolean;
+  fabAnimating: boolean;
 
   constructor(private _loginService: CILoginService,
               private _router: Router,
@@ -175,6 +177,14 @@ export class CIFrame {
         CIUtil.upgradeMDL(this._el.nativeElement.getElementsByClassName("mdl-layout")[0]);
       }, 0);
     }, 200)
+  }
+
+  setFab(fab: CIFrameFabDefination) {
+    this.fabAnimating = true;
+    setTimeout(() => {
+      this.fab = fab;
+      this.fabAnimating = false;
+    }, 200);
   }
 
   isRouteActive(route: any[], router?: any) {

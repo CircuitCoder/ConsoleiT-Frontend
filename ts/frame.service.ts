@@ -7,6 +7,12 @@ export interface CIFrameTabDefination {
   router?: any
 }
 
+export interface CIFrameFabDefination {
+  icon: string,
+  desc?: string,
+  action: () => void
+}
+
 @Injectable()
 export class CIFrameService {
   private frame: CIFrame;
@@ -23,5 +29,9 @@ export class CIFrameService {
 
   setTabs(tabs: CIFrameTabDefination[]) {
     this.frame.setTabs(tabs);
+  }
+
+  setFab(fab: CIFrameFabDefination) {
+    this.frame.setFab(fab);
   }
 }

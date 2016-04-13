@@ -32,6 +32,7 @@ export class CILogin extends CICardView {
 
       _frame.setTitle("");
       _frame.setTabs([]);
+      _frame.setFab(null);
 
       this.data = {
         realname: "",

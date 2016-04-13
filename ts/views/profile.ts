@@ -25,6 +25,7 @@ export class CIProfile extends CICardView {
       this.user = _loginService.getUser();
       _frame.setTitle("个人资料");
       _frame.setTabs([]);
+      _frame.setFab(null);
     }
 
   updatePasswd() {

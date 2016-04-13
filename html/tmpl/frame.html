@@ -1,5 +1,7 @@
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header" ci-mdl [ngClass]="{'ci-anonymous': user==null}" *ngIf="started">
-  <header class="mdl-layout__header" [ngClass]="{'ci-tabs': tabs.length != 0, 'ci-tab-animating': tabAnimating, 'ci-title-animating': titleAnimating}" ci-mdl>
+  <header class="mdl-layout__header" [ngClass]="{'ci-tabs': tabs.length != 0,
+                                                 'ci-tab-animating': tabAnimating,
+                                                 'ci-title-animating': titleAnimating}" ci-mdl>
     <div class="mdl-layout__header-row">
       <span class="mdl-layout-title">{{ title }}</span>
       <div class="mdl-layout-spacer"></div>
@@ -62,5 +64,9 @@
       <router-outlet></router-outlet>
     </div>
   </main>
+
+  <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored ci-fab" [ngClass] = "{'ci-has-fab': fab != null, 'ci-fab-animating': fabAnimating}" (click)="fab.action()">
+    <i class="material-icons">{{ fab ? fab.icon : "" }}</i>
+  </button>
 </div>
 

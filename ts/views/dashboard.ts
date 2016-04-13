@@ -20,6 +20,7 @@ export class CIDashboard extends CICardView{
     this.user = _loginService.getUser();
     _frame.setTitle("主页");
     _frame.setTabs([]);
+    _frame.setFab(null);
   }
 
   gotoConsoleiT() {

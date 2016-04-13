@@ -62,7 +62,7 @@
         状态: <strong>{{ statusText }}{{ locked ? "，已锁定":"" }}</strong>
       </div>
 
-      <div class="mdl-card__supporting-text" *ngIf="isAdmin">
+      <div class="mdl-card__supporting-text" *ngIf="canModerate">
         <button class="mdl-button mdl-js-button mdl-button--icon" (click)="locked?unlock():lock()">
           <i class="material-icons">{{ locked? "lock_open": "lock_outline" }}</i>
         </button>

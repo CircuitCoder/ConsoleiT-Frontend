@@ -15,6 +15,7 @@ export class CIAbout extends CICardView {
     super(_cardService);
     _frame.setTitle("关于");
     _frame.setTabs([]);
+    _frame.setFab(null);
   }
 
   gotoJoin() {

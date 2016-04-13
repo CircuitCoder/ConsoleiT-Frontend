@@ -26,11 +26,12 @@ class CIConfApplicationList extends CICardView {
 
   searchStr: string;
 
-  constructor(_card: CICardService, private _conf: CIConfService, params: RouteParams) {
+  constructor(_card: CICardService, private _conf: CIConfService, params: RouteParams, _frame: CIFrameService) {
     super(_card);
     this.submissions = [];
     this.searchStr = "";
     this.formType = params.get('type');
+    _frame.setFab(null);
   }
 
   routerOnActivate() {
@@ -72,6 +73,7 @@ class CIConfApplication extends CICardView implements CanDeactivate {
   operatorId: number;
 
   canModify: boolean;
+  canModerate: boolean;
   isAdmin: boolean;
   locked: boolean;
 
@@ -87,6 +89,7 @@ class CIConfApplication extends CICardView implements CanDeactivate {
 
   constructor(_card: CICardService,
     params: RouteParams,
+    private _frame: CIFrameService,
     private _router: Router,
     private _conf: CIConfService,
     private _login: CILoginService,
@@ -98,6 +101,7 @@ class CIConfApplication extends CICardView implements CanDeactivate {
       this.formType = params.get('type');
       this.operatorId = _login.getUser()._id;
       this.isAdmin = _conf.hasPerm(this.operatorId, `registrant.${this.formType}.modify`)
+      this.canModerate = _conf.hasPerm(this.operatorId, `registrant.${this.formType}.moderate`)
       if(this.isAdmin)  this.canModify = true;
       else this.canModify = this.operatorId == this.userId;
 
@@ -116,6 +120,17 @@ class CIConfApplication extends CICardView implements CanDeactivate {
           });
         }
         else this.applicants = this._conf.getApplicantMap();
+      }
+
+      if(this.canModerate) {
+        _frame.setFab({
+          icon: "bookmark",
+          action: () => {
+            console.log("ha");
+          }
+        });
+      } else {
+        _frame.setFab(null);
       }
     }
 
@@ -410,6 +425,7 @@ export class CIConfSettings extends CICardView {
 
   constructor(
     _card: CICardService,
+    _frame: CIFrameService,
     private _notifier: CINotifier,
     private _conf: CIConfService) {
       super(_card);
@@ -421,6 +437,8 @@ export class CIConfSettings extends CICardView {
         title: this.conf.title,
         desc: this.conf.desc,
       };
+
+      _frame.setFab(null);
     }
 
   updateSettings() {
@@ -525,6 +543,7 @@ export class CIConf {
         }
         this._frame.setTitle(`会议 - ${data.conf.title}`);
         this._frame.setTabs(tabs);
+        this._frame.setFab(null);
         resolve();
       });
     });
@@ -547,6 +566,7 @@ export class CIConfList extends CICardView {
       super(_card);
       _frame.setTitle("会议列表");
       _frame.setTabs([]);
+      _frame.setFab(null);
     }
 
   routerOnActivate() {

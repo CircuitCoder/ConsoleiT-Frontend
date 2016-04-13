@@ -146,6 +146,31 @@ ci-frame {
       }
     }
   }
+
+  .ci-fab {
+    position: fixed;
+    right: 30px;
+    bottom: 20px;
+    z-index: 4;
+    transition: transform 0.2s ease;
+
+    transform: scale(0);
+
+    &.ci-has-fab {
+      transform: scale(1);
+    }
+
+    .material-icons {
+      transition: opacity 0.2s ease-in-out;
+      opacity: 1;
+    }
+
+    &.ci-fab-animating {
+      .material-icons {
+        opacity: 0;
+      }
+    }
+  }
 }
 
 #ci-snackbar {
