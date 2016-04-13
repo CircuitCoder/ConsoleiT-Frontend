@@ -92,6 +92,10 @@ ci-card {
 }
 
 .ci-card-container {
+  .ci-card-col {
+    padding-bottom: 20px;
+  }
+
   &[type="2-col"] {
     width: 100%;
 
