@@ -17,7 +17,11 @@ export class CIFrameService {
     this.frame = frame;
   }
 
-  setState(title: string, tabs: CIFrameTabDefination[]) {
-    this.frame.setState(title, tabs);
+  setTitle(title: string) {
+    this.frame.setTitle(title);
+  }
+
+  setTabs(tabs: CIFrameTabDefination[]) {
+    this.frame.setTabs(tabs);
   }
 }

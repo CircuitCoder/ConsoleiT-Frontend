@@ -30,7 +30,8 @@ export class CILogin extends CICardView {
     private _routeParams: RouteParams) {
       super(_cardService);
 
-      _frame.setState("", []);
+      _frame.setTitle("");
+      _frame.setTabs([]);
 
       this.data = {
         realname: "",

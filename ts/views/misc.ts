@@ -13,7 +13,8 @@ import {MDL} from '../mdl'
 export class CIAbout extends CICardView {
   constructor(_cardService: CICardService, _frame: CIFrameService) {
     super(_cardService);
-    _frame.setState("关于", []);
+    _frame.setTitle("关于");
+    _frame.setTabs([]);
   }
 
   gotoJoin() {

@@ -129,13 +129,13 @@ class CIConfApplication extends CICardView implements CanDeactivate {
     let resultPromise = new Promise((resolve, reject) => {
       this._conf.getFormResult(this.formType, this.userId, (data) => {
         resolve(data);
-      }
+      });
     });
 
     Promise.all([formPromise, resultPromise]).then((results) => {
       this.form = results[0];
       return results[1];
-    }).then((data) => {
+    }).then((data: any) => {
       this.form.forEach((e: any,i: number) => {
         if(e.type == "checkbox" && !data.submission[i]) data.submission[i] = {};
       });
@@ -523,7 +523,8 @@ export class CIConf {
             router: this._router
           });
         }
-        this._frame.setState(`会议 - ${data.conf.title}`, tabs);
+        this._frame.setTitle(`会议 - ${data.conf.title}`);
+        this._frame.setTabs(tabs);
         resolve();
       });
     });
@@ -544,7 +545,8 @@ export class CIConfList extends CICardView {
     _frame: CIFrameService,
     private _conf: CIConfService) {
       super(_card);
-      _frame.setState("会议列表", []);
+      _frame.setTitle("会议列表");
+      _frame.setTabs([]);
     }
 
   routerOnActivate() {

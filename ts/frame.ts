@@ -158,26 +158,23 @@ export class CIFrame {
     this._loginService.doRestore();
   }
 
-  setState(title: string, tabs: CIFrameTabDefination[]) {
-    console.log(tabs);
-    if(title) {
-      this.titleAnimating = true;
-      setTimeout(() => {
-        this.title = title;
-        this.titleAnimating = false;
-      }, 200)
-    }
+  setTitle(title: string) {
+    this.titleAnimating = true;
+    setTimeout(() => {
+      this.title = title;
+      this.titleAnimating = false;
+    }, 200)
+  }
 
-    if(tabs) {
-      this.tabAnimating = true;
+  setTabs(tabs: CIFrameTabDefination[]) {
+    this.tabAnimating = true;
+    setTimeout(() => {
+      this.tabs = tabs;
+      this.tabAnimating = false;
       setTimeout(() => {
-        this.tabs = tabs;
-        this.tabAnimating = false;
-        setTimeout(() => {
-          CIUtil.upgradeMDL(this._el.nativeElement.getElementsByClassName("mdl-layout")[0]);
-        }, 0);
-      }, 200)
-    }
+        CIUtil.upgradeMDL(this._el.nativeElement.getElementsByClassName("mdl-layout")[0]);
+      }, 0);
+    }, 200)
   }
 
   isRouteActive(route: any[], router?: any) {
