@@ -90,6 +90,7 @@
         <table class="mdl-data-table mdl-js-data-table mdl-data-table conf-jumplist">
           <tr *ngFor="#entry of submissions, #i = index" [routerLink] = "['Application', {type: formType, uid: entry._id}]" [class.is-active] = "entry._id == userId">
             <td class="mdl-data-table__cell--non-numeric">{{ applicants[entry._id].realname }}</td>
+            <td class="mdl-data-table__cell--non-numeric"><i class="material-icons">{{ entry.locked ? "lock" : "" }}</i></td>
           </tr>
         </table>
       </ci-card-table>
