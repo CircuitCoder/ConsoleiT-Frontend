@@ -56,3 +56,21 @@
     cursor: pointer;
   }
 }
+
+.conf-moderator-card {
+  position: fixed;
+  bottom: 0;
+  right: 100px;
+
+  width: 300px;
+
+  z-index: 4;
+
+  transition: transform 0.3s ease-in;
+  transform: translateY(100%);
+
+  &.conf-moderator-shown {
+    transform: translateY(0);
+    transition: transform 0.3s ease-out;
+  }
+}

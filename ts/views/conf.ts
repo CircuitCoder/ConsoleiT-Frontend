@@ -85,6 +85,9 @@ class CIConfApplication extends CICardView implements CanDeactivate {
   submissions: any;
   applicants: any;
 
+  showModerator: boolean;
+  moderatorNote: string;
+
   @ViewChild("importer") importer: any;
 
   constructor(_card: CICardService,
@@ -126,12 +129,14 @@ class CIConfApplication extends CICardView implements CanDeactivate {
         _frame.setFab({
           icon: "bookmark",
           action: () => {
-            console.log("ha");
+            this.showModerator = !this.showModerator ;
           }
         });
       } else {
         _frame.setFab(null);
       }
+
+      this.showModerator = false;
     }
 
   routerOnActivate() {
