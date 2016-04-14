@@ -136,6 +136,12 @@ class CIConfApplication extends CICardView implements CanDeactivate {
         _frame.setFab(null);
       }
 
+      if(this.canModerate) {
+        _conf.getNote(this.formType, this.userId, (note) => {
+          this.moderatorNote = note;
+        });
+      }
+
       this.showModerator = false;
     }
 
@@ -238,6 +244,12 @@ class CIConfApplication extends CICardView implements CanDeactivate {
         this._notifier.show(res.msg);
         this.locked = false;
       }
+    });
+  }
+
+  saveNote() {
+    this._conf.postNote(this.formType, this.userId, this.moderatorNote, () => {
+      this._notifier.show("OperationSuccessful");
     });
   }
 
