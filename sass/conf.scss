@@ -66,3 +66,8 @@
     transition: transform 0.3s ease-out;
   }
 }
+
+.moderator-note-showbox pre {
+  white-space: pre-wrap;
+  margin: 0;
+}

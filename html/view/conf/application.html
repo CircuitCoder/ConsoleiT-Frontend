@@ -62,6 +62,10 @@
         状态: <strong>{{ statusText }}{{ locked ? "，已锁定":"" }}</strong>
       </div>
 
+      <div class="mdl-card__supporting-text moderator-note-showbox" *ngIf="canModerate" [ngClass]="{'ci-annotation': !moderatorNote || moderatorNote == '' }">
+        <pre>{{ moderatorNote ? moderatorNote : "无笔记" }}</pre>
+      </div>
+
 
       <ci-card-actions>
         <button class="mdl-button--raised mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" (click)="submit()" *ngIf="canModify" [disabled]="(!isAdmin) && locked">
