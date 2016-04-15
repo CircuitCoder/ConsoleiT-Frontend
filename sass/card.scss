@@ -44,7 +44,10 @@ ci-card {
         display: none;
       }
 
-      ci-card-table {
+      .ci-card-table {
+        margin-left: -16px;
+        margin-right: -16px;
+
         > table {
           width: 100%;
           padding: 10px 0;

@@ -81,14 +81,22 @@
       <ci-card-title>
         提交列表
       </ci-card-title>
-      <ci-card-table>
+      <div class="ci-card-table ci-entry-table">
         <table class="mdl-data-table mdl-js-data-table mdl-data-table conf-jumplist">
-          <tr *ngFor="#entry of submissions, #i = index" [routerLink] = "['Application', {type: formType, uid: entry._id}]" [class.is-active] = "entry._id == userId">
-            <td class="mdl-data-table__cell--non-numeric">{{ applicants[entry._id].realname }}</td>
-            <td class="mdl-data-table__cell--non-numeric"><i class="material-icons">{{ entry.locked ? "lock" : "" }}</i></td>
-          </tr>
+          <thead>
+            <tr>
+              <th class="mdl-data-table__cell--non-numeric">申请者</th>
+              <th class="mdl-data-table__cell--non-numeric">锁定</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="#entry of submissions, #i = index" [routerLink] = "['Application', {type: formType, uid: entry._id}]" [class.is-active] = "entry._id == userId">
+              <td class="mdl-data-table__cell--non-numeric">{{ applicants[entry._id].realname }}</td>
+              <td class="mdl-data-table__cell--non-numeric"><i class="material-icons">{{ entry.locked ? "lock" : "" }}</i></td>
+            </tr>
+          </tbody>
         </table>
-      </ci-card-table>
+      </div>
     </ci-card>
   </div>
 
