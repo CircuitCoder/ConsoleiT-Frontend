@@ -4,6 +4,10 @@
       <ci-card-title>
         编辑表单: {{ formName }}
       </ci-card-title>
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" [ngClass]="{'is-dirty': formName && formName!=''}">
+        <input class="mdl-textfield__input" type="text" id="conf-form-name" [(ngModel)]="formName">
+        <label class="mdl-textfield__label" for="'conf-form-name">标题</label>
+      </div>
       <ci-card-actions>
         <button class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect" (click) = "pushField()">
           <i class="material-icons">add</i>

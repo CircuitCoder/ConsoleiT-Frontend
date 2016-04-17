@@ -12,32 +12,9 @@
       <textarea class="mdl-textfield__input" rows="4" id="ci-conf-settings-desc" [(ngModel)]="settings.desc"></textarea>
       <label class="mdl-textfield__label" for="ci-conf-settings-desc">会议简介</label>
     </div>
-
-    <div class="ci-radios">
-      <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="conf-settings-status-0" [ngClass]="{'is-checked': settings.status==0}">
-        <input type="radio"
-          id="conf-settings-status-0"
-          class="mdl-radio__button"
-          (click)="settings.status = 0"
-          [checked]="settings.status == 0">
-        <span class="mdl-radio__label">准备中</span>
-      </label>
-      <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="conf-settings-status-1" [ngClass]="{'is-checked': settings.status==1}">
-        <input type="radio"
-          id="conf-settings-status-1"
-          class="mdl-radio__button"
-          (click)="settings.status = 1"
-          [checked]="settings.status == 1">
-        <span class="mdl-radio__label">招募学术团队</span>
-      </label>
-      <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="conf-settings-status-2" [ngClass]="{'is-checked': settings.status==2}">
-        <input type="radio"
-          id="conf-settings-status-2"
-          class="mdl-radio__button"
-          (click)="settings.status = 2"
-          [checked]="settings.status == 2">
-        <span class="mdl-radio__label">学术团队审核</span>
-      </label>
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" ci-mdl>
+      <input class="mdl-textfield__input" type="text" id="ci-conf-settings-currentStage" [(ngModel)]="settings.currentStage">
+      <label class="mdl-textfield__label" for="ci-conf-settings-currentStage">当前阶段</label>
     </div>
 
     <ci-card-actions>

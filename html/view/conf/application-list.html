@@ -14,11 +14,11 @@
     </ci-card>
     <ci-card *ngFor="#entry of submissions | funcFilter:flt:searchStr:membersMap:getStatusText">
       <ci-card-title>
-        {{ membersMap[entry._id].realname }}<span class="ci-annotation"> - {{ getStatusText(entry.status) }}</span>
+        {{ entry.realname }}<span class="ci-annotation"> - {{ entry.status }}</span>
         <i *ngIf="entry.locked" class="material-icons">lock</i>
       </ci-card-title>
       <ci-card-actions>
-        <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" [routerLink] = "['Application', {type: formType, uid: entry._id}]">
+        <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" [routerLink] = "['Application', {form: formId, uid: entry.user}]">
           查看表单
         </button>
       </ci-card-actions>
@@ -30,7 +30,7 @@
         操作
       </ci-card-title>
       <div class="mdl-card__supporting-text">
-        <button class="mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect" [routerLink] = "['Form', {type: formType}]">
+        <button class="mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect" [routerLink] = "['Form', {form: formId}]">
           修改表单
         </button>
       </div>

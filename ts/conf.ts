@@ -13,6 +13,7 @@ export class CIConfService extends CIHttp {
   private conf: any;
   private members: any;
   private group: any;
+  private forms: [{ name: string, title: string, role: string }];
 
   private submissions: any;
   private applicants: any;
@@ -27,6 +28,7 @@ export class CIConfService extends CIHttp {
     this.conf = data.conf;
     this.members = data.members;
     this.group = data.group;
+    this.forms = data.forms;
   }
 
   getConf() {
@@ -51,25 +53,22 @@ export class CIConfService extends CIHttp {
     return this.group;
   }
 
-  registerSubmissions(data: any) {
-    this.submissions = data.list;
-    this.applicants = data.members;
+  getFormDescs() {
+    return this.forms;
   }
 
-  getApplicantMap() {
-    return this.applicants.reduce((prev: any,e: any) => {
-      prev[e._id] = e;
-      return prev;
-    }, {});
+  getFormDesc(formId: string) {
+    let filtered = this.forms.filter(e => e.name == formId);
+    if(filtered.length == 0) return null;
+    else return filtered[0];
+  }
+
+  registerSubmissions(data: any) {
+    this.submissions = data;
   }
 
   getSubmissions() {
     return this.submissions;
-  }
-
-  getStatus(conf?: any) {
-    if(conf) return this.STATUS_MAP[conf.status];
-    else return this.STATUS_MAP[this.conf.status];
   }
 
   hasPerm(uid: number, perm: string) {
@@ -149,9 +148,8 @@ export class CIConfService extends CIHttp {
 
   /* Forms */
 
-  getForm(formType: string, cb: (form: any) => void) {
-    let id = this.conf._id;
-    this.get(`/${id}/${formType}/form`, (err, res) => {
+  getForm(formId: string, cb: (form: any) => void) {
+    this.get(`/${this.conf._id}/form/${formId}`, (err, res) => {
       if(err) {
         console.log(err);
         this._notifier.show("$Unknown");
@@ -161,9 +159,8 @@ export class CIConfService extends CIHttp {
     });
   }
 
-  postForm(formType: string, data: any, cb: (result: any) => void) {
-    let id = this.conf._id;
-    this.post(`/${id}/${formType}/form`, {form: data}, (err, res) => {
+  postForm(formId: string, data: { content: any, title: string }, cb: (result: any) => void) {
+    this.post(`/${this.conf._id}/form/${formId}/content`, data, (err, res) => {
       if(err) {
         console.log(err);
         this._notifier.show("$Unknown");
@@ -173,23 +170,24 @@ export class CIConfService extends CIHttp {
     });
   }
 
-  getFormResult(formType: string, uid: number, cb: (result: any) => void) {
-    this.get(`/${this.conf._id}/${formType}/${uid}`, (err, res) => {
+  getFormResult(formId: string, uid: number, cb: (result: any) => void) {
+    this.get(`/${this.conf._id}/form/${formId}/submission/${uid}`, (err, res) => {
       if(err) {
         console.log(err);
         this._notifier.show("$Unknown");
       } else {
         cb({
-          status: res.status?res.status:0,
+          status: res.new ? '未提交' : (res.status ? res.status : '审核中'),
+          new: res.new,
           locked: res.locked,
-          submission: res.submission?JSON.parse(res.submission):{}
+          submission: res.submission
         });
       }
     });
   }
 
-  lockFormResult(formType: string, uid: number, cb: (result: any) => void) {
-    this.put(`/${this.conf._id}/${formType}/${uid}/lock`, {}, (err, res) => {
+  lockFormResult(formId: string, uid: number, cb: (result: any) => void) {
+    this.put(`/${this.conf._id}/form/${formId}/submission/${uid}/lock`, {}, (err, res) => {
       if(err) {
         console.log(err);
         this._notifier.show("$Unknown");
@@ -199,8 +197,8 @@ export class CIConfService extends CIHttp {
     });
   }
 
-  unlockFormResult(formType: string, uid: number, cb: (result: any) => void) {
-    this.delete(`/${this.conf._id}/${formType}/${uid}/lock`, (err, res) => {
+  unlockFormResult(formId: string, uid: number, cb: (result: any) => void) {
+    this.delete(`/${this.conf._id}/form/${formId}/submission/${uid}/lock`, (err, res) => {
       if(err) {
         console.log(err);
         this._notifier.show("$Unknown");
@@ -210,8 +208,8 @@ export class CIConfService extends CIHttp {
     });
   }
 
-  getNote(formType: string, uid: number, cb: (note: string) => void) {
-    this.get(`/${this.conf._id}/${formType}/${uid}/note`, (err, res) => {
+  getNote(formId: string, uid: number, cb: (note: string) => void) {
+    this.get(`/${this.conf._id}/form/${formId}/submission/${uid}/note`, (err, res) => {
       if(err) {
         console.log(err);
         this._notifier.show("$Unknown");
@@ -221,8 +219,8 @@ export class CIConfService extends CIHttp {
     });
   }
 
-  postNote(formType: string, uid: number, note: string, cb: () => void) {
-    this.post(`/${this.conf._id}/${formType}/${uid}/note`, { note }, (err, res) => {
+  postNote(formId: string, uid: number, note: string, cb: () => void) {
+    this.post(`/${this.conf._id}/form/${formId}/submission/${uid}/note`, { note }, (err, res) => {
       if(err) {
         console.log(err);
         this._notifier.show("$Unknown");
@@ -232,8 +230,8 @@ export class CIConfService extends CIHttp {
     });
   }
 
-  deleteFormResult(formType: string, uid: number, cb: (result: any) => void) {
-    this.delete(`/${this.conf._id}/${formType}/${uid}`, (err, res) => {
+  postApplication(formId: string, uid: number, data: any, cb: (result: any) => void) {
+    this.post(`/${this.conf._id}/form/${formId}/submission/${uid}`, {content: data}, (err, res) => {
       if(err) {
         console.log(err);
         this._notifier.show("$Unknown");
@@ -243,19 +241,8 @@ export class CIConfService extends CIHttp {
     });
   }
 
-  postApplication(formType: string, uid: number, data: any, cb: (result: any) => void) {
-    this.post(`/${this.conf._id}/${formType}/${uid}`, {content: data}, (err, res) => {
-      if(err) {
-        console.log(err);
-        this._notifier.show("$Unknown");
-      } else {
-        cb(res);
-      }
-    });
-  }
-
-  getFormResults(formType: string, cb: (result: any) => void) {
-    this.get(`/${this.conf._id}/${formType}/all`, (err, res) => {
+  getFormResults(formId: string, cb: (result: any) => void) {
+    this.get(`/${this.conf._id}/form/${formId}/submissions`, (err, res) => {
       if(err) {
         console.log(err);
         this._notifier.show("$Unknown");

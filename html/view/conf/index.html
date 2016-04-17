@@ -19,7 +19,7 @@
         主办方: <strong>{{ confGroup.title }}</strong>
       </div>
       <div class="mdl-card__supporting-text">
-        目前会议正在 <strong>{{ confStatus }}</strong>
+        目前会议正在 <strong>{{ confData.currentStage }}</strong>
       </div>
       <ci-card-actions [ngSwitch]="confData.status">
         <div *ngSwitchWhen="1">

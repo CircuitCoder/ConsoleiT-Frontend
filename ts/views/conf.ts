@@ -19,9 +19,8 @@ import * as CIUtil from '../util'
 
 class CIConfApplicationList extends CICardView {
 
-  formType: string;
+  formId: string;
 
-  membersMap: any;
   submissions: any[];
 
   searchStr: string;
@@ -30,15 +29,14 @@ class CIConfApplicationList extends CICardView {
     super(_card);
     this.submissions = [];
     this.searchStr = "";
-    this.formType = params.get('type');
+    this.formId = params.get('form');
     _frame.setFab(null);
   }
 
   routerOnActivate() {
-    this._conf.getFormResults(this.formType, (res) => {
+    this._conf.getFormResults(this.formId, (res) => {
       this._conf.registerSubmissions(res);
       this.submissions = this._conf.getSubmissions();
-      this.membersMap = this._conf.getApplicantMap();
     });
 
     return super.routerOnActivate();
@@ -46,17 +44,7 @@ class CIConfApplicationList extends CICardView {
 
   flt(value: any, str: string, membersMap: any, getStatusText: any) {
     if(str == "") return true;
-    else return getStatusText(value.status) == str || membersMap[value._id].realname.indexOf(str) != -1;
-  }
-
-  getStatusText(id: number) {
-    if(id == 1) {
-      return "等待审核";
-    } else if(id == 2) {
-      return "通过";
-    } else if(id == 3) {
-      return "拒绝";
-    } else return String(id);
+    else return value.status === str || value.realname.indexOf(str) != -1;
   }
 }
 
@@ -67,20 +55,20 @@ class CIConfApplicationList extends CICardView {
 
 class CIConfApplication extends CICardView implements CanDeactivate {
 
-  formType: any;
+  formId: any;
   formName: string;
   userId: number;
   operatorId: number;
 
   canModify: boolean;
   canModerate: boolean;
-  isAdmin: boolean;
-  locked: boolean;
+  role: string;
 
   form: any;
   data: any;
-  status: number;
-  statusText: string;
+  locked: boolean;
+  new: boolean;
+  status: string;
 
   submissions: any;
   applicants: any;
@@ -101,28 +89,31 @@ class CIConfApplication extends CICardView implements CanDeactivate {
       this.form = [];
       this.data = {};
       this.userId = +params.get('uid');
-      this.formType = params.get('type');
+      this.formId = params.get('form');
       this.operatorId = _login.getUser()._id;
-      this.isAdmin = _conf.hasPerm(this.operatorId, `registrant.${this.formType}.modify`)
-      this.canModerate = _conf.hasPerm(this.operatorId, `registrant.${this.formType}.moderate`)
-      if(this.isAdmin)  this.canModify = true;
+
+      var formDesc = _conf.getFormDesc(this.formId);
+      if(!formDesc) {
+        _notifier.show("$Unknown");
+        return this;
+      }
+
+      this.role = formDesc.role;
+      this.formName = formDesc.title;
+
+      this.canModerate = this.role == 'admin' || this.role == 'moderator';
+
+      if(this.role == 'admin')  this.canModify = true;
       else this.canModify = this.operatorId == this.userId;
 
-      if(this.formType == 'academic-en') this.formName = "学术团队申请 - 英文";
-      else if(this.formType == 'academic-zh') this.formName = "学术团队申请 - 中文";
-      else if(this.formType == 'participant') this.formName = "代表报名";
-      else this.formName = this.formType;
-
-      if(this.isAdmin) {
+      if(this.role == 'admin') {
         this.submissions = this._conf.getSubmissions();
         if(!this.submissions) { // Directly routed to this page
-          this._conf.getFormResults(this.formType, (res) => {
+          this._conf.getFormResults(this.formId, (res) => {
             this._conf.registerSubmissions(res);
             this.submissions = this._conf.getSubmissions();
-            this.applicants = this._conf.getApplicantMap();
           });
         }
-        else this.applicants = this._conf.getApplicantMap();
       }
 
       if(this.canModerate) {
@@ -137,7 +128,7 @@ class CIConfApplication extends CICardView implements CanDeactivate {
       }
 
       if(this.canModerate) {
-        _conf.getNote(this.formType, this.userId, (note) => {
+        _conf.getNote(this.formId, this.userId, (note) => {
           this.moderatorNote = note;
         });
       }
@@ -147,42 +138,37 @@ class CIConfApplication extends CICardView implements CanDeactivate {
 
   routerOnActivate() {
     let formPromise = new Promise((resolve, reject) => {
-      this._conf.getForm(this.formType, (form) => {
+      this._conf.getForm(this.formId, (form) => {
         resolve(form);
       });
     });
     
     let resultPromise = new Promise((resolve, reject) => {
-      this._conf.getFormResult(this.formType, this.userId, (data) => {
+      this._conf.getFormResult(this.formId, this.userId, (data) => {
         resolve(data);
       });
     });
 
-    Promise.all([formPromise, resultPromise]).then((results) => {
-      this.form = results[0];
+    Promise.all([formPromise, resultPromise]).then((results: any[]) => {
+      this.form = results[0].content;
+      this.role = results[0].role;
+      this.status = results[0].status;
+      this.formName = results[0].title;
       return results[1];
     }).then((data: any) => {
       this.form.forEach((e: any,i: number) => {
         if(e.type == "checkbox" && !data.submission[i]) data.submission[i] = {};
       });
+
       this.data = data.submission;
       this.locked = data.locked;
-      console.log(data);
-
+      this.new = data.new;
       this.status = data.status;
-      if(this.status == 0)
-        this.statusText = "未提交";
-      else if(this.status == 1)
-        this.statusText = "等待审核";
-      else if(this.status == 2)
-        this.statusText = "通过";
-      else if(this.status == 3)
-        this.statusText = "拒绝";
-      else this.statusText = this.status.toString();
     });
 
+    //TODO: change detection
     window.onbeforeunload = function() {
-      if(this.canModify && (this.isAdmin || !this.locked)) return "请确认已保存";
+      if(this.canModify && (this.role == 'admin' || !this.locked)) return "请确认已保存";
       else return null;
     }
 
@@ -195,7 +181,7 @@ class CIConfApplication extends CICardView implements CanDeactivate {
   }
 
   routerCanDeactivate() {
-    if(this.canModify && (this.isAdmin || !this.locked)) return confirm("请确认已保存");
+    if(this.canModify && (this.role == 'admin' || !this.locked)) return confirm("请确认已保存");
     else return true;
   }
 
@@ -217,18 +203,17 @@ class CIConfApplication extends CICardView implements CanDeactivate {
 
     if(invalids.length > 0) this._notifier.show(`非法字段: ${invalids.join(", ")}`);
     else {
-      this._conf.postApplication(this.formType, this.userId, this.data, (res) => {
+      this._conf.postApplication(this.formId, this.userId, this.data, (res) => {
         if(res.msg == "OperationSuccessful") {
           this._notifier.show(res.msg);
-          this.statusText = "等待审核";
-          this.status = 1;
+          this.status = "审核中";
         } else if(res.error) this._notifier.show(res.error);
       });
     }
   }
 
   lock() {
-    this._conf.lockFormResult(this.formType, this.userId, (res) => {
+    this._conf.lockFormResult(this.formId, this.userId, (res) => {
       if(res.error) this._notifier.show(res.error);
       else {
         this._notifier.show(res.msg);
@@ -238,7 +223,7 @@ class CIConfApplication extends CICardView implements CanDeactivate {
   }
 
   unlock() {
-    this._conf.unlockFormResult(this.formType, this.userId, (res) => {
+    this._conf.unlockFormResult(this.formId, this.userId, (res) => {
       if(res.error) this._notifier.show(res.error);
       else {
         this._notifier.show(res.msg);
@@ -248,7 +233,7 @@ class CIConfApplication extends CICardView implements CanDeactivate {
   }
 
   saveNote() {
-    this._conf.postNote(this.formType, this.userId, this.moderatorNote, () => {
+    this._conf.postNote(this.formId, this.userId, this.moderatorNote, () => {
       this._notifier.show("OperationSuccessful");
     });
   }
@@ -293,7 +278,6 @@ class CIConfHome extends CICardView {
   confData: any;
   confDescs: any;
   confDescTitles: any;
-  confStatus: string;
   confGroup: any;
   confMembers: any;
   confRoles: any;
@@ -308,12 +292,10 @@ class CIConfHome extends CICardView {
 
   routerOnActivate() {
     this.confData = this._conf.getConf();
-    this.confStatus = this._conf.getStatus();
     this.confMembers = this._conf.getMemberMap();
     this.confGroup = this._conf.getGroup();
     this.confRoles = this._conf.getRoleMap();
 
-    console.log(this.confRoles);
     this.confData.members.sort((a: any, b: any) => a.role < b.role ? -1 : 1 );
     Object.keys(this.confMembers).forEach((e: any) => {
       this.confMembers[e].gravatar = CIUtil.generateGravatar(this.confMembers[e].email);
@@ -335,7 +317,7 @@ class CIConfHome extends CICardView {
 
 class CIConfForm extends CICardView {
 
-  formType: any;
+  formId: any;
   data: any;
   formName: any;
 
@@ -345,18 +327,17 @@ class CIConfForm extends CICardView {
     private _conf: CIConfService,
     private _notifier: CINotifier) {
       super(_card);
-      this.formType = params.get('type');
+      this.formId = params.get('form');
+      
+      let formDesc = _conf.getFormDesc(this.formId);
+      this.formName = formDesc.title;
+      //TODO: formName
       this.data = [];
-
-      if(this.formType == 'academic-en') this.formName = "学术团队申请 - 英文";
-      else if(this.formType == 'academic-zh') this.formName = "学术团队申请 - 中文";
-      else if(this.formType == 'participant') this.formName = "代表报名";
-      else this.formName = this.formType;
     }
 
   routerOnActivate() {
-    this._conf.getForm(this.formType,(res) => {
-      this.data = res.map((e: any) => {
+    this._conf.getForm(this.formId,(res) => {
+      this.data = res.content.map((e: any) => {
         return {
           title: e.title,
           desc: e.desc,
@@ -365,8 +346,7 @@ class CIConfForm extends CICardView {
           required: e.required
         }
       });
-
-      console.log(this.data);
+      this.formName = res.title;
     });
 
     return super.routerOnActivate();
@@ -399,7 +379,7 @@ class CIConfForm extends CICardView {
   }
 
   submit() {
-    let result = this.data.map((e: any): any => {
+    let content = this.data.map((e: any): any => {
       let choices = e.choices ? e.choices.split("\n") : [];
       if(e.type == "checkbox" || e.type == "radio") {
         return {
@@ -420,10 +400,12 @@ class CIConfForm extends CICardView {
       }
     });
 
-    this._conf.postForm(this.formType, result, res => {
+    this._conf.postForm(this.formId, {
+      content: content,
+      title: this.formName
+    }, res => {
       if(res.msg == "OperationSuccessful") {
-        this._notifier.show(res.msg);
-        this._router
+        this._notifier.show("操作成功，您可能需要刷新浏览器才能看到效果");
       }
     });
   }
@@ -450,9 +432,9 @@ export class CIConfSettings extends CICardView {
       this.memberMap = _conf.getMemberMap();
 
       this.settings = {
-        status: this.conf.status,
         title: this.conf.title,
         desc: this.conf.desc,
+        currentStage: this.conf.currentStage,
       };
 
       _frame.setFab(null);
@@ -477,15 +459,15 @@ export class CIConfSettings extends CICardView {
     component: CIConfHome,
     useAsDefault: true
   }, {
-    path: '/:type/list',
+    path: '/:form/list',
     name: 'ApplicationList',
     component: CIConfApplicationList
   }, {
-    path: '/:type/:uid',
+    path: '/:form/:uid',
     name: 'Application',
     component: CIConfApplication
   }, {
-    path: '/settings/form/:type',
+    path: '/settings/form/:form',
     name: 'Form',
     component: CIConfForm
   }, {
@@ -515,6 +497,7 @@ export class CIConf {
     return new Promise<void>((resolve, reject) => {
       outer._confService.getData(outer.confId, (data) => {
         outer._confService.registerConf(data);
+        let forms = outer._confService.getFormDescs();
         let tabs: any = [
           {
             title: "主页",
@@ -523,33 +506,21 @@ export class CIConf {
           }
         ];
 
-        if(outer._confService.hasPerm(this.userId, 'registrant.academicZh.view')) {
-          tabs.push({
-            title: "学术团队报名结果 - 中文",
-            route: ['/Conf', {id: this.confId}, 'ApplicationList', {type: 'academic-zh'}],
-            router: this._router
-          });
-        } else if(data.status == 1 || data.forms.indexOf('academic-zh') != -1) {
-          tabs.push({
-            title: "学术团队报名 - 中文",
-            route: ['/Conf', {id: this.confId}, 'Application', {type: 'academic-zh', uid: this.userId}],
-            router: this._router
-          });
-        }
-
-        if(outer._confService.hasPerm(this.userId, 'registrant.academicEn.view')) {
-          tabs.push({
-            title: "学术团队报名结果 - 英文",
-            route: ['/Conf', {id: this.confId}, 'ApplicationList', {type: 'academic-en'}],
-            router: this._router
-          });
-        } else if(data.status == 1 || data.forms.indexOf('academic-en') != -1) {
-          tabs.push({
-            title: "学术团队报名 - 英文",
-            route: ['/Conf', {id: this.confId}, 'Application', {type: 'academic-en', uid: this.userId}],
-            router: this._router
-          });
-        }
+        // Inject forms
+        forms.forEach(e => {
+          if(e.role == "applicant")
+            tabs.push({
+              title: e.title,
+              route: ['/Conf', {id: this.confId}, 'Application', { form: e.name, uid: this.userId }],
+              router: this._router
+            });
+          else
+            tabs.push({
+              title: e.title + ' - 结果',
+              route: ['/Conf', {id: this.confId}, 'ApplicationList', { form: e.name }],
+              router: this._router
+            });
+        });
 
         if(outer._confService.hasPerm(this.userId, 'settings')) {
           tabs.push({
@@ -589,9 +560,6 @@ export class CIConfList extends CICardView {
   routerOnActivate() {
     this._conf.getAvailList( res => {
       this.confs = res;
-      this.confs.forEach((e: any) => {
-        e.statusText = this._conf.getStatus(e);
-      });
     });
 
     return super.routerOnActivate();
