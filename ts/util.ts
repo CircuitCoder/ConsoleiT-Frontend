@@ -138,3 +138,21 @@ export function upgradeMDL(elem?: any) {
 export function downgradeMDL(elem: any) {
   componentHandler.downgradeElements(elem);
 }
+
+/**
+ * Deep clone a object or a array.
+ * GUYS why there is still not a deep clone function in standard js?
+ */
+export function deepClone(elem: any) {
+  if(elem == null) return null;
+  else if(typeof elem !== 'object') return elem;
+  else if(Array.isArray(elem)) {
+    let result:any[] = [];
+    elem.forEach((e: any) => result.push(deepClone(e)));
+    return result;
+  } else {
+    let result:any = {};
+    Object.keys(elem).forEach((k: string) => result[k] = deepClone(elem[k]));
+    return result;
+  }
+}

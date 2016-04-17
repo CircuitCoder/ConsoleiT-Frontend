@@ -66,6 +66,7 @@ class CIConfApplication extends CICardView implements CanDeactivate {
 
   form: any;
   data: any;
+  savedData: any;
   locked: boolean;
   new: boolean;
   status: string;
@@ -164,11 +165,12 @@ class CIConfApplication extends CICardView implements CanDeactivate {
       this.locked = data.locked;
       this.new = data.new;
       this.status = data.status;
+
+      this.savedData = CIUtil.deepClone(this.data);
     });
 
-    //TODO: change detection
     window.onbeforeunload = function() {
-      if(this.canModify && (this.role == 'admin' || !this.locked)) return "请确认已保存";
+      if(this.isDataDifferent(this.savedData,this.data)) return "请确认已保存";
       else return null;
     }
 
@@ -181,7 +183,7 @@ class CIConfApplication extends CICardView implements CanDeactivate {
   }
 
   routerCanDeactivate() {
-    if(this.canModify && (this.role == 'admin' || !this.locked)) return confirm("请确认已保存");
+    if(this.isDataDifferent(this.savedData,this.data)) return confirm("请确认已保存");
     else return true;
   }
 
@@ -265,6 +267,46 @@ class CIConfApplication extends CICardView implements CanDeactivate {
 
     var file = this.importer.nativeElement.files[0];
     fr.readAsText(file);
+  }
+
+  private isDataDifferent(dataA: any[], dataB: any[]) {
+    return !this.form.reduce((prev: boolean, field: any, index: number) => {
+      if(!prev) {
+        console.log("ALREADY DIFFERENT: %d", index);
+        return false;
+      }
+      else if(field.type == 'title') return true;
+      else if(field.type == 'checkbox') {
+        let selectedA:boolean[] = [];
+        let selectedB:boolean[] = [];
+        if(dataA[index] == undefined) {
+          for(var i = 0; i < field.choices.length; ++i) selectedA[i] = false;
+        } else {
+          for(var i = 0; i < field.choices.length; ++i) selectedA[i] = i in dataA[index] && dataA[index][i];
+        }
+
+        if(dataB[index] == undefined) {
+          for(var i = 0; i < field.choices.length; ++i) selectedB[i] = false;
+        } else {
+          for(var i = 0; i < field.choices.length; ++i) selectedB[i] = i in dataB[index] && dataB[index][i];
+        }
+
+        for(var i = 0 ;i < field.choices.length; ++i) if(selectedA[i] != selectedB[i]) return false;
+        return true;
+      } else if(field.type == 'radio') {
+        let AEmpty = dataA[index] == undefined || dataA[index] == null;
+        let BEmpty = dataB[index] == undefined || dataB[index] == null;
+        if(AEmpty) return BEmpty;
+        else return dataA[index] === dataB[index];
+      }
+      else if(field.type == 'input' || field.type == 'area') {
+        let AEmpty = !dataA[index];
+        let BEmpty = !dataB[index];
+        if(AEmpty) return BEmpty;
+        else return dataA[index] === dataB[index];
+      }
+      else return dataA[index] === dataB[index];
+    }, true);
   }
 }
 
