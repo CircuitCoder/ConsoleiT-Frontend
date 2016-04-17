@@ -54,18 +54,30 @@ export function cardMarked(text: string, cb: (titles: string[], bodies: string[]
 /**
  * Export form to pure text file
  */
-export function exportForm(formFields: any[], name: string) {
+export function exportForm(formFields: any[], formData: any[], name: string) {
   return formFields.reduce((prev: string, e: any, fi: number): string => {
     if(e.type == "title") return prev + '# ' + e.title + "\n\n";
     else {
       prev += '# ' + e.title + (e.required ? '*' : '') + "\n";
       if(e.desc != null) prev += "#\n# " + e.desc + "\n";
 
-      if(e.type == "input" || e.type == "area") return prev + `\n[您的回答:]\n---\n\n`;
+      if(e.type == "input" || e.type == "area") return prev + `\n[您的回答:]${formData[fi] ? formData[fi] : ""}\n---\n\n`;
       else if(e.type == "radio" || e.type == "checkbox") {
+        let selected: string;
+        if(formData[fi] != null || formData[fi] != undefined) {
+          if(e.type == "radio") selected = (formData[fi] + 1).toString();
+          else {
+            var selectedKeys:number[] = [];
+            Object.keys(formData[fi]).forEach(key => {
+              if(formData[fi][key]) selectedKeys.push(parseInt(key)+1);
+            });
+            selected = selectedKeys.sort().map(k => k.toString()).join(',');
+          }
+        } else selected = "";
+
         prev += (e.type == "radio" ? "# 单选:\n" : "# 复选:\n");
         prev += e.choices.map((e: string, i: number) => `# ${i+1} ${e}`).join("\n");
-        return prev + `\n\n[您的回答(数字，逗号分隔):]\n---\n\n`;
+        return prev + `\n\n[您的回答(数字，逗号分隔):]${selected}\n---\n\n`;
       } else {
         console.log("WTF", e);
       }
@@ -94,10 +106,10 @@ export function parseForm(formFields: any[], formStr: string) {
     } else if(formFields[counter].type == "checkbox") {
       result[counter] = {};
       e.split(',').forEach(i => {
-        result[counter][formFields[counter].choices[parseInt(i)-1]] = true;
+        result[counter][parseInt(i)-1] = true;
       });
     } else if(formFields[counter].type == "radio") {
-      result[counter] = formFields[counter].choices[parseInt(e)-1];
+      result[counter] = parseInt(e)-1;
     }
     ++counter;
   });

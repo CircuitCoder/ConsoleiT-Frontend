@@ -12,12 +12,12 @@
       <!-- radios -->
       <div class="ci-radios" *ngIf = "entry.type == 'radio'">
         <template ngFor #choice [ngForOf]="entry.choices" #j = "index">
-        <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" [attr.for]="'conf-form-' + i + '-' + j" ci-mdl [ngClass]="{'is-checked': data[i] == choice}">
+        <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" [attr.for]="'conf-form-' + i + '-' + j" ci-mdl [ngClass]="{'is-checked': data[i] == j}">
             <input type="radio"
               [id]="'conf-form-' + i + '-' + j"
               class="mdl-radio__button"
-              (click)="data[i] = choice"
-              [checked]="data[i] == choice">
+              (click)="data[i] = j"
+              [checked]="data[i] == j">
             <span class="mdl-radio__label">{{choice}}</span>
           </label>
           <br>
@@ -27,11 +27,11 @@
       <!-- checkbox -->
       <div class="ci-radios" *ngIf = "entry.type == 'checkbox' && data[i]">
         <template ngFor #choice [ngForOf]="entry.choices" #j = "index">
-          <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" [attr.for]="'conf-form-' + i + '-' + j" ci-mdl [ngClass]="{'is-checked': data[i][choice]}">
+          <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" [attr.for]="'conf-form-' + i + '-' + j" ci-mdl [ngClass]="{'is-checked': data[i][j]}">
             <input type="checkbox"
               [id]="'conf-form-' + i + '-' + j"
               class="mdl-checkbox__input"
-              [(ngModel)]="data[i][choice]">
+              [(ngModel)]="data[i][j]">
             <span class="mdl-checkbox__label">{{choice}}</span>
           </label>
           <br>

@@ -240,7 +240,7 @@ class CIConfApplication extends CICardView implements CanDeactivate {
 
   exportForm() {
     try {
-      CIUtil.saveFile(this.formName, [CIUtil.exportForm(this.form, this.formName)]);
+      CIUtil.saveFile(this.formName, [CIUtil.exportForm(this.form, this.data, this.formName)]);
     } catch(e) {
       this._notifier.show("抱歉，您所使用的浏览区不支持导出");
     }
