@@ -11,8 +11,8 @@ import {MDL} from '../mdl'
 })
 
 export class CIAbout extends CICardView {
-  constructor(_cardService: CICardService, _frame: CIFrameService) {
-    super(_cardService);
+  constructor(_card: CICardService, _frame: CIFrameService) {
+    super(_card);
     _frame.setTitle("关于");
     _frame.setTabs([]);
     _frame.setFab(null);

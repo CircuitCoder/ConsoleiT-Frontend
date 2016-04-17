@@ -21,14 +21,14 @@ export class CILogin extends CICardView {
   @ViewChild(CICard) private loginCard:CICard;
 
   constructor(
-    _cardService: CICardService,
+    _card: CICardService,
     _frame: CIFrameService,
-    private _loginService: CILoginService,
+    private _login: CILoginService,
     private _notifier: CINotifier,
     private _router: Router,
     private _routeData: RouteData,
     private _routeParams: RouteParams) {
-      super(_cardService);
+      super(_card);
 
       _frame.setTitle("");
       _frame.setTabs([]);
@@ -54,10 +54,10 @@ export class CILogin extends CICardView {
 
   commit() {
     if(this.isRegister)
-      this._loginService.doRegister(this.data.email, this.data.realname, () => {
+      this._login.doRegister(this.data.email, this.data.realname, () => {
         this.switchState();
       });
-    else this._loginService.doLogin(this.data.email, this.data.passwd);
+    else this._login.doLogin(this.data.email, this.data.passwd);
   }
 
   switchState() {
@@ -71,6 +71,6 @@ export class CILogin extends CICardView {
 
   requestReset() {
     if(!this.data.email || this.data.email == "") this._notifier.show("请输入邮箱");
-    else this._loginService.doRequestReset(this.data.email, () => {});
+    else this._login.doRequestReset(this.data.email, () => {});
   }
 }

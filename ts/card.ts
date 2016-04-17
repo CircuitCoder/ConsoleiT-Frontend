@@ -79,10 +79,10 @@ export class CICard {
   @ViewChild(CICardContent) private contentWrapper:CICardContent;
 
   constructor(private _el: ElementRef,
-              private _cardService: CICardService) { }
+              private _card: CICardService) { }
 
   ngAfterViewInit() {
-    this._cardService.register(this);
+    this._card.register(this);
   }
 
   setVisible(visible: boolean): Promise<any> {
@@ -123,17 +123,17 @@ export class CICard {
 }
 
 export class CICardView implements OnDeactivate, OnActivate {
-  constructor(protected _cardService: CICardService) { }
+  constructor(protected _card: CICardService) { }
 
   ngAfterViewInit() {
-    this._cardService.setVisibleAll(true);
+    this._card.setVisibleAll(true);
   }
 
   routerOnActivate() {
-    this._cardService.clearCard();
+    this._card.clearCard();
   }
 
   routerOnDeactivate() {
-    return this._cardService.setVisibleAll(false);
+    return this._card.setVisibleAll(false);
   }
 }

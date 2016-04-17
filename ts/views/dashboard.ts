@@ -15,9 +15,9 @@ export class CIDashboard extends CICardView{
 
   user: CIUser;
 
-  constructor(_cardService: CICardService, private _loginService: CILoginService, _frame: CIFrameService) {
-    super(_cardService);
-    this.user = _loginService.getUser();
+  constructor(_card: CICardService, private _login: CILoginService, _frame: CIFrameService) {
+    super(_card);
+    this.user = _login.getUser();
     _frame.setTitle("主页");
     _frame.setTabs([]);
     _frame.setFab(null);

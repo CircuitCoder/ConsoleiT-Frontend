@@ -17,12 +17,12 @@ export class CIProfile extends CICardView {
 
   user: CIUser;
 
-  constructor(_cardService: CICardService,
-    private _loginService: CILoginService,
+  constructor(_card: CICardService,
+    private _login: CILoginService,
     private _notifier: CINotifier,
     _frame: CIFrameService) {
-      super(_cardService);
-      this.user = _loginService.getUser();
+      super(_card);
+      this.user = _login.getUser();
       _frame.setTitle("个人资料");
       _frame.setTabs([]);
       _frame.setFab(null);
@@ -31,7 +31,7 @@ export class CIProfile extends CICardView {
   updatePasswd() {
     if(!this.passwd || this.passwd == "") return this._notifier.show("InvalidInput");
     else {
-      this._loginService.doChangePasswd(this.oripasswd, this.passwd, () => {
+      this._login.doChangePasswd(this.oripasswd, this.passwd, () => {
         // Do nothing
       });
     }

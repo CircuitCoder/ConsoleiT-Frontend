@@ -96,11 +96,11 @@ export class CIFrame {
   tabAnimating: boolean;
   fabAnimating: boolean;
 
-  constructor(private _loginService: CILoginService,
+  constructor(private _login: CILoginService,
               private _router: Router,
               private _notifier: CINotifier,
-              private _confService: CIConfService,
-              private _frameService: CIFrameService,
+              private _conf: CIConfService,
+              private _frame: CIFrameService,
               private _http: Http,
               private _el: ElementRef) {
 
@@ -117,9 +117,9 @@ export class CIFrame {
 
     var outer = this;
 
-    _frameService.setFrame(this);
+    _frame.setFrame(this);
 
-    _loginService.addListener({
+    _login.addListener({
       onLogin: (user: CIUser) => {
         outer.user = user;
         outer.avatarUrl = CIUtil.generateGravatar(user.email);
@@ -157,7 +157,7 @@ export class CIFrame {
   }
 
   ngAfterViewInit() {
-    this._loginService.doRestore();
+    this._login.doRestore();
   }
 
   setTitle(title: string) {
@@ -196,7 +196,7 @@ export class CIFrame {
   }
 
   logout() {
-    this._loginService.doLogout();
+    this._login.doLogout();
   }
 
   closeDrawer($event: any) {
@@ -213,7 +213,7 @@ export class CIFrame {
   }
 
   updateSidebar() {
-    this._confService.getList((res) => {
+    this._conf.getList((res) => {
       this.confs = res;
       console.log(res);
     });

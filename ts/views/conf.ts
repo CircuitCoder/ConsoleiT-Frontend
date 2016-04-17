@@ -483,7 +483,7 @@ export class CIConf {
   userId: number;
 
   constructor(routeParams: RouteParams,
-    private _confService: CIConfService,
+    private _conf: CIConfService,
     private _router: Router,
     private _login: CILoginService,
     private _frame: CIFrameService) {
@@ -495,9 +495,9 @@ export class CIConf {
     var outer = this;
 
     return new Promise<void>((resolve, reject) => {
-      outer._confService.getData(outer.confId, (data) => {
-        outer._confService.registerConf(data);
-        let forms = outer._confService.getFormDescs();
+      outer._conf.getData(outer.confId, (data) => {
+        outer._conf.registerConf(data);
+        let forms = outer._conf.getFormDescs();
         let tabs: any = [
           {
             title: "主页",
@@ -522,7 +522,7 @@ export class CIConf {
             });
         });
 
-        if(outer._confService.hasPerm(this.userId, 'settings')) {
+        if(outer._conf.hasPerm(this.userId, 'settings')) {
           tabs.push({
             title: "设置",
             route: ['/Conf', {id: this.confId}, 'Settings'],
