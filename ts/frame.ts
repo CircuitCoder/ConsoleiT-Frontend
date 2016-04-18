@@ -10,6 +10,7 @@ import {CIDataNotif} from './data'
 import {MDL} from './mdl'
 import {CIUser, CILoginService} from './login'
 import {CIConfService} from './conf'
+import {CIUserService} from './user'
 
 import {CIDashboard} from './views/dashboard'
 import {CILogin} from './views/login'
@@ -23,7 +24,7 @@ import * as CIUtil from './util'
   selector: 'ci-frame',
   templateUrl: 'tmpl/frame.html',
   directives: [ROUTER_DIRECTIVES],
-  providers: [CILoginService, CINotifier, CIConfService, CICardService, CIFrameService]
+  providers: [CILoginService, CINotifier, CIConfService, CICardService, CIFrameService, CIUserService]
 })
 
 @RouteConfig([

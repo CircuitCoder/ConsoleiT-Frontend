@@ -40,13 +40,13 @@
 
       <!-- input -->
       <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" ci-mdl *ngIf = "entry.type == 'input'" [ngClass]="{'is-dirty': data[i] && data[i]!=''}">
-        <input class="mdl-textfield__input" type="text" [id]="'conf-form-'+i" [(ngModel)]="data[i]" ci-mdl-input>
+        <input class="mdl-textfield__input" type="text" [id]="'conf-form-'+i" [(ngModel)]="data[i]">
         <label class="mdl-textfield__label" [attr.for]="'conf-form-'+i">回答</label>
       </div>
 
       <!-- textarea -->
       <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" ci-mdl *ngIf = "entry.type == 'area'" [ngClass]="{'is-dirty': data[i] && data[i]!=''}">
-        <textarea class="mdl-textfield__input" type="text" [id]="'conf-form-'+i" rows="4" [(ngModel)]="data[i]" ci-mdl-input></textarea>
+        <textarea class="mdl-textfield__input" type="text" [id]="'conf-form-'+i" rows="4" [(ngModel)]="data[i]"></textarea>
         <label class="mdl-textfield__label" [attr.for]="'conf-form-'+i">回答</label>
       </div>
 
@@ -115,7 +115,7 @@
         </button>
       </div>
       <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" [ngClass]="{'is-dirty': moderatorNote}">
-        <textarea class="mdl-textfield__input" type="text" id="moderator-note" rows="8" [(ngModel)]="moderatorNote" ci-mdl-input></textarea>
+        <textarea class="mdl-textfield__input" type="text" id="moderator-note" rows="8" [(ngModel)]="moderatorNote"></textarea>
         <label class="mdl-textfield__label" for="moderator-note">笔记</label>
       </div>
       <ci-card-actions>
