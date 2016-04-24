@@ -44,7 +44,7 @@
     "marked": "^0.3.5",
     "material-design-icons": "^2.2.1",
     "reflect-metadata": "0.1.2",
-    "rxjs": "5.0.0-beta.2",
+    "rxjs": "5.0.0-beta.6",
     "systemjs": "0.19.22",
     "zone.js": "0.6.10"
   }
