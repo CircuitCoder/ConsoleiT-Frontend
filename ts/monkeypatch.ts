@@ -5,8 +5,8 @@
  */
 
 // From https://github.com/angular/http/issues/65
-import {BrowserXhr} from 'angular2/http';
-import {Injectable} from 'angular2/core';
+import {BrowserXhr} from '@angular/http';
+import {Injectable} from '@angular/core';
 
 @Injectable()
 export class CORSBrowserXHR extends BrowserXhr {

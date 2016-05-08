@@ -8,19 +8,12 @@
 
     <link rel="stylesheet" href="/css/main.css">
   </head>
-  <base href="/"></base>
+  <base href="/">
   <body>
     <ci-frame></ci-frame>
     <div id="ci-snackbar" class="mdl-js-snackbar mdl-snackbar">
       <div class="mdl-snackbar__text"></div>
       <button class="mdl-snackbar__action" type="button"></button>
     </div>
-
-    <script>
-      System.import('main').then(function(module) {
-        console.log(module);
-        module.start();
-      });
-    </script>
   </body>
 </html>

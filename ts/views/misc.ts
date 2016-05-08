@@ -1,12 +1,12 @@
-import {Component} from 'angular2/core'
-import {RouteConfig} from 'angular2/router'
+import {Component} from '@angular/core'
+import {RouteConfig} from '@angular/router-deprecated'
 
 import {CICardView, CICard, CICardService} from '../card'
 import {CIFrameService} from '../frame.service'
 import {MDL} from '../mdl'
 
 @Component({
-  templateUrl: 'view/about.html',
+  template: require('html/view/about.html'),
   directives: [CICard, MDL]
 })
 

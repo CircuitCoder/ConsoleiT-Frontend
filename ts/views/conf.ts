@@ -1,5 +1,5 @@
-import {ViewChild, Inject, Component, OnInit} from 'angular2/core'
-import {CanDeactivate, Router, RouteConfig, RouteParams, ROUTER_DIRECTIVES, RouterOutlet} from 'angular2/router'
+import {ViewChild, Inject, Component, OnInit} from '@angular/core'
+import {CanDeactivate, Router, RouteConfig, RouteParams, ROUTER_DIRECTIVES, RouterOutlet} from '@angular/router-deprecated'
 
 import {CICardView, CICard, CICardService} from '../card'
 import {CIFrameService} from '../frame.service'
@@ -12,7 +12,7 @@ import {MDL} from '../mdl'
 import * as CIUtil from '../util'
 
 @Component({
-  templateUrl: 'view/conf/application-list.html',
+  template: require('html/view/conf/application-list.html'),
   directives: [CICard, ROUTER_DIRECTIVES, MDL],
   pipes: [CIFuncFilter]
 })
@@ -49,7 +49,7 @@ class CIConfApplicationList extends CICardView {
 }
 
 @Component({
-  templateUrl: 'view/conf/application.html',
+  template: require('html/view/conf/application.html'),
   directives: [CICard, MDL, ROUTER_DIRECTIVES]
 })
 
@@ -311,7 +311,7 @@ class CIConfApplication extends CICardView implements CanDeactivate {
 }
 
 @Component({
-  templateUrl: 'view/conf/index.html',
+  template: require('html/view/conf/index.html'),
   directives: [CICard, MDL, ROUTER_DIRECTIVES]
 })
 
@@ -353,7 +353,7 @@ class CIConfHome extends CICardView {
 }
 
 @Component({
-  templateUrl: 'view/conf/form.html',
+  template: require('html/view/conf/form.html'),
   directives: [CICard, MDL]
 })
 
@@ -454,7 +454,7 @@ class CIConfForm extends CICardView {
 }
 
 @Component({
-  templateUrl: 'view/conf/settings.html',
+  template: require('html/view/conf/settings.html'),
   directives: [MDL, CICard]
 })
 
@@ -581,7 +581,7 @@ export class CIConf {
 }
 
 @Component({
-  templateUrl: 'view/conf-list.html',
+  template: require('html/view/conf-list.html'),
   directives: [MDL, ROUTER_DIRECTIVES, CICard],
   pipes: [CIFuncFilter]
 })

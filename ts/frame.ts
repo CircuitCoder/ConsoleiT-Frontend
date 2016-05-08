@@ -1,6 +1,6 @@
-import {Injectable, Component, ElementRef} from 'angular2/core'
-import {ROUTER_DIRECTIVES, RouteConfig, Router} from 'angular2/router'
-import {Http, Response, Headers, RequestOptions} from 'angular2/http'
+import {Injectable, Component, ElementRef} from '@angular/core'
+import {ROUTER_DIRECTIVES, RouteConfig, Router} from '@angular/router-deprecated'
+import {Http, Response, Headers, RequestOptions} from '@angular/http'
 
 import {CIFrameService, CIFrameTabDefination, CIFrameFabDefination} from './frame.service'
 
@@ -22,7 +22,7 @@ import * as CIUtil from './util'
 
 @Component({
   selector: 'ci-frame',
-  templateUrl: 'tmpl/frame.html',
+  template: require('html/tmpl/frame.html'),
   directives: [ROUTER_DIRECTIVES],
   providers: [CILoginService, CINotifier, CIConfService, CICardService, CIFrameService, CIUserService]
 })

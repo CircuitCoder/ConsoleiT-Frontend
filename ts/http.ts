@@ -1,4 +1,4 @@
-import {Http, Response, Headers, RequestOptions} from 'angular2/http'
+import {Http, Response, Headers, RequestOptions} from '@angular/http'
 
 import * as Config from './config'
 

@@ -1,6 +1,6 @@
-import {Directive, ViewChild, Component, ElementRef, Injectable, Input} from 'angular2/core'
-import {NgClass} from 'angular2/common'
-import {OnActivate, OnDeactivate} from 'angular2/router'
+import {Directive, ViewChild, Component, ElementRef, Injectable, Input} from '@angular/core'
+import {NgClass} from '@angular/common'
+import {OnActivate, OnDeactivate} from '@angular/router-deprecated'
 
 @Injectable()
 export class CICardService {
@@ -70,7 +70,7 @@ class CICardContent {
 
 @Component({
   selector: 'ci-card',
-  templateUrl: '/tmpl/card.html',
+  template: require('html/tmpl/card.html'),
   directives: [NgClass, CICardContent]
 })
 

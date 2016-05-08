@@ -1,5 +1,5 @@
-import {Component} from 'angular2/core'
-import {ROUTER_DIRECTIVES} from 'angular2/router'
+import {Component} from '@angular/core'
+import {ROUTER_DIRECTIVES} from '@angular/router-deprecated'
 
 import {CICardView, CICard, CICardService} from '../card'
 import {CIFrameService} from '../frame.service'
@@ -7,7 +7,7 @@ import {CILoginService, CIUser} from '../login'
 import {MDL} from '../mdl'
 
 @Component({
-  templateUrl: 'view/dashboard.html',
+  template: require('html/view/dashboard.html'),
   directives: [CICard, MDL, ROUTER_DIRECTIVES]
 })
 

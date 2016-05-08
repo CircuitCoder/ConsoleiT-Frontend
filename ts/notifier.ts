@@ -1,4 +1,4 @@
-import {Injectable, Component} from 'angular2/core'
+import {Injectable, Component} from '@angular/core'
 
 @Injectable()
 export class CINotifier {

@@ -10,16 +10,16 @@ var cssmin = require('gulp-cssmin');
 var del = require('del');
 var gulpif = require('gulp-if');
 var htmlmin = require('gulp-htmlmin');
-var inlineNg2Template = require('gulp-inline-ng2-template');
 var rename = require('gulp-rename');
 var rev = require('gulp-rev');
 var revReplace = require('gulp-rev-replace');
 var sass = require('gulp-sass');
 var shell = require('gulp-shell');
 var sourcemaps = require('gulp-sourcemaps');
-var typescript = require('gulp-typescript');
 var uglify = require('gulp-uglify');
 var util = require('gulp-util');
+var watch = require('gulp-watch');
+var webpack = require('webpack-stream');
 
 var production = false;
 var webserver = false;
@@ -35,34 +35,16 @@ var htmlminOpt = {
   minifyURLs: true
 }
 
-var tsOpt= {
-  target: "es5",
-  module: "system",
-  moduleResolution: "node",
-  emitDecoratorMetadata: true,
-  experimentalDecorators: true,
-  noImplicitAny: true,
-  removeComments: true,
-  outFile: 'bundle.js',
-  rootDir: 'ts',
-  typescript: require('typescript')
-}
 
 var depList = [
   'lib/fix.js',
   'lib/md5.js',
   'lib/FileSaver.min.js',
   'lib/material.min.js',
-  'node_modules/angular2/es6/dev/src/testing/shims_for_IE.js',
   'node_modules/marked/marked.min.js',
   'node_modules/es6-shim/es6-shim.js',
-  'node_modules/systemjs/dist/system-polyfills.js',
-  'node_modules/angular2/bundles/angular2-polyfills.min.js',
-  'node_modules/systemjs/dist/system.js',
-  'node_modules/rxjs/bundles/Rx.js',
-  'node_modules/angular2/bundles/angular2.dev.js', // Minified version is broken
-  'node_modules/angular2/bundles/router.dev.js',
-  'node_modules/angular2/bundles/http.dev.js'
+  'node_modules/reflect-metadata/Reflect.js',
+  'node_modules/zone.js/dist/zone.js',
 ];
 
 var fontList = [
@@ -72,17 +54,11 @@ var fontList = [
   'node_modules/material-design-icons/iconfont/MaterialIcons-Regular.ttf',
 ];
 
-var tsProject = typescript.createProject(tsOpt);
-
 function buildjs(bundler) {
-  return gulp.src(['./typings/browser.d.ts','./ts/**/*.ts', '!./ts/config.example.ts'])
+  return gulp.src('./ts/main.ts')
       .on('error', util.log)
-      .pipe(inlineNg2Template({ removeLineBreaks: true, base: '/html' })) // Currently doesn't support source maps
-      .pipe(sourcemaps.init())
-      .pipe(typescript(tsProject))
-      //.pipe(gulpif(production, uglify({mangle: false})))
-      .pipe(gulpif(!production, sourcemaps.write('./')))
-      .pipe(rev())
+      .pipe(webpack(require('./webpack.config'))) // Handles source map
+      .pipe(rev()) // TODO ignore chunk file
       .pipe(gulp.dest('./build/js'))
       .pipe(rev.manifest({
         path: './build/rev-manifest.json',
@@ -161,8 +137,7 @@ function buildrev() {
         modifiedUnreved: replaceMap,
         modifiedReved: replaceMap
       }))
-      .pipe(gulp.dest('./dist'))
-      .pipe(gulpif(webserver, connect.reload()));
+      .pipe(gulp.dest('./dist'));
 }
 
 gulp.task('prebuild:production', function(done) {
@@ -215,6 +190,9 @@ gulp.task('watch', gulp.series('build', function(done) {
   gulp.watch(['./ts/**/*.ts', './html/view/**/*.html', './html/tmpl/**/*.html'], gulp.series('build:js', 'build:rev'));
   gulp.watch('./sass/**/*.scss', gulp.series('build:css', 'build:rev'));
   gulp.watch(['./html/index.html', './html/offline.html'], gulp.series('build:index', 'build:rev'));
+  
+  // Reload when revision or index itself changed
+  watch(['./dist/index.html', './dist/offline.html']).pipe(connect.reload());
   done();
 }));
 

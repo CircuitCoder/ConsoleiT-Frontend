@@ -17,6 +17,7 @@
   "author": "Liu Xiaoyi",
   "license": "AGPL-3.0",
   "devDependencies": {
+    "awesome-typescript-loader": "^0.17.0",
     "del": "^2.2.0",
     "gulp": "github:gulpjs/gulp#4.0",
     "gulp-concat": "^2.6.0",
@@ -24,28 +25,37 @@
     "gulp-cssmin": "^0.1.7",
     "gulp-htmlmin": "^1.3.0",
     "gulp-if": "^2.0.0",
-    "gulp-inline-ng2-template": "^1.1.2",
     "gulp-rename": "^1.2.2",
     "gulp-rev": "^7.0.0",
     "gulp-rev-replace": "^0.4.3",
     "gulp-sass": "^2.2.0",
     "gulp-shell": "^0.5.2",
     "gulp-sourcemaps": "^1.6.0",
-    "gulp-typescript": "^2.12.1",
     "gulp-uglify": "^1.5.2",
     "gulp-util": "^3.0.7",
+    "gulp-watch": "^4.3.5",
+    "raw-loader": "^0.5.1",
+    "source-map-loader": "^0.1.5",
     "typescript": "^1.8.7",
-    "typings": "^0.7.8"
+    "typings": "^0.7.8",
+    "webpack-stream": "^3.2.0"
   },
   "dependencies": {
-    "angular2": "^2.0.0-beta.15",
+    "@angular/common": "2.0.0-rc.1",
+    "@angular/compiler": "2.0.0-rc.1",
+    "@angular/core": "2.0.0-rc.1",
+    "@angular/http": "2.0.0-rc.1",
+    "@angular/platform-browser": "2.0.0-rc.1",
+    "@angular/platform-browser-dynamic": "2.0.0-rc.1",
+    "@angular/router": "2.0.0-rc.1",
+    "@angular/router-deprecated": "2.0.0-rc.1",
     "es6-promise": "3.1.2",
     "es6-shim": "0.35.0",
     "marked": "^0.3.5",
     "material-design-icons": "^2.2.1",
-    "reflect-metadata": "0.1.2",
-    "rxjs": "5.0.0-beta.2",
+    "reflect-metadata": "^0.1.3",
+    "rxjs": "5.0.0-beta.6",
     "systemjs": "0.19.22",
-    "zone.js": "0.6.10"
+    "zone.js": "0.6.12"
   }
 }

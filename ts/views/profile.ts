@@ -1,4 +1,4 @@
-import {Injectable, Component} from 'angular2/core'
+import {Injectable, Component} from '@angular/core'
 
 import {CICard, CICardView, CICardService} from '../card'
 import {CILoginService, CIUser} from '../login'
@@ -8,7 +8,7 @@ import {CINotifier} from '../notifier'
 import {MDL} from '../mdl'
 
 @Component({
-  templateUrl: 'view/profile.html',
+  template: require('html/view/profile.html'),
   directives: [CICard, MDL]
 })
 

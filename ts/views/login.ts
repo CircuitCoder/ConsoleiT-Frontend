@@ -1,6 +1,6 @@
-import {ViewChild, Injectable, Component} from 'angular2/core'
-import {ROUTER_DIRECTIVES, RouteParams, RouteData, Router} from 'angular2/router'
-import {Http, Response, Headers, RequestOptions} from 'angular2/http'
+import {ViewChild, Injectable, Component} from '@angular/core'
+import {ROUTER_DIRECTIVES, RouteParams, RouteData, Router} from '@angular/router-deprecated'
+import {Http, Response, Headers, RequestOptions} from '@angular/http'
 
 import {CIUser, CILoginService} from '../login'
 import {CIFrameService} from '../frame.service'
@@ -10,7 +10,7 @@ import {CILoginData} from '../data'
 import {CINotifier} from '../notifier'
 
 @Component({
-  templateUrl: 'view/login.html',
+  template: require('html/view/login.html'),
   directives: [CICard, MDL, ROUTER_DIRECTIVES]
 })
 
