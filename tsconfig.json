@@ -22,7 +22,8 @@
   ],
   "awesomeTypescriptLoaderOptions": {
     "resolveGlobs": true,
-    "doTypeCheck": false
+    "doTypeCheck": false,
+    "usePrecompiledFiles": true
   },
   "compileOnSave": false,
   "buildOnSave": false
