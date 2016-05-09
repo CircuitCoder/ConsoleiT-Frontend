@@ -99,6 +99,11 @@ ci-card {
 .ci-card-container {
   .ci-card-col {
     padding-bottom: 20px;
+
+    // Require a placeholder currently
+    &.ci-card-col-fixed {
+      position: fixed;
+    }
   }
 
   &[type="2-col"] {

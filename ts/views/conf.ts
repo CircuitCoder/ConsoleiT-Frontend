@@ -487,6 +487,11 @@ export class CIConfSettings extends CICardView {
       if(res.msg) this._notifier.show("更新成功, 您可能需要刷新才能看到效果");
     });
   }
+
+  jumpTo(anchor: string) {
+    var elem = document.getElementById(anchor);
+    elem.scrollIntoView();
+  }
 }
 
 @Component({

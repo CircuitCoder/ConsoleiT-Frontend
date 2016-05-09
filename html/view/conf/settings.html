@@ -1,26 +1,60 @@
-<div class="ci-card-container" type="1-col">
-  <ci-card>
-    <ci-card-title>
-      设置<!-- TODO: We need a icon here-->
-    </ci-card-title>
-    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" ci-mdl>
-      <input class="mdl-textfield__input" type="text" id="ci-conf-settings-title" [(ngModel)]="settings.title">
-      <label class="mdl-textfield__label" for="ci-conf-settings-title">会议名称</label>
-    </div>
-    <br/>
-    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" ci-mdl>
-      <textarea class="mdl-textfield__input" rows="4" id="ci-conf-settings-desc" [(ngModel)]="settings.desc"></textarea>
-      <label class="mdl-textfield__label" for="ci-conf-settings-desc">会议简介</label>
-    </div>
-    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" ci-mdl>
-      <input class="mdl-textfield__input" type="text" id="ci-conf-settings-currentStage" [(ngModel)]="settings.currentStage">
-      <label class="mdl-textfield__label" for="ci-conf-settings-currentStage">当前阶段</label>
-    </div>
+<div class="ci-card-container" type="action">
+  <div class="ci-card-col narrow">
+    <!-- placeholder -->
+  </div>
+  <div class="ci-card-col narrow ci-card-col-fixed">
+    <ci-card>
+      <ci-card-title>
+        设置
+      </ci-card-title>
+      <div class="ci-card-table ci-entry-table">
+        <table class="mdl-data-table mdl-js-data-table mdl-data-table">
+          <tbody>
+            <tr>
+              <td class="mdl-data-table__cell--non-numeric" (click)="jumpTo('conf-setting-info')">会议信息</td>
+            </tr>
+            <tr>
+              <td class="mdl-data-table__cell--non-numeric" (click)="jumpTo('conf-setting-form')">表单</td>
+            </tr>
+            <tr>
+              <td class="mdl-data-table__cell--non-numeric" (click)="jumpTo('conf-setting-comm')">委员会</td>
+            </tr>
+            <tr>
+              <td class="mdl-data-table__cell--non-numeric" (click)="jumpTo('conf-setting-mem')">成员</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </ci-card>
+  </div>
+  <div class="ci-card-col wide">
 
-    <ci-card-actions>
-      <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--colored mdl-button--raised" (click)="updateSettings()">
-        更新
-      </button>
-    </ci-card-actions>
-  </ci-card>
+    <!-- TODO: cleanup the dirtiness! -->
+    <span class="ci-anchor" id="conf-setting-info"></span>
+
+    <ci-card>
+      <ci-card-title>
+        会议信息<!-- TODO: We need a icon here-->
+      </ci-card-title>
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" ci-mdl>
+        <input class="mdl-textfield__input" type="text" id="ci-conf-settings-title" [(ngModel)]="settings.title">
+        <label class="mdl-textfield__label" for="ci-conf-settings-title">会议名称</label>
+      </div>
+      <br/>
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" ci-mdl>
+        <textarea class="mdl-textfield__input" rows="4" id="ci-conf-settings-desc" [(ngModel)]="settings.desc"></textarea>
+        <label class="mdl-textfield__label" for="ci-conf-settings-desc">会议简介</label>
+      </div>
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" ci-mdl>
+        <input class="mdl-textfield__input" type="text" id="ci-conf-settings-currentStage" [(ngModel)]="settings.currentStage">
+        <label class="mdl-textfield__label" for="ci-conf-settings-currentStage">当前阶段</label>
+      </div>
+
+      <ci-card-actions>
+        <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--colored mdl-button--raised" (click)="updateSettings()">
+          更新
+        </button>
+      </ci-card-actions>
+    </ci-card>
+  </div>
 </div>
