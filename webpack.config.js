@@ -1,5 +1,12 @@
+const webpack = require('webpack');
+
 module.exports = {
   cache: true,
+
+  entry: {
+    main: 'ts/main.ts',
+    vendor: 'ts/vendor.ts',
+  },
 
   resolve: {
     root: __dirname,
@@ -18,6 +25,13 @@ module.exports = {
   },
 
   module: {
+    preLoaders: [
+      {
+        test: /.js$/,
+        loader: 'source-map-loader'
+      }
+    ],
+
     loaders: [
       {
         test: /\.ts$/,
@@ -33,11 +47,18 @@ module.exports = {
     ]
   },
 
+  plugins: [
+    new webpack.optimize.OccurenceOrderPlugin(true),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: ['vendor']
+    })
+  ],
+
   devtool: 'source-map',
 
   output: {
-    filename: 'bundle.js',
-    sourceMapFilename: 'bundle.map',
+    filename: 'bundle-[name].js',
+    sourceMapFilename: 'bundle-[name].map',
     chunkFilename: '[chunkhash].js',
   }
 }

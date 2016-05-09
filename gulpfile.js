@@ -35,18 +35,6 @@ var htmlminOpt = {
   minifyURLs: true
 }
 
-
-var depList = [
-  'lib/fix.js',
-  'lib/md5.js',
-  'lib/FileSaver.min.js',
-  'lib/material.min.js',
-  'node_modules/marked/marked.min.js',
-  'node_modules/es6-shim/es6-shim.js',
-  'node_modules/reflect-metadata/Reflect.js',
-  'node_modules/zone.js/dist/zone.js',
-];
-
 var fontList = [
   'node_modules/material-design-icons/iconfont/MaterialIcons-Regular.eot',
   'node_modules/material-design-icons/iconfont/MaterialIcons-Regular.woff',
@@ -86,20 +74,6 @@ function buildcss() {
       }))
       .pipe(gulp.dest('./build'));
 };
-
-function builddep() {
-  return gulp.src(depList)
-      .pipe(concat({path: './bundle-dep.js', cwd: ''}))
-      .pipe(gulpif(production, uglify({mangle: false})))
-      .pipe(rev())
-      .pipe(gulp.dest('./build/js'))
-      .pipe(rev.manifest({
-        path: './build/rev-manifest.json',
-        base: './build',
-        merge: true
-      }))
-      .pipe(gulp.dest('./build'));
-}
 
 function buildfont() {
   return gulp.src(fontList)
@@ -150,15 +124,11 @@ gulp.task('clean', function() {
 });
 
 gulp.task('clean:js', function() {
-  return del(['dist/js/**/*.*', '!dist/js/bundle-dep-*.*', 'build/js/**/*.*', '!build/js/bundle-dep-*.*']);
+  return del(['dist/js/**/*.*', 'build/js/**/*.*']);
 });
 
 gulp.task('clean:css', function() {
   return del(['dist/css', 'build/css']);
-});
-
-gulp.task('clean:dep', function() {
-  return del(['dist/js/bundle-dep-*.*', 'build/js/bundle-dep-*.*']);
 });
 
 gulp.task('clean:font', function() {
@@ -175,7 +145,6 @@ gulp.task('clean:index', function() {
 
 gulp.task('build:js', gulp.series('clean:js', buildjs));
 gulp.task('build:css', gulp.series('clean:css', buildcss));
-gulp.task('build:dep', gulp.series('clean:dep', builddep));
 gulp.task('build:font', gulp.series('clean:font', buildfont));
 gulp.task('build:assets', gulp.series('clean:assets', buildassets));
 gulp.task('build:index', gulp.series('clean:index', function() {
@@ -184,12 +153,14 @@ gulp.task('build:index', gulp.series('clean:index', function() {
 }));
 gulp.task('build:rev', buildrev);
 
-gulp.task('build', gulp.series(gulp.series('build:font', 'build:assets', 'build:dep', 'build:js', 'build:css', 'build:index'), 'build:rev'));
+gulp.task('build', gulp.series(gulp.series('build:font', 'build:assets', 'build:js', 'build:css', 'build:index'), 'build:rev'));
 gulp.task('build:production', gulp.series('prebuild:production', 'build'));
 gulp.task('watch', gulp.series('build', function(done) {
   gulp.watch(['./ts/**/*.ts', './html/view/**/*.html', './html/tmpl/**/*.html'], gulp.series('build:js', 'build:rev'));
   gulp.watch('./sass/**/*.scss', gulp.series('build:css', 'build:rev'));
   gulp.watch(['./html/index.html', './html/offline.html'], gulp.series('build:index', 'build:rev'));
+
+  //TODO: watch vendor
   
   // Reload when revision or index itself changed
   watch(['./dist/index.html', './dist/offline.html']).pipe(connect.reload());
