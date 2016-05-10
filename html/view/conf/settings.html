@@ -80,7 +80,7 @@
             </th>
           </thead>
           <tbody>
-            <tr *ngFor="let f of forms">
+            <tr *ngFor="let f of forms; let i = id">
               <td class="mdl-data-table__cell--non-numeric">
                 {{ f.name }}
               </td>
@@ -91,6 +91,12 @@
                 {{ getFormStatus(f.status) }}
               </td>
               <td class="mdl-data-table__cell--non-numeric">
+                <button class="mdl-button mdl-js-button mdl-button--icon" [routerLink]="['FormEdit', { form: f.name }]">
+                  <i class="material-icons">edit</i>
+                </button>
+                <button class="mdl-button mdl-js-button mdl-button--icon" [routerLink]="['ApplicationList', { form: f.name }]">
+                  <i class="material-icons">toc</i>
+                </button>
               </td>
             </tr>
           </tbody>

@@ -353,11 +353,11 @@ class CIConfHome extends CICardView {
 }
 
 @Component({
-  template: require('html/view/conf/form.html'),
-  directives: [CICard, MDL]
+  template: require('html/view/conf/form-edit.html'),
+  directives: [CICard, MDL, ROUTER_DIRECTIVES]
 })
 
-class CIConfForm extends CICardView {
+class CIConfFormEdit extends CICardView {
 
   formId: any;
   data: any;
@@ -455,7 +455,7 @@ class CIConfForm extends CICardView {
 
 @Component({
   template: require('html/view/conf/settings.html'),
-  directives: [MDL, CICard]
+  directives: [MDL, CICard, ROUTER_DIRECTIVES]
 })
 
 export class CIConfSettings extends CICardView {
@@ -481,14 +481,20 @@ export class CIConfSettings extends CICardView {
       };
 
       _frame.setFab(null);
+
+      this.forms = [];
     }
 
-  routerOnActivate() {
+  ngAfterViewInit() {
     this._conf.getAllForms((forms: any) => {
-      console.log(forms)
       this.forms = forms;
-      super.routerOnActivate();
+      super.ngAfterViewInit();
     });
+  }
+
+  routerOnDeactive() {
+    console.log("DEACTIVE");
+    super.routerOnDeactivate();
   }
 
   updateSettings() {
@@ -530,9 +536,9 @@ export class CIConfSettings extends CICardView {
     name: 'Application',
     component: CIConfApplication
   }, {
-    path: '/settings/form/:form',
-    name: 'Form',
-    component: CIConfForm
+    path: '/:form/edit',
+    name: 'FormEdit',
+    component: CIConfFormEdit
   }, {
     path: '/settings',
     name: 'Settings',
