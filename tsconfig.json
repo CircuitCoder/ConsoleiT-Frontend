@@ -15,15 +15,15 @@
     "ts/config.example.ts"
   ],
   "filesGlob": [
+    "typings/browser.d.ts",
     "ts/**/*.ts",
     "!ts/config.example.ts",
-    "!node_modules/**/*.ts",
-    "typings/browser.d.ts"
+    "!node_modules/**/*.ts"
   ],
   "awesomeTypescriptLoaderOptions": {
     "resolveGlobs": true,
-    "doTypeCheck": false,
-    "usePrecompiledFiles": true
+    "usePrecompiledFiles": true,
+    "forkChecker": true
   },
   "compileOnSave": false,
   "buildOnSave": false

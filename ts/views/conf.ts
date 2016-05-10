@@ -463,6 +463,7 @@ export class CIConfSettings extends CICardView {
   conf: any;
   memberMap: any;
   settings: any;
+  forms: any;
 
   constructor(
     _card: CICardService,
@@ -482,10 +483,25 @@ export class CIConfSettings extends CICardView {
       _frame.setFab(null);
     }
 
+  routerOnActivate() {
+    this._conf.getAllForms((forms: any) => {
+      console.log(forms)
+      this.forms = forms;
+      super.routerOnActivate();
+    });
+  }
+
   updateSettings() {
     this._conf.postSettings(this.conf._id, { settings: this.settings }, res => {
       if(res.msg) this._notifier.show("更新成功, 您可能需要刷新才能看到效果");
     });
+  }
+
+  getFormStatus(id: string) {
+    if(id == "open") return "开放";
+    else if(id == "closed") return "已关闭";
+    else if(id == "archived") return "已存档";
+    else return id;
   }
 
   jumpTo(anchor: string) {

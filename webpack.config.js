@@ -1,4 +1,5 @@
 const webpack = require('webpack');
+const ForkCheckerPlugin = require('awesome-typescript-loader').ForkCheckerPlugin;
 
 module.exports = {
   cache: true,
@@ -51,7 +52,8 @@ module.exports = {
     new webpack.optimize.OccurenceOrderPlugin(true),
     new webpack.optimize.CommonsChunkPlugin({
       name: ['vendor']
-    })
+    }),
+    new ForkCheckerPlugin()
   ],
 
   devtool: 'source-map',

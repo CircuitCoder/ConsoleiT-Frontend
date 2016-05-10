@@ -19,6 +19,7 @@
   "devDependencies": {
     "awesome-typescript-loader": "^0.17.0",
     "del": "^2.2.0",
+    "glob-watcher": "^3.0.0",
     "gulp": "github:gulpjs/gulp#4.0",
     "gulp-concat": "^2.6.0",
     "gulp-connect": "^4.0.0",
@@ -33,7 +34,6 @@
     "gulp-sourcemaps": "^1.6.0",
     "gulp-uglify": "^1.5.2",
     "gulp-util": "^3.0.7",
-    "gulp-watch": "^4.3.5",
     "raw-loader": "^0.5.1",
     "script-loader": "^0.7.0",
     "source-map-loader": "^0.1.5",

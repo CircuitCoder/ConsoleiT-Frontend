@@ -18,8 +18,10 @@ var shell = require('gulp-shell');
 var sourcemaps = require('gulp-sourcemaps');
 var uglify = require('gulp-uglify');
 var util = require('gulp-util');
-var watch = require('gulp-watch');
+var watch = require('glob-watcher');
 var webpack = require('webpack-stream');
+
+var debounce = require('lodash.debounce');
 
 var production = false;
 var webserver = false;
@@ -156,14 +158,26 @@ gulp.task('build:rev', buildrev);
 gulp.task('build', gulp.series(gulp.series('build:font', 'build:assets', 'build:js', 'build:css', 'build:index'), 'build:rev'));
 gulp.task('build:production', gulp.series('prebuild:production', 'build'));
 gulp.task('watch', gulp.series('build', function(done) {
-  gulp.watch(['./ts/**/*.ts', './html/view/**/*.html', './html/tmpl/**/*.html'], gulp.series('build:js', 'build:rev'));
-  gulp.watch('./sass/**/*.scss', gulp.series('build:css', 'build:rev'));
-  gulp.watch(['./html/index.html', './html/offline.html'], gulp.series('build:index', 'build:rev'));
+  gulp.watch(['./ts/**/*.ts', './html/view/**/*.html', './html/tmpl/**/*.html'], gulp.series('build:js'));
+  gulp.watch('./sass/**/*.scss', gulp.series('build:css'));
+  gulp.watch(['./html/index.html', './html/offline.html'], gulp.series('build:index'));
 
   //TODO: watch vendor
+
+  var revWatcher = gulp.watch(['./build/**/*.*']);
+  revWatcher.on('add', debounce(gulp.series('build:rev'), 200));
+  revWatcher.on('change', debounce(gulp.series('build:rev'), 200));
+
   
   // Reload when revision or index itself changed
-  watch(['./dist/index.html', './dist/offline.html']).pipe(connect.reload());
+  var reloadWatcher = gulp.watch('./dist/**/*.*')
+  var reload = debounce(() => {
+    console.log("HA");
+    return gulp.src('./dist/index.html').pipe(connect.reload())
+  }, 200);
+
+  reloadWatcher.on('add', reload);
+  reloadWatcher.on('change', reload);
   done();
 }));
 
