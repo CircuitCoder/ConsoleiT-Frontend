@@ -10,6 +10,7 @@ var cssmin = require('gulp-cssmin');
 var del = require('del');
 var gulpif = require('gulp-if');
 var htmlmin = require('gulp-htmlmin');
+var plumber = require('gulp-plumber');
 var rename = require('gulp-rename');
 var rev = require('gulp-rev');
 var revReplace = require('gulp-rev-replace');
@@ -46,7 +47,7 @@ var fontList = [
 
 function buildjs(bundler) {
   return gulp.src('./ts/main.ts')
-      .on('error', util.log)
+      .pipe(plumber())
       .pipe(webpack(require('./webpack.config'))) // Handles source map
       .pipe(rev()) // TODO ignore chunk file
       .pipe(gulp.dest('./build/js'))
@@ -55,12 +56,13 @@ function buildjs(bundler) {
         base: './build',
         merge: true
       }))
+      .on('error', util.log)
       .pipe(gulp.dest('./build'));
 };
 
 function buildcss() {
   return gulp.src('./sass/**/*.scss')
-      .on('error', util.log)
+      .pipe(plumber())
       .pipe(sourcemaps.init())
       .pipe(sass().on('error', sass.logError))
       .pipe(gulp.src('./lib/*.css', {passthrough: true}))
@@ -74,6 +76,7 @@ function buildcss() {
         base: './build',
         merge: true
       }))
+      .on('error', util.log)
       .pipe(gulp.dest('./build'));
 };
 
