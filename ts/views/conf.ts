@@ -414,7 +414,7 @@ class CIConfFormEdit extends CICardView {
   }
 
   deleteField(i: number) {
-    this.data.splice(i,i+1);
+    this.data.splice(i, 1);
   }
 
   moveUp(i: number) {
@@ -437,7 +437,7 @@ class CIConfFormEdit extends CICardView {
   }
 
   deleteChoice(i: number) {
-    this.selected.choices.splice(i, i+1);
+    this.selected.choices.splice(i, 1);
   }
 
   moveChoiceUp(i: number) {
