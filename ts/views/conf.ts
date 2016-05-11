@@ -454,29 +454,8 @@ class CIConfFormEdit extends CICardView {
   }
 
   submit() {
-    let content = this.data.map((e: any): any => {
-      let choices = e.choices ? e.choices.split("\n") : [];
-      if(e.type == "checkbox" || e.type == "radio") {
-        return {
-          title: e.title,
-          desc: e.desc,
-          type: e.type,
-          choices: choices,
-          required: e.required
-        }
-      }
-      else {
-        return {
-          title: e.title,
-          desc: e.desc,
-          type: e.type,
-          required: e.required
-        }
-      }
-    });
-
     this._conf.postForm(this.formId, {
-      content: content,
+      content: this.data,
       title: this.formName
     }, res => {
       if(res.msg == "OperationSuccessful") {
