@@ -99,9 +99,39 @@
                 </button>
               </td>
             </tr>
+            <tr (click)="createForm()">
+              <td class="mdl-data-table__cell--non-numeric">
+                <span class="ci-annotation-normal">
+                  <i class="material-icons">add</i>
+                  新表单
+                </span>
+              </td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
           </tbody>
         </table>
       </div>
     </ci-card>
   </div>
 </div>
+
+<dialog class="mdl-dialog" id="new-form-dialog" ci-mdl>
+  <h4 class="mdl-dialog__title">新建表单</h4>
+  <div class="mdl-dialog__content">
+    请输入新表单的 ID. 此 ID 要求与本会议中其他表单不同，并会显示在网页 URL 中。<br>
+    您可以在 ID 中使用大小写英文字母、数字或者连字符。
+
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+      <input class="mdl-textfield__input" type="text" id="ci-conf-settings-formid" [(ngModel)]="formId">
+      <label class="mdl-textfield__label" for="ci-conf-settings-formId">ID</label>
+    </div>
+
+    <div class="mdl-dialog__actions">
+      <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised mdl-button--colored" type="submit" (click) = "performFormCreation()">
+        创建新表单
+      </button>
+    </div>
+  </div>
+</dialog>

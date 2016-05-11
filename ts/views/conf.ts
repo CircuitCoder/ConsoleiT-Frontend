@@ -477,6 +477,8 @@ export class CIConfSettings extends CICardView {
   settings: any;
   forms: any;
 
+  formId: string;
+
   constructor(
     _card: CICardService,
     _frame: CIFrameService,
@@ -520,6 +522,15 @@ export class CIConfSettings extends CICardView {
     else if(id == "closed") return "已关闭";
     else if(id == "archived") return "已存档";
     else return id;
+  }
+
+  createForm() {
+    //TODO: polyfill
+    document.getElementById("new-form-dialog").showModal();
+  }
+
+  performFormCreation() {
+    alert("TBI");
   }
 
   jumpTo(anchor: string) {
