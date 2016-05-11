@@ -1,6 +1,8 @@
 import {ViewChild, Inject, Component, OnInit} from '@angular/core'
 import {CanDeactivate, Router, RouteConfig, RouteParams, ROUTER_DIRECTIVES, RouterOutlet} from '@angular/router-deprecated'
 
+import {MdInput, MdHint, MdPlaceholder} from '@angular2-material/input'
+
 import {CICardView, CICard, CICardService} from '../card'
 import {CIFrameService} from '../frame.service'
 import {CIConfService} from '../conf'
@@ -354,7 +356,7 @@ class CIConfHome extends CICardView {
 
 @Component({
   template: require('html/view/conf/form-edit.html'),
-  directives: [CICard, MDL, ROUTER_DIRECTIVES]
+  directives: [CICard, MDL, ROUTER_DIRECTIVES, MdInput, MdHint, MdPlaceholder]
 })
 
 class CIConfFormEdit extends CICardView {
@@ -363,10 +365,15 @@ class CIConfFormEdit extends CICardView {
   data: any;
   formName: any;
 
+  selected: any = null;
+  selectedId: number = -1;
+  selectedChoice: number = -1;
+
   constructor(_card: CICardService,
     params: RouteParams,
     private _router: Router,
     private _conf: CIConfService,
+    private _frame: CIFrameService,
     private _notifier: CINotifier) {
       super(_card);
       this.formId = params.get('form');
@@ -375,23 +382,27 @@ class CIConfFormEdit extends CICardView {
       this.formName = formDesc.title;
       //TODO: formName
       this.data = [];
+
+      _frame.setFab({
+        icon: "done",
+        action: () => {
+          this.submit();
+        }
+      });
     }
 
   routerOnActivate() {
     this._conf.getForm(this.formId,(res) => {
-      this.data = res.content.map((e: any) => {
-        return {
-          title: e.title,
-          desc: e.desc,
-          type: e.type,
-          choices: e.choices ? e.choices.join("\n") : "",
-          required: e.required
-        }
-      });
+      this.data = res.content;
       this.formName = res.title;
     });
 
     return super.routerOnActivate();
+  }
+
+  select(i: number) {
+    this.selectedId = i;
+    this.selected = this.data[i];
   }
 
   pushField() {
@@ -418,6 +429,28 @@ class CIConfFormEdit extends CICardView {
     let tmp=this.data[i];
     this.data[i] = this.data[i+1];
     this.data[i+1] = tmp;
+  }
+
+  pushChoice() {
+    if(!Array.isArray(this.selected.choices)) this.selected.choices = []
+    this.selected.choices.push("");
+  }
+
+  deleteChoice(i: number) {
+    this.selected.choices.splice(i, i+1);
+  }
+
+  moveChoiceUp(i: number) {
+    let tmp=this.selected.choices[i];
+    this.selected.choices[i] = this.selected.choices[i-1];
+    this.selected.choices[i-1] = tmp;
+  }
+
+  moveChoiceDown(i: number) {
+    if(i == this.selected.choices.length - 1) return;
+    let tmp=this.selected.choices[i];
+    this.selected.choices[i] = this.selected.choices[i+1];
+    this.selected.choices[i+1] = tmp;
   }
 
   submit() {

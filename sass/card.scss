@@ -59,6 +59,10 @@ ci-card {
         &.ci-entry-table tbody > tr {
           cursor: pointer;
         }
+
+        tr.ci-table-active {
+          background: rgba(0,0,0,.06);
+        }
       }
     }
 
@@ -208,4 +212,11 @@ ci-card {
   &.ci-radios-multiline {
     padding-top: 40px;
   }
+}
+
+.ci-table-title {
+  color: $primary-color;
+  font-size: 12px;
+  line-height: 12px;
+  margin-bottom: 12px;
 }

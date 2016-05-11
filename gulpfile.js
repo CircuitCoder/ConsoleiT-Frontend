@@ -175,7 +175,6 @@ gulp.task('watch', gulp.series('build', function(done) {
   // Reload when revision or index itself changed
   var reloadWatcher = gulp.watch('./dist/**/*.*')
   var reload = debounce(() => {
-    console.log("HA");
     return gulp.src('./dist/index.html').pipe(connect.reload())
   }, 200);
 
