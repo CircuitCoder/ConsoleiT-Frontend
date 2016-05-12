@@ -159,6 +159,19 @@ export class CIConfService extends CIHttp {
     })
   }
 
+  createForm(id: string, title: string ,cb: (data: any) => void) {
+    this.post(`/${this.conf._id}/form`, {
+      id, title 
+    }, (err, res) => {
+      if(err) {
+        console.log(err);
+        this._notifier.show("$Unknown");
+      } else {
+        cb(res);
+      }
+    })
+  }
+
   getForm(formId: string, cb: (form: any) => void) {
     this.get(`/${this.conf._id}/form/${formId}`, (err, res) => {
       if(err) {

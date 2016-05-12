@@ -71,3 +71,41 @@
   white-space: pre-wrap;
   margin: 0;
 }
+
+// New form card
+.new-form-dialog-overlap {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+
+  background-color: rgba(0,0,0,.3);
+
+  transform: translateY(-10000%); // Out of screen
+  opacity: 0;
+
+  transition-property: transform, opacity;
+  transition-duration: 0s, 0.2s;
+
+  transition-timing-function: linear, ease-in;
+  transition-delay: 0.2s, 0s;
+
+  &.shown {
+    transition-timing-function: linear, ease-out;
+    transition-delay: 0s, 0s;
+
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .new-form-dialog {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 300px;
+  }
+}

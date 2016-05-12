@@ -475,13 +475,18 @@ export class CIConfSettings extends CICardView {
   conf: any;
   memberMap: any;
   settings: any;
-  forms: any;
+  forms: any = [];
 
-  formId: string;
+  formId: string = "";
+  formTitle: string = "";
+  formCreation: boolean = false;
+  formDialogCreated: boolean = false;
+  formCreating: boolean = false;
 
   constructor(
     _card: CICardService,
     _frame: CIFrameService,
+    private _router: Router,
     private _notifier: CINotifier,
     private _conf: CIConfService) {
       super(_card);
@@ -495,8 +500,6 @@ export class CIConfSettings extends CICardView {
       };
 
       _frame.setFab(null);
-
-      this.forms = [];
     }
 
   ngAfterViewInit() {
@@ -524,13 +527,42 @@ export class CIConfSettings extends CICardView {
     else return id;
   }
 
-  createForm() {
-    //TODO: polyfill
-    document.getElementById("new-form-dialog").showModal();
+  showFormCreation() {
+    this.formDialogCreated = true;
+    setTimeout(() => this.formCreation = true, 0);
+  }
+
+  closeFormCreation(event: any) {
+    if(event.target.className.indexOf("new-form-dialog-overlap") != -1)
+      this.formCreation = false;
   }
 
   performFormCreation() {
-    alert("TBI");
+    /* Check id */
+    if(this.formId.length == 0) {
+      this._notifier.show("非法 ID");
+      return;
+    }
+
+    for(var i = 0; i < this.formId.length; ++i) {
+      var charCode = this.formId.charCodeAt(i);
+      if(!((charCode < 123 && charCode > 96) || charCode == 45)) {
+        this._notifier.show("非法 ID");
+        return;
+      }
+    }
+
+    this.formCreating = true;
+    this._conf.createForm(this.formId, this.formTitle, (res: any) => {
+      if(res.error == "DuplicatedId") {
+        this._notifier.show("重复 ID");
+        this.formCreating = false;
+      }
+      else {
+        this.formCreation = false;
+        this._router.navigate(['FormEdit', { form: res.id }]);
+      }
+    });
   }
 
   jumpTo(anchor: string) {
