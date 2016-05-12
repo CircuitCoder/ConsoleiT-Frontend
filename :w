@@ -560,7 +560,7 @@ export class CIConfSettings extends CICardView {
       }
       else {
         this.formCreation = false;
-        this._router.navigate(['FormEdit', { form: res.id }]);
+        this._router.navigate(['FormEdit', res.id]);
       }
     });
   }

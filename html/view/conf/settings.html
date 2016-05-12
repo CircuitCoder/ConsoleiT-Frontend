@@ -99,7 +99,7 @@
                 </button>
               </td>
             </tr>
-            <tr (click)="createForm()">
+            <tr (click)="showFormCreation()">
               <td class="mdl-data-table__cell--non-numeric">
                 <span class="ci-annotation-normal">
                   <i class="material-icons">add</i>
@@ -117,21 +117,32 @@
   </div>
 </div>
 
-<dialog class="mdl-dialog" id="new-form-dialog" ci-mdl>
-  <h4 class="mdl-dialog__title">新建表单</h4>
-  <div class="mdl-dialog__content">
-    请输入新表单的 ID. 此 ID 要求与本会议中其他表单不同，并会显示在网页 URL 中。<br>
-    您可以在 ID 中使用大小写英文字母、数字或者连字符。
+<div class="new-form-dialog-overlap" [ngClass]="{ shown: formCreation }" *ngIf="formDialogCreated" (click)="closeFormCreation($event, this)">
+  <ci-card class="new-form-dialog">
+    <ci-card-title>
+      新建表单
+    </ci-card-title>
+    <div class="mdl-card__supporting-text">
+      请输入新表单的 ID. 此 ID 要求与本会议中其他表单不同，并会显示在网页 URL 中。<br>
+      您可以在 ID 中使用大小写英文字母、数字或者连字符。
+      ID 在表单创建后不能更改。表单名可以更改。
+    </div>
 
     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-      <input class="mdl-textfield__input" type="text" id="ci-conf-settings-formid" [(ngModel)]="formId">
+      <input class="mdl-textfield__input" type="text" id="ci-conf-settings-formId" [(ngModel)]="formId" ci-mdl>
       <label class="mdl-textfield__label" for="ci-conf-settings-formId">ID</label>
     </div>
 
-    <div class="mdl-dialog__actions">
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+      <input class="mdl-textfield__input" type="text" id="ci-conf-settings-formTitle" [(ngModel)]="formTitle" ci-mdl>
+      <label class="mdl-textfield__label" for="ci-conf-settings-formTitle">表单名</label>
+    </div>
+
+    <ci-card-actions>
       <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised mdl-button--colored" type="submit" (click) = "performFormCreation()">
         创建新表单
       </button>
-    </div>
-  </div>
-</dialog>
+      <span style="margin-left: 16px; transition: opacity 0.2s ease" [ngStyle]="{ opacity: formCreating ? 1 : 0 }" class="ci-annotation-normal">创建中...</span>
+    </ci-card-actions>
+  </ci-card>
+</div>
