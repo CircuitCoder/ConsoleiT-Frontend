@@ -36,14 +36,22 @@
                 </button>
               </td>
             </tr>
+            <tr (click) = "pushField()" class="ci-table-creation">
+              <td>
+                <span class="ci-annotation-normal">
+                  <i class="material-icons">add</i>
+                </span>
+              </td>
+              <td class="mdl-data-table__cell--non-numeric">
+                <span class="ci-annotation-normal">
+                  新建
+                </span>
+              </td>
+              <td></td>
+            </tr>
           </tbody>
         </table>
       </div>
-      <ci-card-actions>
-        <button class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect" (click) = "pushField()">
-          <i class="material-icons">add</i>
-        </button>
-      </ci-card-actions>
     </ci-card>
   </div>
   <div class="ci-card-col wide">
@@ -115,7 +123,7 @@
               <th class="mdl-data-table__cell--non-numeric" style="width: 150px">选项</th>
             </thead>
             <tbody>
-              <tr *ngFor = "let choice of selected.choices, let j = index, let last = last" (click)="selectedChoice = j" [ngClass]="{ 'ci-table-active': selectedChoice == j }">
+              <tr *ngFor = "let choice of selected.choices, let j = index, let last = last" (click)="selectChoice(j)" [ngClass]="{ 'ci-table-active': selectedChoice == j }">
                 <td class="mdl-data-table__cell">{{ j + 1 }}</td>
                 <td class="mdl-data-table__cell--non-numeric">{{ choice }}</td>
                 <td class="mdl-data-table__cell--non-numeric">
@@ -130,11 +138,14 @@
                   </button>
                 </td>
               </tr>
-              <tr (click) = "pushChoice()">
-                <td></td>
-                <td class="mdl-data-table__cell--non-numeric">
+              <tr (click) = "pushChoice()" class="ci-table-creation">
+                <td>
                   <span class="ci-annotation-normal">
                     <i class="material-icons">add</i>
+                  </span>
+                </td>
+                <td class="mdl-data-table__cell--non-numeric">
+                  <span class="ci-annotation-normal">
                     新建
                   </span>
                 </td>
@@ -147,7 +158,7 @@
 
 
       <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" [ngClass]="{'is-dirty': selected.choices[selectedChoice] && selected.choices[selectedChoice]!=''}" *ngIf="selectedChoice != -1" style="margin-top: 16px" ci-mdl>
-        <input class="mdl-textfield__input" type="text" id="conf-form-choice" [(ngModel)] = "selected.choices[selectedChoice]">
+        <input class="mdl-textfield__input" type="text" id="conf-form-choice" [(ngModel)] = "selected.choices[selectedChoice]" #choiceInput>
         <label class="mdl-textfield__label" for="conf-form-choice">修改选项 {{ selectedChoice + 1 }}</label>
       </div>
 
