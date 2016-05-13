@@ -91,22 +91,25 @@
                 {{ getFormStatus(f.status) }}
               </td>
               <td class="mdl-data-table__cell--non-numeric">
-                <button class="mdl-button mdl-js-button mdl-button--icon" [routerLink]="['FormEdit', { form: f.name }]">
+                <button class="mdl-button mdl-js-button mdl-button--icon" [routerLink]="['FormEdit', { form: f.name }]" [disabled]="!canModify(f)">
                   <i class="material-icons">edit</i>
                 </button>
-                <button class="mdl-button mdl-js-button mdl-button--icon" [routerLink]="['ApplicationList', { form: f.name }]">
+                <button class="mdl-button mdl-js-button mdl-button--icon" [routerLink]="['ApplicationList', { form: f.name }]" [disabled]="!canView(f)">
                   <i class="material-icons">toc</i>
                 </button>
               </td>
             </tr>
-            <tr (click)="showFormCreation()">
+            <tr (click)="showFormCreation()" class="ci-table-creation">
               <td class="mdl-data-table__cell--non-numeric">
                 <span class="ci-annotation-normal">
                   <i class="material-icons">add</i>
+                </span>
+              </td>
+              <td class="mdl-data-table__cell--non-numeric">
+                <span class="ci-annotation-normal">
                   新表单
                 </span>
               </td>
-              <td></td>
               <td></td>
               <td></td>
             </tr>

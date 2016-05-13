@@ -1,4 +1,4 @@
-import {ViewChild, Inject, Component, OnInit} from '@angular/core'
+import {ElementRef, ViewChild, Inject, Component, OnInit} from '@angular/core'
 import {CanDeactivate, Router, RouteConfig, RouteParams, ROUTER_DIRECTIVES, RouterOutlet} from '@angular/router-deprecated'
 
 import {MdInput, MdHint, MdPlaceholder} from '@angular2-material/input'
@@ -363,11 +363,13 @@ class CIConfFormEdit extends CICardView {
 
   formId: any;
   data: any;
-  formName: any;
+  formName: string = "";
 
   selected: any = null;
   selectedId: number = -1;
   selectedChoice: number = -1;
+
+  @ViewChild('choiceInput') choiceInput: ElementRef;
 
   constructor(_card: CICardService,
     params: RouteParams,
@@ -378,13 +380,11 @@ class CIConfFormEdit extends CICardView {
       super(_card);
       this.formId = params.get('form');
       
-      let formDesc = _conf.getFormDesc(this.formId);
-      this.formName = formDesc.title;
       //TODO: formName
       this.data = [];
 
       _frame.setFab({
-        icon: "done",
+        icon: "save",
         action: () => {
           this.submit();
         }
@@ -401,19 +401,26 @@ class CIConfFormEdit extends CICardView {
   }
 
   select(i: number) {
+    this.selectedChoice = -1;
     this.selectedId = i;
     this.selected = this.data[i];
   }
 
   pushField() {
-    this.data.push({
+    let newLen = this.data.push({
       type: "input"
     });
 
-    console.log(this.data);
+    this.select(newLen - 1);
   }
 
   deleteField(i: number) {
+    if(this.selectedId == i) {
+      this.selected = null;
+      this.selectedId = -1;
+      this.selectedChoice = -1;
+    }
+
     this.data.splice(i, 1);
   }
 
@@ -431,12 +438,21 @@ class CIConfFormEdit extends CICardView {
     this.data[i+1] = tmp;
   }
 
+  selectChoice(i: number) {
+    this.selectedChoice = i;
+  }
+
   pushChoice() {
-    if(!Array.isArray(this.selected.choices)) this.selected.choices = []
-    this.selected.choices.push("");
+    if(!Array.isArray(this.selected.choices)) this.selected.choices = [];
+    this.selectedChoice = this.selected.choices.push("") - 1;
+
+    setTimeout(() => this.choiceInput.nativeElement.focus(), 0);
   }
 
   deleteChoice(i: number) {
+    if(this.selectedChoice == i)
+      this.selectedChoice = -1;
+
     this.selected.choices.splice(i, 1);
   }
 
@@ -488,6 +504,7 @@ export class CIConfSettings extends CICardView {
     _frame: CIFrameService,
     private _router: Router,
     private _notifier: CINotifier,
+    private _login: CILoginService,
     private _conf: CIConfService) {
       super(_card);
       this.conf = _conf.getConf();
@@ -521,7 +538,8 @@ export class CIConfSettings extends CICardView {
   }
 
   getFormStatus(id: string) {
-    if(id == "open") return "开放";
+    if(id == "pending") return "准备中";
+    else if(id == "open") return "开放";
     else if(id == "closed") return "已关闭";
     else if(id == "archived") return "已存档";
     else return id;
@@ -563,6 +581,19 @@ export class CIConfSettings extends CICardView {
         this._router.navigate(['FormEdit', { form: res.id }]);
       }
     });
+  }
+
+  canModify(conf: any) {
+    var userId = this._login.getUser()._id;
+    return conf.admins && conf.admins.indexOf(userId) != -1;
+  }
+
+  canView(conf: any) {
+    var userId = this._login.getUser()._id;
+    if(conf.admins && conf.admins.indexOf(userId) != -1) return true;
+    else if(conf.moderators && conf.moderators.indexOf(userId) != -1) return true;
+    else if(conf.viewers && conf.viewers.indexOf(userId) != -1) return true;
+    else return false;
   }
 
   jumpTo(anchor: string) {
