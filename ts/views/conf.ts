@@ -13,6 +13,13 @@ import {MDL} from '../mdl'
 
 import * as CIUtil from '../util'
 
+const FORM_STATUS_MAP: { [status: string]: string } = {
+  pending: "准备中",
+  open: "开放",
+  closed: "已关闭",
+  archived: "已存档",
+}
+
 @Component({
   template: require('html/view/conf/application-list.html'),
   directives: [CICard, ROUTER_DIRECTIVES, MDL],
@@ -363,6 +370,8 @@ class CIConfFormEdit extends CICardView {
 
   formId: any;
   data: any;
+  formStatus: string = "";
+  formStatusStr: string = "";
   formName: string = "";
 
   selected: any = null;
@@ -395,10 +404,16 @@ class CIConfFormEdit extends CICardView {
     this._conf.getForm(this.formId,(res) => {
       this.data = res.content;
       this.formName = res.title;
+      this.formStatus = res.status;
+
+      if(res.status in FORM_STATUS_MAP) this.formStatusStr = FORM_STATUS_MAP[<string> res.status];
+      else this.formStatusStr = res.status;
     });
 
     return super.routerOnActivate();
   }
+
+  /* Editing - Field */
 
   select(i: number) {
     this.selectedChoice = -1;
@@ -438,6 +453,8 @@ class CIConfFormEdit extends CICardView {
     this.data[i+1] = tmp;
   }
 
+  /* Editing - Choices */
+
   selectChoice(i: number) {
     this.selectedChoice = i;
   }
@@ -469,6 +486,8 @@ class CIConfFormEdit extends CICardView {
     this.selected.choices[i+1] = tmp;
   }
 
+  /* Editing - Actions */
+
   submit() {
     this._conf.postForm(this.formId, {
       content: this.data,
@@ -478,6 +497,54 @@ class CIConfFormEdit extends CICardView {
         this._notifier.show("操作成功，您可能需要刷新浏览器才能看到效果");
       }
     });
+  }
+
+  /* Status - Actions */
+  statusOpen() {
+    this._conf.postFormStatus(this.formId, 'open', (res: any) => {
+      if(res.error)
+        this._notifier.show(res.error);
+      else {
+        this._notifier.show(res.msg);
+        this.formStatus = 'open';
+        this.formStatusStr = FORM_STATUS_MAP['open'];
+      }
+    })
+  }
+
+  statusClose() {
+    this._conf.postFormStatus(this.formId, 'close', (res: any) => {
+      if(res.error)
+        this._notifier.show(res.error);
+      else {
+        this._notifier.show(res.msg);
+        this.formStatus = 'closed';
+        this.formStatusStr = FORM_STATUS_MAP['closed'];
+      }
+    })
+  }
+
+  statusArchive() {
+    this._conf.postFormStatus(this.formId, 'archive', (res: any) => {
+      if(res.error)
+        this._notifier.show(res.error);
+      else {
+        this._notifier.show(res.msg);
+        this.formStatus = 'archived';
+        this.formStatusStr = FORM_STATUS_MAP['archived'];
+      }
+    })
+  }
+
+  statusDelete() {
+    this._conf.deleteForm(this.formId, (res: any) => {
+      if(res.error)
+        this._notifier.show(res.error);
+      else {
+        this._notifier.show(res.msg);
+        this._router.navigate(['Settings']);
+      }
+    })
   }
 }
 
@@ -526,9 +593,17 @@ export class CIConfSettings extends CICardView {
     });
   }
 
-  routerOnDeactive() {
-    console.log("DEACTIVE");
-    super.routerOnDeactivate();
+  routerOnDeactivate() {
+    if(!this.formCreation) {
+      return new Promise((resolve, reject) => {
+        // Hide dialog
+        this.formDialogCreated = false;
+        setTimeout(() => super.routerOnDeactivate().then(resolve, reject), 0);
+      })
+    } else {
+      this.formCreation = false;
+      return super.routerOnDeactivate();
+    }
   }
 
   updateSettings() {
@@ -538,10 +613,7 @@ export class CIConfSettings extends CICardView {
   }
 
   getFormStatus(id: string) {
-    if(id == "pending") return "准备中";
-    else if(id == "open") return "开放";
-    else if(id == "closed") return "已关闭";
-    else if(id == "archived") return "已存档";
+    if(id in FORM_STATUS_MAP) return FORM_STATUS_MAP[id];
     else return id;
   }
 
@@ -577,7 +649,7 @@ export class CIConfSettings extends CICardView {
         this.formCreating = false;
       }
       else {
-        this.formCreation = false;
+        // On deactivate will remove formCreation flag
         this._router.navigate(['FormEdit', { form: res.id }]);
       }
     });

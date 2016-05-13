@@ -106,6 +106,12 @@ ci-card {
   [disabled] .material-icons {
     color: rgba(0,0,0,.30);
   }
+
+  .mdl-textfield {
+    // Expand textfields to the full width of narrow elements
+    width: 100%;
+    max-width: 100%;
+  }
 }
 
 .ci-card-container {
@@ -185,12 +191,6 @@ ci-card {
   ci-card {
     margin-left: 0;
     margin-right: 0;
-
-    .mdl-textfield {
-      // Expand textfields to the full width of narrow elements
-      width: 100%;
-      max-width: 100%;
-    }
   }
 }
 

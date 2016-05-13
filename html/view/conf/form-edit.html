@@ -8,6 +8,23 @@
         <input class="mdl-textfield__input" type="text" id="conf-form-name" [(ngModel)]="formName">
         <label class="mdl-textfield__label" for="'conf-form-name">标题</label>
       </div>
+      <div class="mdl-card__supporting-text">
+        状态 <strong>{{ formStatusStr }}</strong>
+      </div>
+      <ci-card-actions>
+        <button class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect" *ngIf = "formStatus == 'pending' || formStatus == 'closed'" (click)="statusOpen()">
+          <i class="material-icons">play_arrow</i>
+        </button>
+        <button class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect" *ngIf = "formStatus == 'open'" (click)="statusClose()">
+          <i class="material-icons">pause</i>
+        </button>
+        <button class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect" *ngIf = "formStatus == 'open' || formStatus == 'closed'" (click)="statusArchive()">
+          <i class="material-icons">power_settings_new</i>
+        </button>
+        <button class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect" *ngIf = "formStatus == 'pending'" (click)="statusDelete()">
+          <i class="material-icons">delete</i>
+        </button>
+      </ci-card-actions>
     </ci-card>
     <ci-card>
       <ci-card-title>
