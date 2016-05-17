@@ -30,14 +30,30 @@ export class CILoginService extends CIHttp {
     CILoginService.listeners.push(l);
   }
 
-  doLogin(email: String, passwd: String) {
+  doLogin(email: String, passwd: String, needInit: (data: any) => void) {
     this.post('/login', { email, passwd }, (err, res) => {
       if(err) {
         console.log(err);
         this._notifier.show("$Unknown");
       } else if(res.error) {
-        this._notifier.show(res.error);
+        if(res.error == "InitializationRequired") return needInit(res);
+        else this._notifier.show(res.error);
       } else {
+        CILoginService.user = <CIUser> res.user;
+        CILoginService.listeners.forEach((l) => {
+          if(l.onLogin) l.onLogin(<CIUser> res.user);
+        });
+      }
+    });
+  }
+
+  doInit(data: any) {
+    this.post('/initialize', data, (err, res) => {
+      if(err) {
+        console.log(err);
+        this._notifier.show("$Unknown");
+      } else {
+        this._notifier.show("OperationSuccessful");
         CILoginService.user = <CIUser> res.user;
         CILoginService.listeners.forEach((l) => {
           if(l.onLogin) l.onLogin(<CIUser> res.user);

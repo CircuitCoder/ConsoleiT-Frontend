@@ -34,3 +34,28 @@
     在新用户注册时，初始密码会发至您的注册邮箱
   </div>
 </div>
+
+<div class="init-overlap" *ngIf = "needInit" [ngStyle] = "{ opacity: showInit ? 1 : 0 }">
+  <ci-card class="init-card">
+    <ci-card-title>
+      还差一步...
+    </ci-card-title>
+    <div class="mdl-card__supporting-text">
+      在您能第一次登陆前，我们需要您初始化您的账户。请填写如下信息:
+    </div>
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" ci-mdl>
+      <select class="mdl-textfield__input" id="ci-login-school" [(ngModel)]="data.school" (keyup.enter)="commit()">
+        <option *ngFor="let school of schoolList">{{ school }}</option>
+      </select>
+      <label class="mdl-textfield__label" for="ci-login-school">您所在的学校</label>
+    </div>
+    <div class="mdl-card__supporting-text ci-annotation-normal">
+      如果您的学校不在列表中，请联系: Someone
+    </div>
+    <ci-card-actions>
+      <button class="mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect" (click) = "init()" ci-mdl>
+        提交
+      </button>
+    </ci-card-actions>
+  </ci-card>
+</div>

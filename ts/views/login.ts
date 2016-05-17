@@ -16,8 +16,12 @@ import {CINotifier} from '../notifier'
 
 export class CILogin extends CICardView {
   isRegister: boolean;
-  isStarted: boolean;
   data: CILoginData;
+
+  isStarted: boolean = false;
+  needInit: boolean = false;
+  showInit: boolean = false;
+  schoolList: string[];
   @ViewChild(CICard) private loginCard:CICard;
 
   constructor(
@@ -43,8 +47,6 @@ export class CILogin extends CICardView {
 
       let msg = this._routeParams.get('msg');
       if(msg) setTimeout(() => this._notifier.show(msg), 0);
-
-      this.isStarted = false;
     }
 
   routerOnActivate() {
@@ -52,12 +54,28 @@ export class CILogin extends CICardView {
     super.routerOnActivate();
   }
 
+  routerOnDeactivate() {
+    this.isStarted = false;
+    this.showInit = false;
+    return super.routerOnDeactivate();
+  }
+
   commit() {
     if(this.isRegister)
       this._login.doRegister(this.data.email, this.data.realname, () => {
         this.switchState();
       });
-    else this._login.doLogin(this.data.email, this.data.passwd);
+    else this._login.doLogin(this.data.email, this.data.passwd, (data: any) => {
+      // Need initialization
+      this.schoolList = data.schoolList;
+
+      this.needInit = true;
+      setTimeout(() => this.showInit = true, 0); // For animation
+    });
+  }
+
+  init() {
+    this._login.doInit(this.data);
   }
 
   switchState() {

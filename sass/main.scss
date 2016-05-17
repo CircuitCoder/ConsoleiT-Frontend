@@ -59,10 +59,21 @@ ci-frame {
     }
   }
 
+  main.mdl-layout__content {
+    transition-property: 0;
+    transition-duration: 0s;
+    transition-delay: 0.2s;
+    margin-top: 0;
+  }
+
   .ci-anonymous {
     > header.mdl-layout__header {
       transition-timing-function: ease-in;
       transform: translateY(-70px);
+    }
+    > main.mdl-layout__content {
+      transition-delay: 5s;
+      margin-top: -70px;
     }
   }
 

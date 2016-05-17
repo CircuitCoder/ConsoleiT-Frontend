@@ -22,9 +22,37 @@
     color: rgba(0,0,0,.30);
     transition: opacity 0.4s 0.2s ease;
 
+    opacity: 0;
+
     a {
       color: rgba(0,0,0,.30);
       cursor: pointer;
     }
+  }
+}
+
+.init-overlap {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  background: rgba(0,0,0,.3);
+
+  transition: opacity 0.2s ease;
+
+  .init-card {
+    width: 450px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
   }
 }
