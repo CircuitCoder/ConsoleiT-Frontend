@@ -39,7 +39,7 @@
     "script-loader": "^0.7.0",
     "source-map-loader": "^0.1.5",
     "typescript": "^1.8.7",
-    "typings": "^1.0.3",
+    "typings": "^1.0.4",
     "webpack-stream": "^3.2.0"
   },
   "dependencies": {
