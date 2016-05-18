@@ -1,9 +1,11 @@
 # ConsoleiT Frontend
 ConsoleiT 的前端代码
 
-[![依赖状态](https://david-dm.org/CircuitCoder/ConsoleiT-Frontend.svg)](https://david-dm.org/CircuitCoder/ConsoleiT-Frontend)
-[![开发依赖状态](https://david-dm.org/CircuitCoder/ConsoleiT-Frontend/dev-status.svg)](https://david-dm.org/CircuitCoder/ConsoleiT-Frontend#info=devDependencies)
-[![测试状态](https://travis-ci.org/CircuitCoder/ConsoleiT-Frontend.svg?branch=master)](https://travis-ci.org/CircuitCoder/ConsoleiT-Frontend)
+[![bitHound Overall Score](https://www.bithound.io/github/CircuitCoder/ConsoleiT-Frontend/badges/score.svg)](https://www.bithound.io/github/CircuitCoder/ConsoleiT-Frontend)
+[![bitHound Dependencies](https://www.bithound.io/github/CircuitCoder/ConsoleiT-Frontend/badges/dependencies.svg)](https://www.bithound.io/github/CircuitCoder/ConsoleiT-Frontend/master/dependencies/npm)
+[![bitHound Dev Dependencies](https://www.bithound.io/github/CircuitCoder/ConsoleiT-Frontend/badges/devDependencies.svg)](https://www.bithound.io/github/CircuitCoder/ConsoleiT-Frontend/master/dependencies/npm)
+[![bitHound Code](https://www.bithound.io/github/CircuitCoder/ConsoleiT-Frontend/badges/code.svg)](https://www.bithound.io/github/CircuitCoder/ConsoleiT-Frontend)
+[![Build Status](https://travis-ci.org/CircuitCoder/ConsoleiT-Frontend.svg?branch=master)](https://travis-ci.org/CircuitCoder/ConsoleiT-Frontend)
 
 ## 安装
 在 git clone 完成以后，首先请将 `ts/config.example.ts` 重命名为 `ts/config.ts` ，修改其内容，随后在项目目录下执行以下指令:
