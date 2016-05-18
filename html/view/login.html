@@ -43,15 +43,64 @@
     <div class="mdl-card__supporting-text">
       在您能第一次登陆前，我们需要您初始化您的账户。请填写如下信息:
     </div>
-    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" ci-mdl>
-      <select class="mdl-textfield__input" id="ci-login-school" [(ngModel)]="data.school" (keyup.enter)="commit()">
-        <option *ngFor="let school of schoolList">{{ school }}</option>
-      </select>
-      <label class="mdl-textfield__label" for="ci-login-school">您所在的学校</label>
-    </div>
+
     <div class="mdl-card__supporting-text ci-annotation-normal">
-      如果您的学校不在列表中，请联系: Someone
+      若下拉栏中没有您的学校，请您手动填写。
     </div>
+
+    <div class="ci-radios ci-radios-flex" ci-mdl>
+      <div class="ci-radios-title">您目前在读</div>
+      <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="ci-login-school-type-junior" [ngClass]="{'is-checked': data.schoolType == 1}" ci-mdl>
+        <input type="radio"
+          id="ci-login-school-type-junior"
+          class="mdl-radio__button"
+          (click)="data.schoolType = 1"
+          [checked]="data.schoolType == 1">
+        <span class="mdl-radio__label">初中</span>
+      </label>
+
+      <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="ci-login-school-type-senior" [ngClass]="{'is-checked': data.schoolType == 2}" ci-mdl>
+        <input type="radio"
+          id="ci-login-school-type-senior"
+          class="mdl-radio__button"
+          (click)="data.schoolType = 2"
+          [checked]="data.schoolType == 2">
+        <span class="mdl-radio__label">高中</span>
+      </label>
+
+      <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="ci-login-school-type-university" [ngClass]="{'is-checked': data.schoolType == 3}" ci-mdl>
+        <input type="radio"
+          id="ci-login-school-type-university"
+          class="mdl-radio__button"
+          (click)="data.schoolType = 3"
+          [checked]="data.schoolType == 3">
+        <span class="mdl-radio__label">大学</span>
+      </label>
+
+      <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="ci-login-school-type-other" [ngClass]="{'is-checked': data.schoolType == 4}" ci-mdl>
+        <input type="radio"
+          id="ci-login-school-type-other"
+          class="mdl-radio__button"
+          (click)="data.schoolType = 4"
+          [checked]="data.schoolType == 4">
+        <span class="mdl-radio__label">其他</span>
+      </label>
+    </div>
+
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" *ngIf = "data.schoolType != 4" ci-mdl [ngClass]="{'is-dirty': data.schoolName}">
+      <input class="mdl-textfield__input" type="text" list="ci-login-school-list" id="ci-profile-school-name" [(ngModel)]="data.schoolName">
+      <label class="mdl-textfield__label" for="ci-login-school-name">您在读的学校名</label>
+    </div>
+
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" *ngIf = "data.schoolType != 4" ci-mdl [ngClass]="{'is-dirty': data.graduationYear != undefined}">
+      <input class="mdl-textfield__input" type="number" id="ci-profile-graduation-year" [(ngModel)]="data.graduationYear">
+      <label class="mdl-textfield__label" for="ci-login-graduation-year">您的毕业年份</label>
+    </div>
+
+    <datalist id="ci-login-school-list">
+      <option *ngFor="let school of schoolList" [value]="school"></option>
+    </datalist>
+
     <ci-card-actions>
       <button class="mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect" (click) = "init()" ci-mdl>
         提交

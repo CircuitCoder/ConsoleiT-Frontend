@@ -17,7 +17,9 @@ export class CIProfile extends CICardView {
   passwd: String;
 
   account: CIUser;
-  user: any;
+  user: any = {};
+
+  schoolList: string[] = [];
 
   constructor(_card: CICardService,
     private _login: CILoginService,
@@ -26,13 +28,13 @@ export class CIProfile extends CICardView {
     _frame: CIFrameService) {
       super(_card);
       this.account = _login.getUser();
-      this.user = null;
       _frame.setTitle("个人资料");
       _frame.setTabs([]);
       _frame.setFab(null);
 
       _user.getSelfInfo(this.account._id, (data: any) => {
         this.user = data;
+        this.schoolList = data.meta.schoolList;
       });
     }
 

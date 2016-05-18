@@ -1,22 +1,22 @@
 <div class="ci-card-container" type="2-col">
   <div class="ci-card-col">
-    <ci-card *ngIf = "user != null">
+    <ci-card>
       <ci-card-title>
         个人信息
       </ci-card-title>
-      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" [ngClass]="{'is-dirty': user.email}">
         <input class="mdl-textfield__input" type="text" id="ci-profile-email" [(ngModel)]="account.email" disabled>
         <label class="mdl-textfield__label" for="ci-profile-email">注册邮箱</label>
       </div>
 
-      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" [ngClass]="{'is-dirty': user.realname}">
         <input class="mdl-textfield__input" type="text" id="ci-profile-realname" [(ngModel)]="user.realname">
         <label class="mdl-textfield__label" for="ci-profile-realname">真实姓名</label>
       </div>
 
       <div class="ci-radios ci-radios-flex" ci-mdl>
         <div class="ci-radios-title">性别</div>
-        <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="ci-profile-gender-male">
+        <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="ci-profile-gender-male" [ngClass]="{'is-checked': user.gender == 'male'}">
           <input type="radio"
             id="ci-profile-gender-male"
             class="mdl-radio__button"
@@ -25,7 +25,7 @@
           <span class="mdl-radio__label">男</span>
         </label>
 
-        <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="ci-profile-gender-female">
+        <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="ci-profile-gender-female" [ngClass]="{'is-checked': user.gender == 'female'}">
           <input type="radio"
             id="ci-profile-gender-female"
             class="mdl-radio__button"
@@ -34,7 +34,7 @@
           <span class="mdl-radio__label">女</span>
         </label>
 
-        <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="ci-profile-gender-unknown">
+        <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="ci-profile-gender-unknown" [ngClass]="{'is-checked': user.gender == 'unknown'}">
           <input type="radio"
             id="ci-profile-gender-unknown"
             class="mdl-radio__button"
@@ -43,7 +43,7 @@
           <span class="mdl-radio__label">保密</span>
         </label>
 
-        <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="ci-profile-gender-other">
+        <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="ci-profile-gender-other" [ngClass]="{'is-checked': user.gender == 'other'}">
           <input type="radio"
             id="ci-profile-gender-other"
             class="mdl-radio__button"
@@ -55,47 +55,14 @@
 
       <!-- Do we need an extra field for genders? -->
 
-      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" [ngClass]="{'is-dirty': user.phone}">
         <input class="mdl-textfield__input" type="text" id="ci-profile-phone" [(ngModel)]="user.phone">
         <label class="mdl-textfield__label" for="ci-profile-phone">手机</label>
       </div>
 
-      <div class="ci-radios ci-radios-multiline" ci-mdl>
-        <div class="ci-radios-title">身份证件类别</div>
-        <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="ci-profile-id-type-national">
-          <input type="radio"
-            id="ci-profile-id-type-national"
-            class="mdl-radio__button"
-            (click)="user.IDType = 1"
-            [checked]="user.IDType == 1">
-          <span class="mdl-radio__label">居民身份证</span>
-        </label><br>
-        <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="ci-profile-id-type-passport">
-          <input type="radio"
-            id="ci-profile-id-type-passport"
-            class="mdl-radio__button"
-            (click)="user.IDType = 2"
-            [checked]="user.IDType == 2">
-          <span class="mdl-radio__label">护照</span>
-        </label><br>
-        <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="ci-profile-id-type-hmt">
-          <input type="radio"
-            id="ci-profile-id-type-hmt"
-            class="mdl-radio__button"
-            (click)="user.IDType = 3"
-            [checked]="user.IDType == 3">
-          <span class="mdl-radio__label">港澳／台湾居民来往内地通行证</span>
-        </label>
-      </div>
-
-      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <input class="mdl-textfield__input" type="text" id="ci-profile-id-number" [(ngModel)]="user.IDNumber">
-        <label class="mdl-textfield__label" for="ci-profile-id-number">身份证件号码</label>
-      </div>
-
       <div class="ci-radios ci-radios-flex" ci-mdl>
         <div class="ci-radios-title">目前在读</div>
-        <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="ci-profile-school-type-junior">
+        <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="ci-profile-school-type-junior" [ngClass]="{'is-checked': user.schoolType == 1}" ci-mdl>
           <input type="radio"
             id="ci-profile-school-type-junior"
             class="mdl-radio__button"
@@ -104,7 +71,7 @@
           <span class="mdl-radio__label">初中</span>
         </label>
 
-        <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="ci-profile-school-type-senior">
+        <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="ci-profile-school-type-senior" [ngClass]="{'is-checked': user.schoolType == 2}" ci-mdl>
           <input type="radio"
             id="ci-profile-school-type-senior"
             class="mdl-radio__button"
@@ -113,7 +80,7 @@
           <span class="mdl-radio__label">高中</span>
         </label>
 
-        <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="ci-profile-school-type-university">
+        <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="ci-profile-school-type-university" [ngClass]="{'is-checked': user.schoolType == 3}" ci-mdl>
           <input type="radio"
             id="ci-profile-school-type-university"
             class="mdl-radio__button"
@@ -122,7 +89,7 @@
           <span class="mdl-radio__label">大学</span>
         </label>
 
-        <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="ci-profile-school-type-other">
+        <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="ci-profile-school-type-other" [ngClass]="{'is-checked': user.schoolType == 4}" ci-mdl>
           <input type="radio"
             id="ci-profile-school-type-other"
             class="mdl-radio__button"
@@ -132,21 +99,26 @@
         </label>
       </div>
 
-      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" *ngIf = "user.schoolType != 4" ci-mdl>
-        <input class="mdl-textfield__input" type="text" id="ci-profile-school-name" [(ngModel)]="user.schoolName">
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" *ngIf = "user.schoolType != 4" ci-mdl [ngClass]="{'is-dirty': user.schoolName}">
+        <input class="mdl-textfield__input" type="text" list="ci-profile-school-list" id="ci-profile-school-name" [(ngModel)]="user.schoolName">
         <label class="mdl-textfield__label" for="ci-profile-school-name">在读校名</label>
       </div>
 
+      <datalist id="ci-profile-school-list">
+        <option *ngFor="let school of schoolList" [value]="school">
+      </datalist>
+
       <!-- TODO: Why do I need a ngClass here? -->
-      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" *ngIf = "user.schoolType != 4" ci-mdl [ngClass]="{'is-dirty': user.yearEnrolled}">
-        <input class="mdl-textfield__input" type="text" id="ci-profile-year-enrolled" [(ngModel)]="user.yearEnrolled">
-        <label class="mdl-textfield__label" for="ci-profile-year-enrolled">入学年份</label>
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" *ngIf = "user.schoolType != 4" ci-mdl [ngClass]="{'is-dirty': user.graduationYear != undefined}">
+        <input class="mdl-textfield__input" type="number" id="ci-profile-graduation-year" [(ngModel)]="user.graduationYear">
+        <label class="mdl-textfield__label" for="ci-profile-graduation-year">毕业年份</label>
       </div>
 
-      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" [ngClass]="{'is-dirty': user.desc}">
         <textarea class="mdl-textfield__input" type="text" id="ci-profile-desc" rows="4" [(ngModel)]="user.desc"></textarea>
         <label class="mdl-textfield__label" for="user.desc">个人简介</label>
       </div>
+
       <ci-card-actions>
         <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised mdl-button--colored" type="submit" (click) = "updateInfo()">
           提交
