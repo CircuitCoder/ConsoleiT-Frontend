@@ -40,7 +40,7 @@
     </nav>
 
     <div class="profile-box" *ngIf="user">
-      <img [src]="avatarUrl" class="mdl-shadow--2dp">
+      <ci-avatar [name]="user.realname" [email]="user.email"></ci-avatar>
       <div class="realname">{{ user.realname }}</div>
       <div class="email">{{ user.email }}</div>
       <div class="operations">

@@ -8,6 +8,7 @@ import {CICardService} from './card'
 import {CINotifier} from './notifier'
 import {CIDataNotif} from './data'
 import {MDL} from './mdl'
+import {CIAvatar} from './avatar'
 import {CIUser, CILoginService} from './login'
 import {CIConfService} from './conf'
 import {CIUserService} from './user'
@@ -23,7 +24,7 @@ import * as CIUtil from './util'
 @Component({
   selector: 'ci-frame',
   template: require('html/tmpl/frame.html'),
-  directives: [ROUTER_DIRECTIVES],
+  directives: [ROUTER_DIRECTIVES, CIAvatar],
   providers: [CILoginService, CINotifier, CIConfService, CICardService, CIFrameService, CIUserService]
 })
 
@@ -86,7 +87,6 @@ import * as CIUtil from './util'
 export class CIFrame {
   notif: CIDataNotif[];
   user: CIUser;
-  avatarUrl: string;
   started: boolean;
   confs: any[];
   tabs: CIFrameTabDefination[];
@@ -107,7 +107,6 @@ export class CIFrame {
 
     this.notif = new Array();
     this.user = null;
-    this.avatarUrl = "";
     this.started = false;
     this.confs = [];
 
@@ -123,7 +122,6 @@ export class CIFrame {
     _login.addListener({
       onLogin: (user: CIUser) => {
         outer.user = user;
-        outer.avatarUrl = CIUtil.generateGravatar(user.email);
         outer._router.navigate(['Dashboard']);
         this.updateSidebar();
       },
@@ -143,8 +141,6 @@ export class CIFrame {
           }
         } else {
           outer.user = user
-          outer.avatarUrl = CIUtil.generateGravatar(user.email);
-          console.log(outer.avatarUrl);
           if(this.isComponentActive(CILogin)) {
             outer._notifier.show("AlreadyLoggedIn");
             outer._router.navigate(['Dashboard']);

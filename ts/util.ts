@@ -15,7 +15,7 @@ declare var componentHandler: MDLHandler;
  * Generate gravatar url from email
  */
 export function generateGravatar(email: string) {
-  return `https://gravatar.lug.ustc.edu.cn/avatar/${md5(email)}?d=mm&r=g`;
+  return `https://gravatar.lug.ustc.edu.cn/avatar/${md5(email)}?d=404&r=g`;
 }
 
 /**

@@ -1,0 +1,6 @@
+<div class="ci-avatar">
+  <div class="ci-fallback-avatar">
+    {{ getInitials() }}
+  </div>
+  <img class="ci-avatar-img mdl-shadow--2dp" [src]="getGravatar()" [ngClass]="{ shown: showImg && loaded }" (load)="loadSuccess()">
+</div>

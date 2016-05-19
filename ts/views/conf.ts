@@ -10,6 +10,7 @@ import {CILoginService} from '../login'
 import {CINotifier} from '../notifier'
 import {CIFuncFilter} from '../pipes'
 import {MDL} from '../mdl'
+import {CIAvatar} from '../avatar'
 
 import * as CIUtil from '../util'
 
@@ -321,7 +322,7 @@ class CIConfApplication extends CICardView implements CanDeactivate {
 
 @Component({
   template: require('html/view/conf/index.html'),
-  directives: [CICard, MDL, ROUTER_DIRECTIVES]
+  directives: [CICard, MDL, ROUTER_DIRECTIVES, CIAvatar]
 })
 
 class CIConfHome extends CICardView {
@@ -333,7 +334,6 @@ class CIConfHome extends CICardView {
   confMembers: any;
   confRoles: any;
   
-
   userId: number;
 
   constructor(_card: CICardService, private _conf: CIConfService, private _login: CILoginService) {
@@ -348,9 +348,6 @@ class CIConfHome extends CICardView {
     this.confRoles = this._conf.getRoleMap();
 
     this.confData.members.sort((a: any, b: any) => a.role < b.role ? -1 : 1 );
-    Object.keys(this.confMembers).forEach((e: any) => {
-      this.confMembers[e].gravatar = CIUtil.generateGravatar(this.confMembers[e].email);
-    });
 
     CIUtil.cardMarked(this.confData.desc, (titles, bodies) => {
       this.confDescs = bodies;

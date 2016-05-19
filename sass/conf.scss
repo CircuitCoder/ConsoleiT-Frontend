@@ -2,10 +2,12 @@
   padding-top: 16px;
   height: 60px;
 
-  img {
-    border-radius: 50%;
+  ci-avatar {
     height: 60px;
     width: 60px;
+    line-height: 60px;
+    font-size: 30px;
+
     margin-right: 20px;
     float: left;
   }

@@ -1,0 +1,46 @@
+ci-avatar {
+  height: 80px;
+  width: 80px;
+  line-height: 80px;
+  font-size: 40px;
+
+  .ci-avatar {
+    position: relative;
+    height: 100%;
+    width: 100%;
+
+    .ci-fallback-avatar {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      border-radius: 50%;
+
+      border: rgba(0,0,0,.24) 1px solid;
+      color: rgba(0,0,0,.24);
+
+      font-weight: 100;
+      text-align: center;
+    }
+
+    .ci-avatar-img {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      top: 0;
+      right: 0;
+      height: 100%;
+      width: 100%;
+
+      border-radius: 50%;
+
+      opacity: 0;
+
+      &.shown {
+        opacity: 1;
+        transition: opacity 0.2s ease-out;
+      }
+    }
+  }
+}

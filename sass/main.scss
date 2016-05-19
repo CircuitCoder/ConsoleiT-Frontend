@@ -105,15 +105,13 @@ ci-frame {
 
       border-top: 1px solid rgba(0,0,0,.12);
 
-      img {
+      ci-avatar {
         position: absolute;
         top: 10px;
         bottom: 10px;
         left: 10px;
         width: 80px;
         height: 80px;
-
-        border-radius: 50%;
       }
 
       .realname {

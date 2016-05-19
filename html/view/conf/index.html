@@ -40,7 +40,7 @@
         组织团队
       </ci-card-title>
       <div class="conf-member-list" *ngFor="#member of confData.members">
-        <img [src]="confMembers[member._id].gravatar" class="mdl-shadow--2dp">
+        <ci-avatar [name]="confMembers[member._id].realname" [email]="confMembers[member._id].email"></ci-avatar>
         <div class="conf-member-info">
           <div class="conf-member-name">{{confMembers[member._id].realname}}</div>
           <div class="conf-member-role" [title]="confRoles[member.role].title">{{confRoles[member.role].title}}</div>
