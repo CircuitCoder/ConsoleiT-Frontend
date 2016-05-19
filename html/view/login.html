@@ -1,7 +1,12 @@
 <div class="login-title">
   <canvas class="login-canvas"></canvas>
 </div>
+
 <div class="login-box">
+  <div class="login-logo-container" [style.opacity]="isStarted ? 1 : 0">
+    <img src="/assets/imgs/console.svg" class="ci-login-logo">
+  </div>
+
   <ci-card>
     <ci-card-title>
       {{ isRegister ? "注册" : "登陆" }}

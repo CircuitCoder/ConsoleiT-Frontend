@@ -11,6 +11,7 @@ export class CICardService {
   private static visible = false;
   
   public register(card: CICard) {
+    console.log(card);
     CICardService.cards.push(card);
     if(CICardService.visible) {
       setTimeout(() => card.setVisible(true), 50); // TODO: ensure the animation performs
@@ -24,6 +25,7 @@ export class CICardService {
       let p = c.getPosition();
       return Math.min(prev, p.top*2 + p.left);
     }, Infinity);
+    console.log(startPoint);
 
     return Promise.all(CICardService.cards.map((c:CICard) => {
       let p = c.getPosition();

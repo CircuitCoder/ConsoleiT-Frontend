@@ -49,15 +49,21 @@ export class CILogin extends CICardView {
       if(msg) setTimeout(() => this._notifier.show(msg), 0);
     }
 
-  routerOnActivate() {
+  ngAfterViewInit() {
     setTimeout(() => this.isStarted = true, 0);
-    super.routerOnActivate();
+    setTimeout(() => super.ngAfterViewInit(), 200);
   }
 
   routerOnDeactivate() {
     this.isStarted = false;
     this.showInit = false;
-    return super.routerOnDeactivate();
+    return Promise.all([new Promise((resolve, reject) => {
+      setTimeout(resolve, 800);
+    }), new Promise((resolve, reject) => {
+      setTimeout(() => {
+        super.routerOnDeactivate().then(resolve, reject);
+      }, 200);
+    })]);
   }
 
   commit() {
