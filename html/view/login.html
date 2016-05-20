@@ -92,7 +92,7 @@
       </label>
     </div>
 
-    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" *ngIf = "data.schoolType != 4" ci-mdl [ngClass]="{'is-dirty': data.schoolName}">
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" ci-mdl [ngClass]="{'is-dirty': data.schoolName}">
       <input class="mdl-textfield__input" type="text" list="ci-login-school-list" id="ci-profile-school-name" [(ngModel)]="data.schoolName">
       <label class="mdl-textfield__label" for="ci-login-school-name">您在读的学校名</label>
     </div>
