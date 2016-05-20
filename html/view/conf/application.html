@@ -10,7 +10,7 @@
       </div>
 
       <!-- radios -->
-      <div class="ci-radios" *ngIf = "entry.type == 'radio'">
+      <div class="ci-radios ci-radios-no-title" *ngIf = "entry.type == 'radio'">
         <template ngFor let-choice [ngForOf]="entry.choices" let-j="index">
           <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" [attr.for]="'conf-form-' + i + '-' + j" ci-mdl [ngClass]="{'is-checked': data[i] == j}">
             <input type="radio"
@@ -25,7 +25,7 @@
       </div>
 
       <!-- checkbox -->
-      <div class="ci-radios" *ngIf = "entry.type == 'checkbox' && data[i]">
+      <div class="ci-radios ci-radios-no-title" *ngIf = "entry.type == 'checkbox' && data[i]">
         <template ngFor let-choice [ngForOf]="entry.choices" let-j="index">
           <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" [attr.for]="'conf-form-' + i + '-' + j" ci-mdl [ngClass]="{'is-checked': data[i][j]}">
             <input type="checkbox"

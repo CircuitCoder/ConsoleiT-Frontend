@@ -209,6 +209,10 @@ ci-card {
     }
   }
 
+  &.ci-radios-no-title {
+    padding-top: 0;
+  }
+
   .ci-radios-title {
     color: $primary-color;
     font-size: 12px;
