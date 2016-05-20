@@ -732,7 +732,7 @@ export class CIConf {
 
         // Inject forms
         forms.forEach(e => {
-          if(e.role == "applicant")
+          if(e.role == "applicant" || !e.role)
             tabs.push({
               title: e.title,
               route: ['/Conf', {id: this.confId}, 'Application', { form: e.name, uid: this.userId }],

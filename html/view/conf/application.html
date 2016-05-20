@@ -1,6 +1,6 @@
 <div class="ci-card-container" type="action">
   <div class="ci-card-col wide">
-    <ci-card *ngFor="#entry of form, #i = index">
+    <ci-card *ngFor="let entry of form, let i = index">
       <ci-card-title>
         <span class="ci-annotation-normal">{{ i+1 }}</span> <span [style.font-weight]="entry.type == 'title' ? 'bold' : 'inherit'">{{ entry.title }}</span> <span class="ci-warning" *ngIf="entry.required">*</span>
       </ci-card-title>
@@ -11,8 +11,8 @@
 
       <!-- radios -->
       <div class="ci-radios" *ngIf = "entry.type == 'radio'">
-        <template ngFor #choice [ngForOf]="entry.choices" #j = "index">
-        <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" [attr.for]="'conf-form-' + i + '-' + j" ci-mdl [ngClass]="{'is-checked': data[i] == j}">
+        <template ngFor let-choice [ngForOf]="entry.choices" let-j="index">
+          <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" [attr.for]="'conf-form-' + i + '-' + j" ci-mdl [ngClass]="{'is-checked': data[i] == j}">
             <input type="radio"
               [id]="'conf-form-' + i + '-' + j"
               class="mdl-radio__button"
@@ -26,7 +26,7 @@
 
       <!-- checkbox -->
       <div class="ci-radios" *ngIf = "entry.type == 'checkbox' && data[i]">
-        <template ngFor #choice [ngForOf]="entry.choices" #j = "index">
+        <template ngFor let-choice [ngForOf]="entry.choices" let-j="index">
           <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" [attr.for]="'conf-form-' + i + '-' + j" ci-mdl [ngClass]="{'is-checked': data[i][j]}">
             <input type="checkbox"
               [id]="'conf-form-' + i + '-' + j"
@@ -94,7 +94,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="#entry of submissions, #i = index" [routerLink] = "['Application', {form: formId, uid: entry.user}]" [class.is-active] = "entry.user == userId">
+            <tr *ngFor="let entry of submissions, let i = index" [routerLink] = "['Application', {form: formId, uid: entry.user}]" [class.is-active] = "entry.user == userId">
               <td class="mdl-data-table__cell--non-numeric">{{ entry.realname }}</td>
               <td class="mdl-data-table__cell--non-numeric"><i class="material-icons">{{ entry.locked ? "lock" : "" }}</i></td>
             </tr>
