@@ -212,7 +212,6 @@ export class CIFrame {
   updateSidebar() {
     this._conf.getList((res) => {
       this.confs = res;
-      console.log(res);
     });
   }
 }

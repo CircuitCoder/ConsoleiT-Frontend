@@ -18,7 +18,6 @@ export class CIAvatar {
   }
 
   loadSuccess() {
-    console.log("SHOW");
     this.showImg = true;
   }
 
