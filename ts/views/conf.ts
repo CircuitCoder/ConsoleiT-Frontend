@@ -208,7 +208,7 @@ class CIConfApplication extends CICardView implements CanDeactivate {
           for(let field in this.data[i]) if(this.data[i][field]) flag = true;
           if(!flag) invalids.push(i+1);
         } else {
-          if(!i in this.data || this.data[i] === null || this.data[i] === undefined || this.data[i] === "") invalids.push(i+1);
+          if(!(i in this.data) || this.data[i] === null || this.data[i] === undefined || this.data[i] === "") invalids.push(i+1);
         }
       }
     });
