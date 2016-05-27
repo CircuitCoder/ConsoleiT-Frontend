@@ -17,7 +17,7 @@
     </div>
 
     <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
-      <a *ngFor="#tab of tabs" class="mdl-layout__tab" [routerLink]="tab.route" [ngClass]="{'is-active': isRouteActive(tab.route, tab.router)}">
+      <a *ngFor="let tab of tabs" class="mdl-layout__tab" [routerLink]="tab.route" [ngClass]="{'is-active': isRouteActive(tab.route, tab.router)}">
         {{ tab.title }}
         <span class="mdl-layout__tab-ripple-container mdl-js-ripple-effect">
           <span class="mdl-ripple"></span>
@@ -33,7 +33,7 @@
     <nav class="mdl-navigation">
       <a [routerLink]="['Dashboard']" class="mdl-navigation__link">主页</a>
 
-      <a *ngFor="#conf of confs" class="mdl-navigation__link" [routerLink]="['Conf', {id: conf._id}]">{{ conf.title }}</a>
+      <a *ngFor="let conf of confs" class="mdl-navigation__link" [routerLink]="['Conf', {id: conf._id}]">{{ conf.title }}</a>
 
       <a [routerLink]="['ConfList']" class="mdl-navigation__link">全部会议</a>
       <a [routerLink]="['About']" class="mdl-navigation__link">关于</a>
