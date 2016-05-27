@@ -8,11 +8,11 @@
         {{ submissions.length == 0 ? "目前无人提交申请" : "目前有 " + submissions.length + " 人提交申请" }}
       </div>
       <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" ci-mdl>
-        <input class="mdl-textfield__input" type="text" id="ci-app-listing-search" [(ngModel)]="searchStr">
+        <input class="mdl-textfield__input" type="text" id="ci-app-listing-search" [(ngModel)]="searchStr" #searchInput>
         <label class="mdl-textfield__label" for="ci-app-listing-search">搜索 (姓名包含或者状态等于)</label>
       </div>
     </ci-card>
-    <ci-card *ngFor="#entry of submissions | funcFilter:flt:searchStr:membersMap:getStatusText">
+    <ci-card *ngFor="let entry of submissions" [ngStyle] = "{ opacity: entry.visible ? 1 : 0 }">
       <ci-card-title>
         {{ entry.realname }}<span class="ci-annotation"> - {{ entry.status }}</span>
         <i *ngIf="entry.locked" class="material-icons">lock</i>

@@ -1,5 +1,6 @@
 import {ElementRef, ViewChild, Inject, Component, OnInit} from '@angular/core'
 import {CanDeactivate, Router, RouteConfig, RouteParams, ROUTER_DIRECTIVES, RouterOutlet} from '@angular/router-deprecated'
+import {Observable} from 'rxjs/Rx';
 
 import {MdInput, MdHint, MdPlaceholder} from '@angular2-material/input'
 
@@ -31,14 +32,14 @@ class CIConfApplicationList extends CICardView {
 
   formId: string;
 
-  submissions: any[];
+  submissions: any[] = [];
 
-  searchStr: string;
+  searchStr: string = "";
+
+  @ViewChild("searchInput") searchInput: ElementRef;
 
   constructor(_card: CICardService, private _conf: CIConfService, params: RouteParams, _frame: CIFrameService) {
     super(_card);
-    this.submissions = [];
-    this.searchStr = "";
     this.formId = params.get('form');
     _frame.setFab(null);
   }
@@ -47,14 +48,32 @@ class CIConfApplicationList extends CICardView {
     this._conf.getFormResults(this.formId, (res) => {
       this._conf.registerSubmissions(res);
       this.submissions = this._conf.getSubmissions();
+      this.submissions.forEach((e) => {
+        e.visible = true;
+      });
     });
 
     return super.routerOnActivate();
   }
 
-  flt(value: any, str: string, membersMap: any, getStatusText: any) {
-    if(str == "") return true;
-    else return value.status === str || value.realname.indexOf(str) != -1;
+  ngAfterViewInit() {
+    const searchChanged = Observable.fromEvent(this.searchInput.nativeElement, 'keyup').debounceTime(200).distinctUntilChanged();
+    searchChanged.subscribe(() => this.refilter());
+    super.ngAfterViewInit();
+  }
+
+  refilter() {
+    console.log("REFILTER");
+    let sorted = this.submissions.slice(); // Copy by reference
+
+    //TODO: sort
+    sorted.forEach((e) => {
+      // filter
+      
+      if(this.searchStr == "") e.visible = true;
+      else if(e.realname.indexOf(this.searchStr) != -1) e.visible = true;
+      else e.visible = false;
+    });
   }
 }
 
