@@ -72,15 +72,21 @@ class CIConfApplicationList extends CICardView {
     //TODO: sort
 
     let delta = 0;
-    sorted.forEach((e) => {
+    sorted.forEach(e => {
       // filter
 
       if(this.searchStr == "") e.visible = true;
       else if(e.profile.realname.indexOf(this.searchStr) != -1) e.visible = true;
       else if(e.profile.schoolName.indexOf(this.searchStr) != -1) e.visible = true;
       else {
-        e.visible = false;
-        delta -= 48;
+        
+        //Search in keywords
+
+        e.visible = this.keywords.some(k => this.getKwRepr(k.field, e.submission[k.id]).indexOf(this.searchStr) != -1);
+
+        if(!e.visible) {
+          delta -= 48;
+        }
       }
       e.delta = delta;
     });
@@ -89,10 +95,10 @@ class CIConfApplicationList extends CICardView {
   getKwRepr(kw: any, value: any) {
     if(kw.type == 'checkbox') {
       if(!value) return '';
-      else return kw.choices.filter((e, i) => value[i]).join(', ')
+      else return kw.choices.filter((e: any, i: any) => value[i]).join(', ')
     } else if(kw.type == 'radio') {
-      return kw.choices[value];
-    } else return value;
+      return kw.choices[value] == undefined ? '' : kw.choices[value];
+    } else return value == undefined ? '' : value;
   }
 }
 

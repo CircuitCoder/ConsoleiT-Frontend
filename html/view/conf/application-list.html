@@ -17,12 +17,14 @@
         <table class="mdl-data-table">
           <thead>
             <th class="mdl-data-table__cell--non-numeric">姓名</th>
+            <th class="mdl-data-table__cell--non-numeric">学校</th>
             <th class="mdl-data-table__cell--non-numeric" *ngFor="let kw of keywords">{{ kw.field.title }}</th>
           </thead>
           <tbody>
             <!-- Using display for now since table rows can't be transformed -->
             <tr *ngFor="let entry of registrants" [ngStyle]="{ display: entry.visible ? 'table-row' : 'none' }" [routerLink]="['Application', { form: formId, uid: entry.user }]">
               <td class="mdl-data-table__cell--non-numeric">{{ entry.profile.realname }}</td>
+              <td class="mdl-data-table__cell--non-numeric">{{ entry.profile.schoolName }}</td>
               <td class="mdl-data-table__cell--non-numeric" *ngFor="let kw of keywords">{{ getKwRepr(kw.field, entry.submission[kw.id]) }}</td>
             </tr>
           </tbody>
