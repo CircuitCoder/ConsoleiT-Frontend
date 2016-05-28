@@ -15,8 +15,8 @@ export class CIConfService extends CIHttp {
   private group: any;
   private forms: [{ name: string, title: string, role: string }];
 
-  private submissions: any;
-  private applicants: any;
+  private registrants: any;
+  private keywords: any;
 
   private STATUS_MAP: {[id: number]: string;} = {
     0: "进行准备",
@@ -63,12 +63,17 @@ export class CIConfService extends CIHttp {
     else return filtered[0];
   }
 
-  registerSubmissions(data: any) {
-    this.submissions = data;
+  registerFormResults(data: any) {
+    this.registrants = data.registrants;
+    this.keywords = data.keywords;
   }
 
-  getSubmissions() {
-    return this.submissions;
+  getRegistrants() {
+    return this.registrants;
+  }
+  
+  getKeywords() {
+    return this.keywords;
   }
 
   hasPerm(uid: number, perm: string) {

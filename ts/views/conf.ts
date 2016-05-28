@@ -32,7 +32,8 @@ class CIConfApplicationList extends CICardView {
 
   formId: string;
 
-  submissions: any[] = [];
+  registrants: any[] = [];
+  keywords: any[] = [];
 
   searchStr: string = "";
 
@@ -46,9 +47,11 @@ class CIConfApplicationList extends CICardView {
 
   routerOnActivate() {
     this._conf.getFormResults(this.formId, (res) => {
-      this._conf.registerSubmissions(res);
-      this.submissions = this._conf.getSubmissions();
-      this.submissions.forEach((e) => {
+      this._conf.registerFormResults(res);
+      this.registrants = this._conf.getRegistrants();
+      this.keywords = this._conf.getKeywords();
+
+      this.registrants.forEach((e) => {
         e.visible = true;
       });
     });
@@ -64,7 +67,7 @@ class CIConfApplicationList extends CICardView {
 
   refilter() {
     console.log("REFILTER");
-    let sorted = this.submissions.slice(); // Copy by reference
+    let sorted = this.registrants.slice(); // Copy by reference
 
     //TODO: sort
 
@@ -81,6 +84,15 @@ class CIConfApplicationList extends CICardView {
       }
       e.delta = delta;
     });
+  }
+
+  getKwRepr(kw: any, value: any) {
+    if(kw.type == 'checkbox') {
+      if(!value) return '';
+      else return kw.choices.filter((e, i) => value[i]).join(', ')
+    } else if(kw.type == 'radio') {
+      return kw.choices[value];
+    } else return value;
   }
 }
 
@@ -107,8 +119,7 @@ class CIConfApplication extends CICardView implements CanDeactivate {
   new: boolean;
   status: string;
 
-  submissions: any;
-  applicants: any;
+  registrants: any;
 
   showModerator: boolean;
   moderatorNote: string;
@@ -144,11 +155,11 @@ class CIConfApplication extends CICardView implements CanDeactivate {
       else this.canModify = this.operatorId == this.userId;
 
       if(this.role == 'admin') {
-        this.submissions = this._conf.getSubmissions();
-        if(!this.submissions) { // Directly routed to this page
+        this.registrants = this._conf.getRegistrants();
+        if(!this.registrants) { // Directly routed to this page
           this._conf.getFormResults(this.formId, (res) => {
-            this._conf.registerSubmissions(res);
-            this.submissions = this._conf.getSubmissions();
+            this._conf.registerFormResults(res);
+            this.registrants = this._conf.getRegistrants();
           });
         }
       }

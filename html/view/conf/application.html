@@ -81,7 +81,7 @@
       </ci-card-actions>
     </ci-card>
 
-    <ci-card *ngIf = "role != 'applicant' && submissions">
+    <ci-card *ngIf = "role != 'applicant' && registrants">
       <ci-card-title>
         提交列表
       </ci-card-title>
@@ -94,8 +94,8 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let entry of submissions, let i = index" [routerLink] = "['Application', {form: formId, uid: entry.user}]" [class.is-active] = "entry.user == userId">
-              <td class="mdl-data-table__cell--non-numeric">{{ entry.realname }}</td>
+            <tr *ngFor="let entry of registrants, let i = index" [routerLink] = "['Application', {form: formId, uid: entry.user}]" [class.is-active] = "entry.user == userId">
+              <td class="mdl-data-table__cell--non-numeric">{{ entry.profile.realname }}</td>
               <td class="mdl-data-table__cell--non-numeric"><i class="material-icons">{{ entry.locked ? "lock" : "" }}</i></td>
             </tr>
           </tbody>

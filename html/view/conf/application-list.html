@@ -5,7 +5,7 @@
         提交状态
       </ci-card-title>
       <div class="mdl-card__supporting-text ci-annotation">
-        {{ submissions.length == 0 ? "目前无人提交申请" : "目前有 " + submissions.length + " 人提交申请" }}
+        {{ registrants.length == 0 ? "目前无人提交申请" : "目前有 " + registrants.length + " 人提交申请" }}
       </div>
       <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" ci-mdl>
         <input class="mdl-textfield__input" type="text" id="ci-app-listing-search" [(ngModel)]="searchStr" #searchInput>
@@ -17,11 +17,13 @@
         <table class="mdl-data-table">
           <thead>
             <th class="mdl-data-table__cell--non-numeric">姓名</th>
+            <th class="mdl-data-table__cell--non-numeric" *ngFor="let kw of keywords">{{ kw.field.title }}</th>
           </thead>
           <tbody>
             <!-- Using display for now since table rows can't be transformed -->
-            <tr *ngFor="let entry of submissions" [ngStyle]="{ display: entry.visible ? 'table-row' : 'none' }" [routerLink]="['Application', { form: formId, uid: entry.user }]">
+            <tr *ngFor="let entry of registrants" [ngStyle]="{ display: entry.visible ? 'table-row' : 'none' }" [routerLink]="['Application', { form: formId, uid: entry.user }]">
               <td class="mdl-data-table__cell--non-numeric">{{ entry.profile.realname }}</td>
+              <td class="mdl-data-table__cell--non-numeric" *ngFor="let kw of keywords">{{ getKwRepr(kw.field, entry.submission[kw.id]) }}</td>
             </tr>
           </tbody>
         </table>
