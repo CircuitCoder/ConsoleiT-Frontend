@@ -1,6 +1,6 @@
 $primary-color: rgb(33,150,243);
 
-ci-card {
+ci-card, ci-search-input-card {
   margin: 20px 0;
   display: block;
   .mdl-card {
@@ -186,6 +186,17 @@ ci-card {
   &[type="1-col"] {
     width: 440px;
     margin: 0 auto;
+  }
+
+  &[type="1-col-wide"] {
+    width: 100%;
+
+    .ci-card-col {
+      width: 900px;
+      @media (max-width: 1049px) {
+        width: 440px;
+      }
+    }
   }
   
   ci-card {

@@ -77,9 +77,10 @@ class CICardContent {
 export class CICard {
   public visible = false;
   @ViewChild(CICardContent) private contentWrapper:CICardContent;
+  @Input() private hideTitle: boolean;
 
-  constructor(private _el: ElementRef,
-              private _card: CICardService) { }
+  constructor(protected _el: ElementRef,
+              protected _card: CICardService) { }
 
   ngAfterViewInit() {
     this._card.register(this);

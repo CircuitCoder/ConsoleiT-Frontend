@@ -136,3 +136,56 @@
     }
   }
 }
+
+.ci-application-search {
+  height: 64px;
+  position: relative;
+
+  .ci-card-content {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+  }
+
+  .ci-card-inner {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    padding: 0;
+  }
+
+  .ci-application-search-icon {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 64px;
+    line-height: 64px;
+
+    font-size: 18px;
+
+    text-align: center;
+  }
+
+  .ci-application-search-input {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+
+    width: 100%;
+    padding: 0 0 0 64px;
+    box-sizing: border-box;
+
+    outline: 0;
+    border: none;
+    line-height: 64px;
+
+    font-size: 18px;
+  }
+}

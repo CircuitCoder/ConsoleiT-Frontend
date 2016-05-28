@@ -1,5 +1,5 @@
-<div class="ci-card-container" type="action">
-  <div class="ci-card-col wide">
+<div class="ci-card-container" type="1-col-wide">
+  <div class="ci-card-col">
     <ci-card>
       <ci-card-title>
         提交状态
@@ -7,12 +7,16 @@
       <div class="mdl-card__supporting-text ci-annotation">
         {{ registrants.length == 0 ? "目前无人提交申请" : "目前有 " + registrants.length + " 人提交申请" }}
       </div>
-      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" ci-mdl>
-        <input class="mdl-textfield__input" type="text" id="ci-app-listing-search" [(ngModel)]="searchStr" #searchInput>
-        <label class="mdl-textfield__label" for="ci-app-listing-search">搜索 (姓名包含或者状态等于)</label>
+    </ci-card>
+
+    <ci-card [hideTitle]="true" class="ci-application-search">
+      <input class="ci-application-search-input" [(ngModel)]="searchStr" #searchInput>
+      <div class="ci-application-search-icon">
+        <i class="material-icons">search</i>
       </div>
     </ci-card>
-    <ci-card>
+
+    <ci-card [hideTitle]="true">
       <div class="ci-card-table ci-entry-table ci-application-list">
         <table class="mdl-data-table">
           <thead>
@@ -38,18 +42,6 @@
             </tr>
           </tbody>
         </table>
-      </div>
-    </ci-card>
-  </div>
-  <div class="ci-card-col narrow">
-    <ci-card>
-      <ci-card-title>
-        操作
-      </ci-card-title>
-      <div class="mdl-card__supporting-text">
-        <button class="mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect" [routerLink] = "['FormEdit', {form: formId}]">
-          修改表单
-        </button>
       </div>
     </ci-card>
   </div>
