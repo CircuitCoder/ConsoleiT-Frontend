@@ -35,6 +35,16 @@ class CIConfApplicationList extends CICardView {
   registrants: any[] = [];
   keywords: any[] = [];
 
+  currentSort: {
+    name: string,
+    spec: number,
+    ascending: boolean
+  } = {
+    name: undefined,
+    spec: undefined,
+    ascending: true
+  };
+
   searchStr: string = "";
 
   @ViewChild("searchInput") searchInput: ElementRef;
@@ -54,6 +64,8 @@ class CIConfApplicationList extends CICardView {
       this.registrants.forEach((e) => {
         e.visible = true;
       });
+
+      this.sortBy('name');
     });
 
     return super.routerOnActivate();
@@ -65,14 +77,40 @@ class CIConfApplicationList extends CICardView {
     super.ngAfterViewInit();
   }
 
+  sortBy(name: string, spec?: number) {
+    if(this.currentSort.name === name && this.currentSort.spec === spec) {
+      this.currentSort.ascending = !this.currentSort.ascending;
+    } else {
+      this.currentSort.name = name;
+      this.currentSort.spec = spec;
+      this.currentSort.ascending = true;
+    }
+
+    if(name === 'name') {
+      this.registrants.sort((a,b) => {
+        if(a.profile.realname === b.profile.realname) return 0;
+        else return a.profile.realname < b.profile.realname ? -1 : 1;
+      });
+    } else if(name === 'school') {
+      this.registrants.sort((a,b) => {
+        if(a.profile.schoolName === b.profile.schoolName) return 0;
+        else return a.profile.schoolName < b.profile.schoolName ? -1 : 1;
+      });
+    } else if(name === 'keyword') {
+      this.registrants.sort((a,b) => {
+        if(a.submission[spec] === undefined) return b.submission[spec] === undefined ? 0 : -1;
+        else if(b.submission[spec] === undefined) return 1;
+
+        if(a.submission[spec] === b.submission[spec]) return 0;
+        else return a.submission[spec] < b.submission[spec] ? -1 : 1;
+      });
+    }
+
+    if(!this.currentSort.ascending) this.registrants.reverse();
+  }
+
   refilter() {
-    console.log("REFILTER");
-    let sorted = this.registrants.slice(); // Copy by reference
-
-    //TODO: sort
-
-    let delta = 0;
-    sorted.forEach(e => {
+    this.registrants.forEach(e => {
       // filter
 
       if(this.searchStr == "") e.visible = true;
@@ -81,14 +119,8 @@ class CIConfApplicationList extends CICardView {
       else {
         
         //Search in keywords
-
         e.visible = this.keywords.some(k => this.getKwRepr(k.field, e.submission[k.id]).indexOf(this.searchStr) != -1);
-
-        if(!e.visible) {
-          delta -= 48;
-        }
       }
-      e.delta = delta;
     });
   }
 

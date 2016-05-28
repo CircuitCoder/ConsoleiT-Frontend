@@ -120,4 +120,19 @@
 
     border-bottom: rgba(0,0,0,.12);
   }
+
+  .sort-indicator {
+    transition: transform 0.2s ease, opacity 0.2s ease-in;
+    opacity: 0;
+    transform: rotate(180deg);
+
+    &.sorted {
+      transition: transform 0.2s ease, opacity 0.2s ease-out;
+      opacity: 1;
+    }
+
+    &.ascending {
+      transform: rotate(0);
+    }
+  }
 }

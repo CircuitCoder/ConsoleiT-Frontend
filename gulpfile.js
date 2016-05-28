@@ -45,7 +45,7 @@ var fontList = [
   'node_modules/material-design-icons/iconfont/MaterialIcons-Regular.ttf',
 ];
 
-function buildjs(bundler) {
+function buildjs() {
   return gulp.src('./ts/main.ts')
       .pipe(plumber())
       .pipe(webpack(require('./webpack.config'))) // Handles source map

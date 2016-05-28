@@ -16,9 +16,18 @@
       <div class="ci-card-table ci-entry-table ci-application-list">
         <table class="mdl-data-table">
           <thead>
-            <th class="mdl-data-table__cell--non-numeric">姓名</th>
-            <th class="mdl-data-table__cell--non-numeric">学校</th>
-            <th class="mdl-data-table__cell--non-numeric" *ngFor="let kw of keywords">{{ kw.field.title }}</th>
+            <th class="mdl-data-table__cell--non-numeric" (click)="sortBy('name')">
+              姓名
+              <i class="material-icons sort-indicator" [ngClass]="{ ascending: currentSort.ascending, sorted: currentSort.name === 'name' }">keyboard_arrow_down</i>
+            </th>
+            <th class="mdl-data-table__cell--non-numeric" (click)="sortBy('school')">
+              学校
+              <i class="material-icons sort-indicator" [ngClass]="{ ascending: currentSort.ascending, sorted: currentSort.name === 'school' }">keyboard_arrow_down</i>
+            </th>
+            <th class="mdl-data-table__cell--non-numeric" *ngFor="let kw of keywords" (click)="sortBy('keyword', kw.id)">
+              {{ kw.field.title }}
+              <i class="material-icons sort-indicator" [ngClass]="{ ascending: currentSort.ascending, sorted: currentSort.name === 'keyword' && currentSort.spec == kw.id }">keyboard_arrow_down</i>
+            </th>
           </thead>
           <tbody>
             <!-- Using display for now since table rows can't be transformed -->
