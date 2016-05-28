@@ -111,3 +111,13 @@
     width: 450px;
   }
 }
+
+.ci-application-list {
+  tbody tr {
+    transition-property: transform, opacity, background-color;
+    transition-timing-function: ease, ease, cubic-bezier(.4, 0, .2, 1);
+    transition-duration: .2s, .2s, .28s;
+
+    border-bottom: rgba(0,0,0,.12);
+  }
+}

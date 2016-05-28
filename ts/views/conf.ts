@@ -67,12 +67,19 @@ class CIConfApplicationList extends CICardView {
     let sorted = this.submissions.slice(); // Copy by reference
 
     //TODO: sort
+
+    let delta = 0;
     sorted.forEach((e) => {
       // filter
-      
+
       if(this.searchStr == "") e.visible = true;
-      else if(e.realname.indexOf(this.searchStr) != -1) e.visible = true;
-      else e.visible = false;
+      else if(e.profile.realname.indexOf(this.searchStr) != -1) e.visible = true;
+      else if(e.profile.schoolName.indexOf(this.searchStr) != -1) e.visible = true;
+      else {
+        e.visible = false;
+        delta -= 48;
+      }
+      e.delta = delta;
     });
   }
 }

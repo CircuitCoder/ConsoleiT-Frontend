@@ -12,16 +12,20 @@
         <label class="mdl-textfield__label" for="ci-app-listing-search">搜索 (姓名包含或者状态等于)</label>
       </div>
     </ci-card>
-    <ci-card *ngFor="let entry of submissions" [ngStyle] = "{ opacity: entry.visible ? 1 : 0 }">
-      <ci-card-title>
-        {{ entry.realname }}<span class="ci-annotation"> - {{ entry.status }}</span>
-        <i *ngIf="entry.locked" class="material-icons">lock</i>
-      </ci-card-title>
-      <ci-card-actions>
-        <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" [routerLink] = "['Application', {form: formId, uid: entry.user}]">
-          查看表单
-        </button>
-      </ci-card-actions>
+    <ci-card>
+      <div class="ci-card-table ci-entry-table ci-application-list">
+        <table class="mdl-data-table">
+          <thead>
+            <th class="mdl-data-table__cell--non-numeric">姓名</th>
+          </thead>
+          <tbody>
+            <!-- Using display for now since table rows can't be transformed -->
+            <tr *ngFor="let entry of submissions" [ngStyle]="{ display: entry.visible ? 'table-row' : 'none' }" [routerLink]="['Application', { form: formId, uid: entry.user }]">
+              <td class="mdl-data-table__cell--non-numeric">{{ entry.profile.realname }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </ci-card>
   </div>
   <div class="ci-card-col narrow">
