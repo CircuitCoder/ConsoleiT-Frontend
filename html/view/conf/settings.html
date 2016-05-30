@@ -41,10 +41,11 @@
         <label class="mdl-textfield__label" for="ci-conf-settings-title">会议名称</label>
       </div>
       <br/>
-      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <textarea class="mdl-textfield__input" rows="4" id="ci-conf-settings-desc" [(ngModel)]="settings.desc"></textarea>
-        <label class="mdl-textfield__label" for="ci-conf-settings-desc">会议简介</label>
-      </div>
+
+      <!-- Codemirror -->
+      <div class="ci-form-label">会议简介</div>
+      <textarea id="ci-conf-settings-desc" [(ngModel)]="settings.desc" #descArea></textarea>
+
       <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
         <input class="mdl-textfield__input" type="text" id="ci-conf-settings-currentStage" [(ngModel)]="settings.currentStage">
         <label class="mdl-textfield__label" for="ci-conf-settings-currentStage">当前阶段</label>

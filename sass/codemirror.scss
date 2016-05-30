@@ -1,0 +1,39 @@
+// Additional theming for our CodeMirror editor
+
+.CodeMirror.cm-s-material {
+  margin-bottom: 16px;
+  border-radius: 4px;
+  box-shadow: rgba(0,0,0,.3) 0 2px 3px;
+
+  .CodeMirror-lines {
+    padding: 10px 0;
+
+    .CodeMirror-line {
+      line-height: 24px;
+      padding: 0 8px;
+    }
+  }
+
+  .cm-header {
+    @for $i from 1 through 7 {
+      &.cm-header-#{$i} {
+        font-size: 30px - $i * 2px;
+        line-height: 44px - $i * 2px;
+      }
+    }
+
+    color: #FFCC80;
+  }
+
+  .cm-link {
+    color: #90CAF9;
+  }
+
+  .CodeMirror-gutter.CodeMirror-linenumbers {
+    background: #37474F;
+  }
+
+  .CodeMirror-gutter-elt.CodeMirror-linenumbers {
+    line-height: 24px;
+  }
+}

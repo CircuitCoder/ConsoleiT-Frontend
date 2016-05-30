@@ -10,12 +10,10 @@
   },
   "exclude": [
     "node_modules",
-    "typings/main.d.ts",
-    "typings/main",
     "ts/config.example.ts"
   ],
   "filesGlob": [
-    "typings/browser.d.ts",
+    "typings/index.d.ts",
     "ts/**/*.ts",
     "!ts/config.example.ts",
     "!node_modules/**/*.ts"

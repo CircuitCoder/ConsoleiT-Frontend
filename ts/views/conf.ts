@@ -15,6 +15,9 @@ import {CIAvatar} from '../avatar'
 
 import * as CIUtil from '../util'
 
+const gfm = require('codemirror/mode/gfm/gfm');
+const CodeMirror = require('codemirror');
+
 const FORM_STATUS_MAP: { [status: string]: string } = {
   pending: "准备中",
   open: "开放",
@@ -638,6 +641,8 @@ export class CIConfSettings extends CICardView {
   formDialogCreated: boolean = false;
   formCreating: boolean = false;
 
+  @ViewChild('descArea') descArea: ElementRef;
+
   constructor(
     _card: CICardService,
     _frame: CIFrameService,
@@ -662,6 +667,13 @@ export class CIConfSettings extends CICardView {
     this._conf.getAllForms((forms: any) => {
       this.forms = forms;
       super.ngAfterViewInit();
+    });
+
+    CodeMirror.fromTextArea(this.descArea.nativeElement, {
+      mode: "gfm",
+      theme: "material",
+      lineWrapping: true,
+      lineNumbers: true,
     });
   }
 

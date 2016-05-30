@@ -45,6 +45,12 @@ var fontList = [
   'node_modules/material-design-icons/iconfont/MaterialIcons-Regular.ttf',
 ];
 
+var styleList = [
+  './lib/*.css',
+  'node_modules/codemirror/lib/codemirror.css',
+  'node_modules/codemirror/theme/material.css'
+];
+
 function buildjs() {
   return gulp.src('./ts/main.ts')
       .pipe(plumber())
@@ -65,7 +71,7 @@ function buildcss() {
       .pipe(plumber())
       .pipe(sourcemaps.init())
       .pipe(sass().on('error', sass.logError))
-      .pipe(gulp.src('./lib/*.css', {passthrough: true}))
+      .pipe(gulp.src(styleList, {passthrough: true}))
       .pipe(concat('main.css'))
       //.pipe(gulpif(production, cssmin()))
       .pipe(gulpif(!production, sourcemaps.write('./')))
