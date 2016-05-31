@@ -1,16 +1,16 @@
-import {Injectable} from '@angular/core'
-import {CIFrame} from './frame'
+import {Injectable} from "@angular/core";
+import {CIFrame} from "./frame";
 
 export interface CIFrameTabDefination {
-  route: any[],
-  title: string,
-  router?: any
+  route: any[];
+  title: string;
+  router?: any;
 }
 
 export interface CIFrameFabDefination {
-  icon: string,
-  desc?: string,
-  action: () => void
+  icon: string;
+  desc?: string;
+  action: () => void;
 }
 
 @Injectable()

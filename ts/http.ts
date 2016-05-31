@@ -1,12 +1,12 @@
-import {Http, Response, Headers, RequestOptions} from '@angular/http'
+import {Http, Headers, RequestOptions} from "@angular/http";
 
-import * as Config from './config'
+import * as Config from "./config";
 
 export class CIHttp {
-  private urlBase = (Config.backend.https ? 'https://':'http://') + Config.backend.host + ':' + Config.backend.port;
+  private urlBase = (Config.backend.https ? "https://" : "http://") + Config.backend.host + ":" + Config.backend.port;
   private reqOpt = new RequestOptions({
     headers: new Headers({
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json"
     })
   });
 

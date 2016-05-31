@@ -1,10 +1,10 @@
-import {Input, Component} from '@angular/core'
+import {Input, Component} from "@angular/core";
 
-import {generateGravatar} from './util'
+import {generateGravatar} from "./util";
 
 @Component({
-  selector: 'ci-avatar',
-  template: require('html/tmpl/avatar.html')
+  selector: "ci-avatar",
+  template: require("html/tmpl/avatar.html")
 })
 export class CIAvatar {
   @Input() name: string;
@@ -22,9 +22,9 @@ export class CIAvatar {
   }
 
   getInitials() {
-    return this.name.split(' ').reduce((prev, e) => {
+    return this.name.split(" ").reduce((prev, e) => {
       return prev + e.charAt(0);
-    },"");
+    }, "");
   }
 
   getGravatar() {

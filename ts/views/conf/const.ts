@@ -3,4 +3,4 @@ export const FORM_STATUS_MAP: { [status: string]: string } = {
   open: "开放",
   closed: "已关闭",
   archived: "已存档",
-}
+};

@@ -1,8 +1,8 @@
-import {Http, Response, Headers, RequestOptions} from '@angular/http'
+import {Injectable} from "@angular/core";
+import {Http} from "@angular/http";
 
-import {Injectable} from '@angular/core'
-import {CIHttp} from './http'
-import {CINotifier} from './notifier'
+import {CIHttp} from "./http";
+import {CINotifier} from "./notifier";
 
 @Injectable()
 export class CIUserService extends CIHttp {
@@ -10,7 +10,7 @@ export class CIUserService extends CIHttp {
     _http: Http,
     private _notifier: CINotifier
   ) {
-    super(_http, '/user');
+    super(_http, "/user");
   }
 
   getSelfInfo(id: number, cb: (data: any) => void) {

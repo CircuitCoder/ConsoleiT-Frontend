@@ -1,30 +1,29 @@
-import {Injectable, Component, ElementRef} from '@angular/core'
-import {ROUTER_DIRECTIVES, RouteConfig, Router} from '@angular/router-deprecated'
-import {Http, Response, Headers, RequestOptions} from '@angular/http'
+import {Component, ElementRef} from "@angular/core";
+import {ROUTER_DIRECTIVES, RouteConfig, Router} from "@angular/router-deprecated";
+import {Http} from "@angular/http";
 
-import {CIFrameService, CIFrameTabDefination, CIFrameFabDefination} from './frame.service'
+import {CIFrameService, CIFrameTabDefination, CIFrameFabDefination} from "./frame.service";
 
-import {CICardService} from './card'
-import {CINotifier} from './notifier'
-import {CIDataNotif} from './data'
-import {MDL} from './mdl'
-import {CIAvatar} from './avatar'
-import {CIUser, CILoginService} from './login'
-import {CIConfService} from './conf'
-import {CIUserService} from './user'
+import {CICardService} from "./card";
+import {CINotifier} from "./notifier";
+import {CIDataNotif} from "./data";
+import {CIAvatar} from "./avatar";
+import {CIUser, CILoginService} from "./login";
+import {CIConfService} from "./conf";
+import {CIUserService} from "./user";
 
-import {CIDashboard} from './views/dashboard'
-import {CILogin} from './views/login'
-import {CIProfile} from './views/profile'
-import {CIConf} from './views/conf'
-import {CIConfList} from './views/conf-list'
-import {CIAbout} from './views/misc'
+import {CIDashboard} from "./views/dashboard";
+import {CILogin} from "./views/login";
+import {CIProfile} from "./views/profile";
+import {CIConf} from "./views/conf";
+import {CIConfList} from "./views/conf-list";
+import {CIAbout} from "./views/misc";
 
-import * as CIUtil from './util'
+import * as CIUtil from "./util";
 
 @Component({
-  selector: 'ci-frame',
-  template: require('html/tmpl/frame.html'),
+  selector: "ci-frame",
+  template: require("html/tmpl/frame.html"),
   directives: [ROUTER_DIRECTIVES, CIAvatar],
   providers: [CILoginService, CINotifier, CIConfService, CICardService, CIFrameService, CIUserService]
 })
@@ -33,55 +32,55 @@ import * as CIUtil from './util'
 
   /* Pages */
   {
-    path:'/dashboard',
-    name: 'Dashboard',
+    path: "/dashboard",
+    name: "Dashboard",
     component: CIDashboard,
     useAsDefault: true
   },
-  
+
   /* Accounts */
   {
-    path: '/login',
-    name: 'Login',
+    path: "/login",
+    name: "Login",
     component: CILogin,
-    data: {action: 'login'}
+    data: {action: "login"}
   }, {
-    path: '/register',
-    name: 'Register',
+    path: "/register",
+    name: "Register",
     component: CILogin,
-    data: {action: 'register'}
+    data: {action: "register"}
   }, {
-    path: '/profile',
-    name: 'Profile',
+    path: "/profile",
+    name: "Profile",
     component: CIProfile
   },
 
   /* Conf */
   {
     path: "/conf/list",
-    name: 'ConfList',
+    name: "ConfList",
     component: CIConfList
   }, {
     path: "/conf/:id/...",
-    name: 'Conf',
+    name: "Conf",
     component: CIConf
   },
 
   /* Settings */
   {
-    path: '/settings',
-    name: 'Settings',
+    path: "/settings",
+    name: "Settings",
     component: CIDashboard
   }, {
-    path: '/about',
-    name: 'About',
+    path: "/about",
+    name: "About",
     component: CIAbout
   },
-  
+
   /* Fallback */
   {
-    path: '/**',
-    redirectTo: ['Dashboard']
+    path: "/**",
+    redirectTo: ["Dashboard"]
   }
 ])
 
@@ -112,25 +111,25 @@ export class CIFrame {
     this.confs = [];
 
     this.tabs = [];
-    this.title = ""
+    this.title = "";
     this.titleAnimating = false;
     this.tabAnimating = false;
 
-    var outer = this;
+    let outer = this;
 
     _frame.setFrame(this);
 
     _login.addListener({
       onLogin: (user: CIUser) => {
         outer.user = user;
-        outer._router.navigate(['Dashboard']);
+        outer._router.navigate(["Dashboard"]);
         this.updateSidebar();
       },
 
       onLogout: () => {
         console.log("Logout");
         outer.user = null;
-        outer._router.navigate(['Login']);
+        outer._router.navigate(["Login"]);
       },
 
       onRestore: (error: string, user: CIUser) => {
@@ -138,13 +137,13 @@ export class CIFrame {
           console.log(error);
           if(!this.isComponentActive(CILogin)) {
             outer._notifier.show(error);
-            outer._router.navigate(['Login']);
+            outer._router.navigate(["Login"]);
           }
         } else {
-          outer.user = user
+          outer.user = user;
           if(this.isComponentActive(CILogin)) {
             outer._notifier.show("AlreadyLoggedIn");
-            outer._router.navigate(['Dashboard']);
+            outer._router.navigate(["Dashboard"]);
           }
         }
 
@@ -163,7 +162,7 @@ export class CIFrame {
     setTimeout(() => {
       this.title = title;
       this.titleAnimating = false;
-    }, 200)
+    }, 200);
   }
 
   setTabs(tabs: CIFrameTabDefination[]) {
@@ -174,7 +173,7 @@ export class CIFrame {
       setTimeout(() => {
         CIUtil.upgradeMDL(this._el.nativeElement.getElementsByClassName("mdl-layout")[0]);
       }, 0);
-    }, 200)
+    }, 200);
   }
 
   setFab(fab: CIFrameFabDefination) {
@@ -186,11 +185,12 @@ export class CIFrame {
   }
 
   isRouteActive(route: any[], router?: any) {
-    return (router ? router:this._router).isRouteActive(router.generate(route));
+    return (router ? router : this._router).isRouteActive(router.generate(route));
   }
 
   isComponentActive(comp: any, router?: any) {
-    return (router ? router:this._router).currentInstruction.component.componentType == comp;
+    // TODO: may be fixed in the new release
+    return (router ? router : this._router).currentInstruction.component.componentType === comp;
   }
 
   logout() {
@@ -198,14 +198,14 @@ export class CIFrame {
   }
 
   closeDrawer($event: any) {
-    let drawer = this._el.nativeElement.getElementsByClassName('ci-drawer')[0];
+    let drawer = this._el.nativeElement.getElementsByClassName("ci-drawer")[0];
     let target = $event.target;
     while(true) {
-      if(target.tagName == "A" || target.tagName == "BUTTON") {
+      if(target.tagName === "A" || target.tagName === "BUTTON") {
         this._el.nativeElement.getElementsByClassName("mdl-layout")[0].MaterialLayout.toggleDrawer();
         return;
       }
-      else if(target == drawer) return;
+      else if(target === drawer) return;
       else target = target.parentNode;
     }
   }

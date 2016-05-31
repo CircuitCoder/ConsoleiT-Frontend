@@ -1,15 +1,15 @@
-import {Directive, ViewChild, Component, ElementRef, Injectable, Input} from '@angular/core'
-import {NgClass} from '@angular/common'
-import {OnActivate, OnDeactivate} from '@angular/router-deprecated'
+import {Directive, ViewChild, Component, ElementRef, Injectable, Input} from "@angular/core";
+import {NgClass} from "@angular/common";
+import {OnActivate, OnDeactivate} from "@angular/router-deprecated";
 
 @Injectable()
 export class CICardService {
+  // TODO: use singleton
   private static animationSpeed = 3;
-  private static cards = new Array<CICard>();
-  private static shownCard = 0;
+  private static cards: CICard[] = [];
 
   private static visible = false;
-  
+
   public register(card: CICard) {
     CICardService.cards.push(card);
     if(CICardService.visible) {
@@ -22,28 +22,28 @@ export class CICardService {
 
     let startPoint = CICardService.cards.reduce((prev: number, c: CICard) => {
       let p = c.getPosition();
-      return Math.min(prev, p.top*2 + p.left);
+      return Math.min(prev, p.top * 2 + p.left);
     }, Infinity);
 
-    return Promise.all(CICardService.cards.map((c:CICard) => {
+    return Promise.all(CICardService.cards.map((c: CICard) => {
       let p = c.getPosition();
       return new Promise((resolve, reject) => {
         setTimeout(() => {
           c.setVisible(visible).then(() => {
             return resolve();
           });
-        }, CICardService.cards.length > 10 ? 0 : (p.top*2+p.left-startPoint)/CICardService.animationSpeed);
-      })
+        }, CICardService.cards.length > 10 ? 0 : (p.top * 2 + p.left - startPoint) / CICardService.animationSpeed);
+      });
     }));
   }
 
   public clearCard() {
-    CICardService.cards = new Array<CICard>();
+    CICardService.cards = [];
   }
 }
 
 @Directive({
-  selector: '.ci-card-content',
+  selector: ".ci-card-content",
 })
 class CICardContent {
   constructor(private _el: ElementRef) {
@@ -55,28 +55,32 @@ class CICardContent {
 
   toggle() {
     return new Promise((resolve) => {
-      for(var i = 0; i< this._el.nativeElement.children.length; ++i) {
+      for(let i = 0; i < this._el.nativeElement.children.length; ++i) {
         ((_i: number) => {
           setTimeout(() => {
-            this._el.nativeElement.children[_i].classList.toggle('visible');
-          }, _i*100);
+            this._el.nativeElement.children[_i].classList.toggle("visible");
+          }, _i * 100);
         })(i);
       }
 
-      setTimeout(resolve, this._el.nativeElement.children.length*100 + 100); // Wait for animation
+      setTimeout(resolve, this._el.nativeElement.children.length * 100 + 100); // Wait for animation
     });
   }
 }
 
 @Component({
-  selector: 'ci-card',
-  template: require('html/tmpl/card.html'),
+  selector: "ci-card",
+  template: require("html/tmpl/card.html"),
   directives: [NgClass, CICardContent]
 })
 
 export class CICard {
   public visible = false;
-  @ViewChild(CICardContent) private contentWrapper:CICardContent;
+
+  @ViewChild(CICardContent) private contentWrapper: CICardContent;
+
+  /* Only for bindings in the template */
+  /* tslint:disable-next-line */
   @Input() private hideTitle: boolean;
 
   constructor(protected _el: ElementRef,
@@ -87,7 +91,7 @@ export class CICard {
   }
 
   setVisible(visible: boolean): Promise<any> {
-    if(visible == this.visible) return Promise.resolve();
+    if(visible === this.visible) return Promise.resolve();
 
     else if(visible) {
       this.visible = visible;
@@ -114,7 +118,7 @@ export class CICard {
   }
 
   getPosition() {
-    var rect = this._el.nativeElement.getBoundingClientRect();
+    let rect = this._el.nativeElement.getBoundingClientRect();
     return rect;
   }
 

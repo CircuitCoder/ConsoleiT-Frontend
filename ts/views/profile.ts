@@ -1,14 +1,14 @@
-import {Injectable, Component} from '@angular/core'
+import {Component} from "@angular/core";
 
-import {CICard, CICardView, CICardService} from '../card'
-import {CILoginService, CIUser} from '../login'
-import {CIFrameService} from '../frame.service'
-import {CIUserService} from '../user'
-import {CINotifier} from '../notifier'
-import {MDL} from '../mdl'
+import {CICard, CICardView, CICardService} from "../card";
+import {CILoginService, CIUser} from "../login";
+import {CIFrameService} from "../frame.service";
+import {CIUserService} from "../user";
+import {CINotifier} from "../notifier";
+import {MDL} from "../mdl";
 
 @Component({
-  template: require('html/view/profile.html'),
+  template: require("html/view/profile.html"),
   directives: [CICard, MDL]
 })
 
@@ -39,7 +39,7 @@ export class CIProfile extends CICardView {
     }
 
   updatePasswd() {
-    if(!this.passwd || this.passwd == "") return this._notifier.show("InvalidInput");
+    if(!this.passwd || this.passwd === "") return this._notifier.show("InvalidInput");
     else {
       this._login.doChangePasswd(this.oripasswd, this.passwd, () => {
         // Do nothing

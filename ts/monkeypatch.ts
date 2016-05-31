@@ -5,14 +5,15 @@
  */
 
 // From https://github.com/angular/http/issues/65
-import {BrowserXhr} from '@angular/http';
-import {Injectable} from '@angular/core';
+import {BrowserXhr} from "@angular/http";
+import {Injectable} from "@angular/core";
 
 @Injectable()
 export class CORSBrowserXHR extends BrowserXhr {
+  // TODO: fixed in the next angular release
   build(): any {
     console.log("ConsoleiT Warning: Patching Xhr request");
-    var xhr:any = super.build();
+    let xhr: any = super.build();
     xhr.withCredentials = true;
     return xhr;
   }

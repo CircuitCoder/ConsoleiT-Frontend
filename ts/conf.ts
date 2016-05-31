@@ -1,13 +1,13 @@
-import {Http, Response, Headers, RequestOptions} from '@angular/http'
-import {Injectable} from '@angular/core'
+import {Http} from "@angular/http";
+import {Injectable} from "@angular/core";
 
-import {CIHttp} from './http'
-import {CINotifier} from './notifier'
+import {CIHttp} from "./http";
+import {CINotifier} from "./notifier";
 
 @Injectable()
 export class CIConfService extends CIHttp {
   constructor(_http: Http, private _notifier: CINotifier) {
-    super(_http, '/conf');
+    super(_http, "/conf");
   }
 
   private conf: any;
@@ -17,12 +17,6 @@ export class CIConfService extends CIHttp {
 
   private registrants: any;
   private keywords: any;
-
-  private STATUS_MAP: {[id: number]: string;} = {
-    0: "进行准备",
-    1: "招募学术团队",
-    2: "审核学术团队",
-  };
 
   registerConf(data: any) {
     this.conf = data.conf;
@@ -58,8 +52,8 @@ export class CIConfService extends CIHttp {
   }
 
   getFormDesc(formId: string) {
-    let filtered = this.forms.filter(e => e.name == formId);
-    if(filtered.length == 0) return null;
+    let filtered = this.forms.filter(e => e.name === formId);
+    if(filtered.length === 0) return null;
     else return filtered[0];
   }
 
@@ -71,7 +65,7 @@ export class CIConfService extends CIHttp {
   getRegistrants() {
     return this.registrants;
   }
-  
+
   getKeywords() {
     return this.keywords;
   }
@@ -80,18 +74,18 @@ export class CIConfService extends CIHttp {
     let roleMap = this.getRoleMap();
     let roleId = -1;
     this.conf.members.forEach((e: any) => {
-      if(e._id == uid) roleId = e.role;
+      if(e._id === uid) roleId = e.role;
     });
-    if(roleId == -1) return false;
+    if(roleId === -1) return false;
     let permObj = roleMap[roleId].perm;
 
-    let seg = perm.split('.');
-    for(let i = 0; i< seg.length; ++i) {
+    let seg = perm.split(".");
+    for(let i = 0; i < seg.length; ++i) {
       if(permObj.all) return true;
       else if(!(seg[i] in permObj)) return false;
       else {
         permObj = permObj[seg[i]];
-        if(typeof permObj == "boolean") return permObj;
+        if(typeof permObj === "boolean") return permObj;
       }
     }
 
@@ -99,20 +93,20 @@ export class CIConfService extends CIHttp {
   }
 
   getList(cb: (res: any) => void) {
-    this.get('/', (err, res) => {
+    this.get("/", (err, res) => {
       if(err) {
         console.log(err);
         this._notifier.show("$Unknown");
       }
       else if(res.error) this._notifier.show(res.error);
-      else cb(res.confs.sort((a: any,b: any) => {
-        return ((!!a.pinned)!==(!!b.pinned)) ? a.pinned : a.title.localeCompare(b.title);
+      else cb(res.confs.sort((a: any, b: any) => {
+        return ((!!a.pinned) !== (!!b.pinned)) ? a.pinned : a.title.localeCompare(b.title);
       }));
     });
   }
 
   getAvailList(cb: (res: any) => void) {
-    this.get('/available', (err, res) => {
+    this.get("/available", (err, res) => {
       if(err) {
         console.log(err);
         this._notifier.show("$Unknown");
@@ -161,12 +155,12 @@ export class CIConfService extends CIHttp {
       } else {
         cb(res);
       }
-    })
+    });
   }
 
-  createForm(id: string, title: string ,cb: (data: any) => void) {
+  createForm(id: string, title: string, cb: (data: any) => void) {
     this.post(`/${this.conf._id}/form`, {
-      id, title 
+      id, title
     }, (err, res) => {
       if(err) {
         console.log(err);
@@ -174,7 +168,7 @@ export class CIConfService extends CIHttp {
       } else {
         cb(res);
       }
-    })
+    });
   }
 
   getForm(formId: string, cb: (form: any) => void) {
@@ -218,7 +212,7 @@ export class CIConfService extends CIHttp {
       } else {
         cb(res);
       }
-    })
+    });
   }
 
   getFormResult(formId: string, uid: number, cb: (result: any) => void) {
@@ -228,7 +222,7 @@ export class CIConfService extends CIHttp {
         this._notifier.show("$Unknown");
       } else {
         cb({
-          status: res.new ? '未提交' : (res.status ? res.status : '审核中'),
+          status: res.new ? "未提交" : (res.status ? res.status : "审核中"),
           new: res.new,
           locked: res.locked,
           submission: res.submission

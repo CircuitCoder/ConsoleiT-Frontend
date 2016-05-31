@@ -1,42 +1,41 @@
-import {Http, Response, Headers, RequestOptions} from '@angular/http'
+import {Http} from "@angular/http";
 
-import {Injectable} from '@angular/core'
-import {CILoginData} from './data'
-import {CINotifier} from './notifier'
-import {CIHttp} from './http'
-import * as Config from './config'
+import {Injectable} from "@angular/core";
+// import {CILoginData} from "./data";
+import {CINotifier} from "./notifier";
+import {CIHttp} from "./http";
 
 export interface CIUser {
-  _id: number,
-  realname: string,
-  email: string
+  _id: number;
+  realname: string;
+  email: string;
 }
 
 @Injectable()
 export class CILoginService extends CIHttp {
 
-  private static listeners = new Array<CILoginService.Listener>();
+  private static listeners: CILoginService.Listener[] = [];
 
-  private static user:CIUser = null;
+  private static user: CIUser = null;
 
   constructor(
     _http: Http,
     private _notifier: CINotifier
   ) {
-    super(_http, '/account');
+    super(_http, "/account");
   }
-  
+
   addListener(l: CILoginService.Listener) {
     CILoginService.listeners.push(l);
   }
 
-  doLogin(email: String, passwd: String, needInit: (data: any) => void) {
-    this.post('/login', { email, passwd }, (err, res) => {
+  doLogin(email: string, passwd: string, needInit: (data: any) => void) {
+    this.post("/login", { email, passwd }, (err, res) => {
       if(err) {
         console.log(err);
         this._notifier.show("$Unknown");
       } else if(res.error) {
-        if(res.error == "InitializationRequired") return needInit(res);
+        if(res.error === "InitializationRequired") return needInit(res);
         else this._notifier.show(res.error);
       } else {
         CILoginService.user = <CIUser> res.user;
@@ -48,7 +47,7 @@ export class CILoginService extends CIHttp {
   }
 
   doInit(data: any) {
-    this.post('/initialize', data, (err, res) => {
+    this.post("/initialize", data, (err, res) => {
       if(err) {
         console.log(err);
         this._notifier.show("$Unknown");
@@ -63,7 +62,7 @@ export class CILoginService extends CIHttp {
   }
 
   doLogout() {
-    this.get('/logout', (err, res) => {
+    this.get("/logout", (err, res) => {
       if(err) {
         console.log(err);
         this._notifier.show("$Unknown");
@@ -80,7 +79,7 @@ export class CILoginService extends CIHttp {
   }
 
   doRegister(email: String, realname: String, next: () => void) {
-    this.post('/register', { email, realname }, (err, res) => {
+    this.post("/register", { email, realname }, (err, res) => {
       if(err) {
         console.log(err);
         this._notifier.show("$Unknown");
@@ -94,7 +93,7 @@ export class CILoginService extends CIHttp {
   }
 
   doRestore() {
-    this.get('/restore', (err, res) => {
+    this.get("/restore", (err, res) => {
       if(err) {
         window.location.href = "/offline.html";
       } else {
@@ -110,7 +109,7 @@ export class CILoginService extends CIHttp {
   }
 
   doChangePasswd(oripasswd: String, passwd: String, next: () => void) {
-    this.post('/settings/passwd', { oripasswd, passwd }, (err, res) => {
+    this.post("/settings/passwd", { oripasswd, passwd }, (err, res) => {
       if(err) {
         console.log(err);
         this._notifier.show("$Unknown");
@@ -124,7 +123,7 @@ export class CILoginService extends CIHttp {
   }
 
   doRequestReset(email: String, next: () => void) {
-    this.post('/settings/passwd/reset/request', { email }, (err, res) => {
+    this.post("/settings/passwd/reset/request", { email }, (err, res) => {
       if(err) {
         console.log(err);
         this._notifier.show("$Unknown");
@@ -146,7 +145,7 @@ export class CILoginService extends CIHttp {
   }
 }
 
-export module CILoginService {
+export namespace CILoginService {
   export interface Listener {
     onLogin?: (user: CIUser) => void;
     onLogout?: () => void;

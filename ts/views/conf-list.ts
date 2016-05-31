@@ -1,13 +1,13 @@
-import {Component} from '@angular/core'
-import {ROUTER_DIRECTIVES} from '@angular/router-deprecated'
+import {Component} from "@angular/core";
+import {ROUTER_DIRECTIVES} from "@angular/router-deprecated";
 
-import {CICardView, CICard, CICardService} from '../card'
-import {CIFrameService} from '../frame.service'
-import {CIConfService} from '../conf'
-import {MDL} from '../mdl'
+import {CICardView, CICard, CICardService} from "../card";
+import {CIFrameService} from "../frame.service";
+import {CIConfService} from "../conf";
+import {MDL} from "../mdl";
 
 @Component({
-  template: require('html/view/conf-list.html'),
+  template: require("html/view/conf-list.html"),
   directives: [MDL, ROUTER_DIRECTIVES, CICard]
 })
 

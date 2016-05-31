@@ -1,19 +1,16 @@
-import {Component} from '@angular/core'
-import {CanDeactivate, Router, RouteParams, ROUTER_DIRECTIVES} from '@angular/router-deprecated'
+import {Component} from "@angular/core";
+import {ROUTER_DIRECTIVES} from "@angular/router-deprecated";
 
-import {CICardView, CICard, CICardService} from '../../card'
-import {CIFrameService} from '../../frame.service'
-import {CIConfService} from '../../conf'
-import {CILoginService} from '../../login'
-import {MDL} from '../../mdl'
-import {CIAvatar} from '../../avatar'
+import {CICardView, CICard, CICardService} from "../../card";
+import {CIConfService} from "../../conf";
+import {CILoginService} from "../../login";
+import {MDL} from "../../mdl";
+import {CIAvatar} from "../../avatar";
 
-import {FORM_STATUS_MAP} from './const'
-
-import * as CIUtil from '../../util'
+import * as CIUtil from "../../util";
 
 @Component({
-  template: require('html/view/conf/index.html'),
+  template: require("html/view/conf/index.html"),
   directives: [CICard, MDL, ROUTER_DIRECTIVES, CIAvatar]
 })
 
@@ -25,7 +22,7 @@ export class CIConfHome extends CICardView {
   confGroup: any;
   confMembers: any;
   confRoles: any;
-  
+
   userId: number;
 
   constructor(_card: CICardService, private _conf: CIConfService, private _login: CILoginService) {

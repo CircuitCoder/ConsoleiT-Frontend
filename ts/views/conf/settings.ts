@@ -1,20 +1,20 @@
-import {ElementRef, ViewChild, Component} from '@angular/core'
-import {CanDeactivate, Router, RouteParams, ROUTER_DIRECTIVES} from '@angular/router-deprecated'
+import {ElementRef, ViewChild, Component} from "@angular/core";
+import {Router, ROUTER_DIRECTIVES} from "@angular/router-deprecated";
 
-import {CICardView, CICard, CICardService} from '../../card'
-import {CIFrameService} from '../../frame.service'
-import {CIConfService} from '../../conf'
-import {CILoginService} from '../../login'
-import {CINotifier} from '../../notifier'
-import {MDL} from '../../mdl'
+import {CICardView, CICard, CICardService} from "../../card";
+import {CIFrameService} from "../../frame.service";
+import {CIConfService} from "../../conf";
+import {CILoginService} from "../../login";
+import {CINotifier} from "../../notifier";
+import {MDL} from "../../mdl";
 
-import {FORM_STATUS_MAP} from './const'
+import {FORM_STATUS_MAP} from "./const";
 
-const CodeMirror = require('codemirror');
-const CMgfm = require('codemirror/mode/gfm/gfm.js');
+const CodeMirror = require("codemirror");
+require("codemirror/mode/gfm/gfm.js");
 
 @Component({
-  template: require('html/view/conf/settings.html'),
+  template: require("html/view/conf/settings.html"),
   directives: [MDL, CICard, ROUTER_DIRECTIVES]
 })
 
@@ -31,7 +31,7 @@ export class CIConfSettings extends CICardView {
   formDialogCreated: boolean = false;
   formCreating: boolean = false;
 
-  @ViewChild('descArea') descArea: ElementRef;
+  @ViewChild("descArea") descArea: ElementRef;
 
   descMirror: CodeMirror.Editor= null;
 
@@ -75,7 +75,7 @@ export class CIConfSettings extends CICardView {
         // Hide dialog
         this.formDialogCreated = false;
         setTimeout(() => super.routerOnDeactivate().then(resolve, reject), 0);
-      })
+      });
     } else {
       this.formCreation = false;
       return super.routerOnDeactivate();
@@ -100,20 +100,20 @@ export class CIConfSettings extends CICardView {
   }
 
   closeFormCreation(event: any) {
-    if(event.target.className.indexOf("new-form-dialog-overlap") != -1)
+    if(event.target.className.indexOf("new-form-dialog-overlap") !== -1)
       this.formCreation = false;
   }
 
   performFormCreation() {
     /* Check id */
-    if(this.formId.length == 0) {
+    if(this.formId.length === 0) {
       this._notifier.show("非法 ID");
       return;
     }
 
-    for(var i = 0; i < this.formId.length; ++i) {
-      var charCode = this.formId.charCodeAt(i);
-      if(!((charCode < 123 && charCode > 96) || charCode == 45)) {
+    for(let i = 0; i < this.formId.length; ++i) {
+      let charCode = this.formId.charCodeAt(i);
+      if(!((charCode < 123 && charCode > 96) || charCode === 45)) {
         this._notifier.show("非法 ID");
         return;
       }
@@ -121,32 +121,32 @@ export class CIConfSettings extends CICardView {
 
     this.formCreating = true;
     this._conf.createForm(this.formId, this.formTitle, (res: any) => {
-      if(res.error == "DuplicatedId") {
+      if(res.error === "DuplicatedId") {
         this._notifier.show("重复 ID");
         this.formCreating = false;
       }
       else {
         // On deactivate will remove formCreation flag
-        this._router.navigate(['FormEdit', { form: res.id }]);
+        this._router.navigate(["FormEdit", { form: res.id }]);
       }
     });
   }
 
   canModify(conf: any) {
-    var userId = this._login.getUser()._id;
-    return conf.admins && conf.admins.indexOf(userId) != -1;
+    let userId = this._login.getUser()._id;
+    return conf.admins && conf.admins.indexOf(userId) !== -1;
   }
 
   canView(conf: any) {
-    var userId = this._login.getUser()._id;
-    if(conf.admins && conf.admins.indexOf(userId) != -1) return true;
-    else if(conf.moderators && conf.moderators.indexOf(userId) != -1) return true;
-    else if(conf.viewers && conf.viewers.indexOf(userId) != -1) return true;
+    let userId = this._login.getUser()._id;
+    if(conf.admins && conf.admins.indexOf(userId) !== -1) return true;
+    else if(conf.moderators && conf.moderators.indexOf(userId) !== -1) return true;
+    else if(conf.viewers && conf.viewers.indexOf(userId) !== -1) return true;
     else return false;
   }
 
   jumpTo(anchor: string) {
-    var elem = document.getElementById(anchor);
+    let elem = document.getElementById(anchor);
     elem.scrollIntoView();
   }
 }

@@ -1,17 +1,17 @@
-import {Component} from '@angular/core'
-import {ROUTER_DIRECTIVES} from '@angular/router-deprecated'
+import {Component} from "@angular/core";
+import {ROUTER_DIRECTIVES} from "@angular/router-deprecated";
 
-import {CICardView, CICard, CICardService} from '../card'
-import {CIFrameService} from '../frame.service'
-import {CILoginService, CIUser} from '../login'
-import {MDL} from '../mdl'
+import {CICardView, CICard, CICardService} from "../card";
+import {CIFrameService} from "../frame.service";
+import {CILoginService, CIUser} from "../login";
+import {MDL} from "../mdl";
 
 @Component({
-  template: require('html/view/dashboard.html'),
+  template: require("html/view/dashboard.html"),
   directives: [CICard, MDL, ROUTER_DIRECTIVES]
 })
 
-export class CIDashboard extends CICardView{
+export class CIDashboard extends CICardView {
 
   user: CIUser;
 
@@ -24,6 +24,6 @@ export class CIDashboard extends CICardView{
   }
 
   gotoConsoleiT() {
-    window.location.href="https://bjmun.org/console-it/client/"
+    window.location.href = "https://bjmun.org/console-it/client/";
   }
 }

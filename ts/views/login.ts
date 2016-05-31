@@ -1,16 +1,15 @@
-import {ViewChild, Injectable, Component} from '@angular/core'
-import {ROUTER_DIRECTIVES, RouteParams, RouteData, Router} from '@angular/router-deprecated'
-import {Http, Response, Headers, RequestOptions} from '@angular/http'
+import {ViewChild, Component} from "@angular/core";
+import {ROUTER_DIRECTIVES, RouteParams, RouteData, Router} from "@angular/router-deprecated";
 
-import {CIUser, CILoginService} from '../login'
-import {CIFrameService} from '../frame.service'
-import {CICard, CICardView, CICardService} from '../card'
-import {MDL} from '../mdl'
-import {CILoginData} from '../data'
-import {CINotifier} from '../notifier'
+import {CILoginService} from "../login";
+import {CIFrameService} from "../frame.service";
+import {CICard, CICardView, CICardService} from "../card";
+import {MDL} from "../mdl";
+import {CILoginData} from "../data";
+import {CINotifier} from "../notifier";
 
 @Component({
-  template: require('html/view/login.html'),
+  template: require("html/view/login.html"),
   directives: [CICard, MDL, ROUTER_DIRECTIVES]
 })
 
@@ -22,7 +21,7 @@ export class CILogin extends CICardView {
   needInit: boolean = false;
   showInit: boolean = false;
   schoolList: string[];
-  @ViewChild(CICard) private loginCard:CICard;
+  @ViewChild(CICard) private loginCard: CICard;
 
   constructor(
     _card: CICardService,
@@ -43,9 +42,9 @@ export class CILogin extends CICardView {
         email: "",
         passwd: ""
       };
-      this.isRegister = this._routeData.get('action') == 'register';
+      this.isRegister = this._routeData.get("action") === "register";
 
-      let msg = this._routeParams.get('msg');
+      let msg = this._routeParams.get("msg");
       if(msg) setTimeout(() => this._notifier.show(msg), 0);
     }
 
@@ -85,8 +84,8 @@ export class CILogin extends CICardView {
   }
 
   switchState() {
-    if(this.isRegister) this._router.navigate(['Login']);
-    else this._router.navigate(['Register']);
+    if(this.isRegister) this._router.navigate(["Login"]);
+    else this._router.navigate(["Register"]);
     this.loginCard.toggleContent().then(() => {
       this.isRegister = !this.isRegister;
       this.loginCard.toggleContent();
@@ -94,7 +93,7 @@ export class CILogin extends CICardView {
   }
 
   requestReset() {
-    if(!this.data.email || this.data.email == "") this._notifier.show("请输入邮箱");
+    if(!this.data.email || this.data.email === "") this._notifier.show("请输入邮箱");
     else this._login.doRequestReset(this.data.email, () => {});
   }
 }

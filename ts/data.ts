@@ -3,8 +3,8 @@ export interface CIDataNotif {
 }
 
 export interface CILoginData {
-  email: String,
-  passwd: String,
-  realname: String
+  email: string,
+  passwd: string,
+  realname: string
 }
 
