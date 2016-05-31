@@ -8,7 +8,9 @@
     "build": "npm run gulp build",
     "daemon": "npm run gulp daemon",
     "typings": "typings",
-    "gulp": "gulp"
+    "gulp": "gulp",
+    "tslint": "tslint",
+    "lint": "npm run tslint"
   },
   "repository": {
     "type": "git",
@@ -38,6 +40,8 @@
     "raw-loader": "^0.5.1",
     "script-loader": "^0.7.0",
     "source-map-loader": "^0.1.5",
+    "tslint": "^3.10.2",
+    "tslint-loader": "^2.1.4",
     "typescript": "^1.8.7",
     "typings": "^1.0.4",
     "webpack-stream": "^3.2.0"

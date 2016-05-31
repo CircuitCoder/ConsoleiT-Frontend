@@ -1,11 +1,11 @@
-require('script!lib/fix.js');
-require('script!lib/md5.js');
-require('script!lib/FileSaver.min.js');
-require('script!lib/material.min.js');
-require('script!marked/marked.min.js');
-require('script!es6-shim/es6-shim.js');
-require('script!reflect-metadata/Reflect.js');
-require('script!zone.js/dist/zone.js');
+import 'script!lib/fix.js';
+import 'script!lib/md5.js';
+import 'script!lib/FileSaver.min.js';
+import 'script!lib/material.min.js';
+import 'script!marked/marked.min.js';
+import 'script!es6-shim/es6-shim.js';
+import 'script!reflect-metadata/Reflect.js';
+import 'script!zone.js/dist/zone.js';
 
 import '@angular/platform-browser';
 import '@angular/platform-browser-dynamic';
