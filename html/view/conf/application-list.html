@@ -1,18 +1,19 @@
 <div class="ci-card-container" type="1-col-wide">
   <div class="ci-card-col">
-    <ci-card>
-      <ci-card-title>
-        提交状态
-      </ci-card-title>
-      <div class="mdl-card__supporting-text ci-annotation">
-        {{ registrants.length == 0 ? "目前无人提交申请" : "目前有 " + registrants.length + " 人提交申请" }}
-      </div>
-    </ci-card>
-
     <ci-card [hideTitle]="true" class="ci-application-search">
       <input class="ci-application-search-input" [(ngModel)]="searchStr" #searchInput>
       <div class="ci-application-search-icon">
         <i class="material-icons">search</i>
+      </div>
+      <div class="ci-application-indicators">
+        <span class="indicator">
+          <i class="material-icons">visibility</i>
+          {{ visibleSelected }} / {{ visible }}
+        </span>
+        <span class="indicator">
+          <i class="material-icons">toc</i>
+          {{ selected }} / {{ registrants.length }}
+        </span>
       </div>
     </ci-card>
 
@@ -20,6 +21,15 @@
       <div class="ci-card-table ci-entry-table ci-application-list">
         <table class="mdl-data-table">
           <thead>
+            <th class="mdl-data-table__cell--non-numeric">
+              <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="ci-applicant-all" [ngClass]="{'is-checked': visible !== 0 && visibleSelected === visible }" (click)="selectAll($event)" ci-mdl>
+                <input type="checkbox"
+                  id="ci-applicant-all"
+                  class="mdl-checkbox__input"
+                  (click)="stopEvent($event)"
+                  [checked]="visible !== 0 && visibleSelected === visible">
+              </label>
+            </th>
             <th class="mdl-data-table__cell--non-numeric" (click)="sortBy('name')">
               姓名
               <i class="material-icons sort-indicator" [ngClass]="{ ascending: currentSort.ascending, sorted: currentSort.name === 'name' }">keyboard_arrow_down</i>
@@ -32,13 +42,28 @@
               {{ kw.field.title }}
               <i class="material-icons sort-indicator" [ngClass]="{ ascending: currentSort.ascending, sorted: currentSort.name === 'keyword' && currentSort.spec == kw.id }">keyboard_arrow_down</i>
             </th>
+            <th class="mdl-data-table__cell--non-numeric"></th>
           </thead>
           <tbody>
             <!-- Using display for now since table rows can't be transformed -->
-            <tr *ngFor="let entry of registrants" [ngStyle]="{ display: entry.visible ? 'table-row' : 'none' }" [routerLink]="['Application', { form: formId, uid: entry.user }]">
+            <tr *ngFor="let entry of registrants; let i = index" [ngStyle]="{ display: entry.visible ? 'table-row' : 'none' }" (click)="gotoApplicant($event, formId, entry.user)">
+              <td class="mdl-data-table__cell--non-numeric">
+                <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" [attr.for]="'ci-applicant-' + i" [ngClass]="{'is-checked': entry.selected }" (click)="select(i, $event)" ci-mdl>
+                  <input type="checkbox"
+                    [id]="'ci-applicant' + i"
+                    class="mdl-checkbox__input"
+                    (click)="stopEvent($event)"
+                    [checked]="entry.selected">
+                </label>
+              </td>
               <td class="mdl-data-table__cell--non-numeric">{{ entry.profile.realname }}</td>
               <td class="mdl-data-table__cell--non-numeric">{{ entry.profile.schoolName }}</td>
               <td class="mdl-data-table__cell--non-numeric" *ngFor="let kw of keywords">{{ getKwRepr(kw.field, entry.submission[kw.id]) }}</td>
+              <td class="mdl-data-table__cell--non-numeric">
+                <button class="mdl-button mdl-js-button mdl-button--icon" (click)="gotoNewTab($event, formId, entry.user)">
+                  <i class="material-icons">open_in_new</i>
+                </button>
+              </td>
             </tr>
           </tbody>
         </table>

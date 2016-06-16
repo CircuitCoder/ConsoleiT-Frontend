@@ -1,5 +1,5 @@
 import {ElementRef, ViewChild, Component} from "@angular/core";
-import {RouteParams, ROUTER_DIRECTIVES} from "@angular/router-deprecated";
+import {Router, RouteParams, ROUTER_DIRECTIVES} from "@angular/router-deprecated";
 import {Observable} from "rxjs/Rx";
 
 import {CICardView, CICard, CICardService} from "../../card";
@@ -33,10 +33,19 @@ export class CIConfApplicationList extends CICardView {
 
   @ViewChild("searchInput") searchInput: ElementRef;
 
-  constructor(_card: CICardService, private _conf: CIConfService, params: RouteParams, _frame: CIFrameService) {
+  constructor(_card: CICardService,
+              private _conf: CIConfService,
+              params: RouteParams,
+              private _frame: CIFrameService,
+              private _router: Router) {
     super(_card);
     this.formId = params.get("form");
-    _frame.setFab(null);
+    _frame.setFab({
+      icon: 'lightbulb_outline',
+      action: () => {
+        console.log("HA");
+      }
+    });
   }
 
   routerOnActivate() {
@@ -47,9 +56,11 @@ export class CIConfApplicationList extends CICardView {
 
       this.registrants.forEach((e) => {
         e.visible = true;
+        e.selected = false;
       });
 
       this.sortBy("name");
+      this.visible = this.registrants.length;
     });
 
     return super.routerOnActivate();
@@ -59,6 +70,60 @@ export class CIConfApplicationList extends CICardView {
     const searchChanged = Observable.fromEvent(this.searchInput.nativeElement, "keyup").debounceTime(200).distinctUntilChanged();
     searchChanged.subscribe(() => this.refilter());
     super.ngAfterViewInit();
+  }
+
+  getKwRepr(kw: any, value: any) {
+    if(kw.type === "checkbox") {
+      if(!value) return "";
+      else return kw.choices.filter((e: any, i: any) => value[i]).join(", ");
+    } else if(kw.type === "radio") {
+      return kw.choices[value] === undefined ? "" : kw.choices[value];
+    } else return value === undefined ? "" : value;
+  }
+
+  /* Selection & Refiltering */
+  selected: number = 0;
+  visibleSelected: number = 0;
+  visible: number = 0;
+
+  selectAll($e: Event) {
+    $e.preventDefault();
+    if(this.visible === 0) return;
+    let target = this.visibleSelected !== this.visible;
+
+    let modified = 0;
+    this.registrants.forEach(e => {
+      if(e.visible) {
+        // Only apply on visible
+
+        if(e.selected !== target) {
+          e.selected = target;
+          ++modified;
+        }
+      }
+    });
+
+    if(target) {
+      this.selected += modified;
+      this.visibleSelected = this.visible;
+    }
+
+    else {
+      this.selected -= modified;
+      this.visibleSelected = 0;
+    }
+  }
+
+  select(i: number, $event: Event) {
+    $event.stopPropagation();
+    this.registrants[i].selected = !this.registrants[i].selected;
+    if(this.registrants[i].selected) {
+      ++this.selected;
+      ++this.visibleSelected;
+    } else {
+      --this.selected;
+      --this.visibleSelected;
+    }
   }
 
   sortBy(name: string, spec?: number) {
@@ -94,26 +159,40 @@ export class CIConfApplicationList extends CICardView {
   }
 
   refilter() {
-    this.registrants.forEach(e => {
-      // filter
+    this.visibleSelected = 0;
+    this.visible = 0;
 
+    this.registrants.forEach(e => {
       if(this.searchStr === "") e.visible = true;
       else if(e.profile.realname.indexOf(this.searchStr) !== -1) e.visible = true;
       else if(e.profile.schoolName.indexOf(this.searchStr) !== -1) e.visible = true;
       else {
-
         // Search in keywords
         e.visible = this.keywords.some(k => this.getKwRepr(k.field, e.submission[k.id]).indexOf(this.searchStr) !== -1);
+      }
+
+      if(e.visible) {
+        ++this.visible;
+        if(e.selected) ++this.visibleSelected;
       }
     });
   }
 
-  getKwRepr(kw: any, value: any) {
-    if(kw.type === "checkbox") {
-      if(!value) return "";
-      else return kw.choices.filter((e: any, i: any) => value[i]).join(", ");
-    } else if(kw.type === "radio") {
-      return kw.choices[value] === undefined ? "" : kw.choices[value];
-    } else return value === undefined ? "" : value;
+  /* Jump */
+  gotoApplicant($event: Event, form: string, applicant: number) {
+    this._router.navigate(['Application', { form: form, uid: applicant }]);
+  }
+
+  gotoNewTab($event: Event, form: string, applicant: number) {
+    $event.preventDefault();
+    $event.stopPropagation();
+    let url = this._router.generate(['Application', { form: form, uid: applicant }]).toLinkUrl();
+    window.open(url);
+  }
+
+  /* Utility */
+  stopEvent($event: Event) {
+    $event.stopPropagation();
+    $event.preventDefault();
   }
 }
