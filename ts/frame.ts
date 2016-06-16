@@ -85,17 +85,18 @@ import * as CIUtil from "./util";
 ])
 
 export class CIFrame {
-  notif: CIDataNotif[];
-  user: CIUser;
-  started: boolean;
-  confs: any[];
-  tabs: CIFrameTabDefination[];
-  fab: CIFrameFabDefination;
-  title: string;
+  notif: CIDataNotif[] = [];
+  user: CIUser = null;
+  started: boolean = false;
+  confs: any[] = [];
+  tabs: CIFrameTabDefination[] = [];
+  fab: CIFrameFabDefination = null;
+  title: string = "";
 
-  titleAnimating: boolean;
-  tabAnimating: boolean;
-  fabAnimating: boolean;
+  titleAnimating: boolean = false;
+  tabAnimating: boolean = false;
+  fabAnimating: boolean = false;
+  showSubfabs: boolean = false;
 
   constructor(private _login: CILoginService,
               private _router: Router,
@@ -104,16 +105,6 @@ export class CIFrame {
               private _frame: CIFrameService,
               private _http: Http,
               private _el: ElementRef) {
-
-    this.notif = new Array();
-    this.user = null;
-    this.started = false;
-    this.confs = [];
-
-    this.tabs = [];
-    this.title = "";
-    this.titleAnimating = false;
-    this.tabAnimating = false;
 
     let outer = this;
 
@@ -178,10 +169,15 @@ export class CIFrame {
 
   setFab(fab: CIFrameFabDefination) {
     this.fabAnimating = true;
+    this.showSubfabs = false;
     setTimeout(() => {
       this.fab = fab;
       this.fabAnimating = false;
     }, 200);
+  }
+
+  toggleSubfabs() {
+    this.showSubfabs = !this.showSubfabs;
   }
 
   isRouteActive(route: any[], router?: any) {

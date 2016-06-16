@@ -51,6 +51,40 @@
   }
 }
 
+ci-card.conf-payment-status {
+  &.paid {
+    .conf-payment-status-icon {
+      background-color: #A5D6A7;
+    }
+  }
+
+  .conf-payment-status-icon {
+    font-size: 64px;
+    line-height: 96px;
+    margin-bottom: 24px;
+    text-align: center;
+    width: 96px;
+    border-radius: 50%;
+    background-color: #EEEEEE;
+    box-shadow: rgba(0,0,0,.2) 0 0 10px inset;
+  }
+
+  .conf-payment-status-hint {
+    position: absolute;
+    top: 0;
+    right: 16px;
+    left: 128px;
+    height: 96px;
+
+    font-size: 24px;
+    line-height: 32px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
+
 .conf-moderator-card {
   position: fixed;
   bottom: 0;

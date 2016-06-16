@@ -11,6 +11,16 @@
       <div class="mdl-card__supporting-text">
         状态 <strong>{{ formStatusStr }}</strong>
       </div>
+      <div class="mdl-card__supporting-text">
+        <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="ci-form-edit-meta-payment" [ngClass]="{'is-checked': meta.payment }" ci-mdl>
+          <input type="checkbox"
+            id="ci-form-edit-meta-payment"
+            class="mdl-checkbox__input"
+            (click)="meta.payment = !meta.payment"
+            [checked]="meta.payment">
+          <span class="mdl-checkbox__label">包含付款</span>
+        </label>
+      </div>
       <ci-card-actions>
         <button class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect" *ngIf = "formStatus == 'pending' || formStatus == 'closed'" (click)="statusOpen()">
           <i class="material-icons">play_arrow</i>
@@ -38,7 +48,7 @@
             <th class="mdl-data-table__cell--non-numeric">操作</th>
           </thead>
           <tbody>
-            <tr *ngFor = "let entry of data, let i = index, let last = last" (click)="select(i)" [ngClass]="{ 'ci-table-active': selectedId == i }">
+            <tr *ngFor = "let entry of content, let i = index, let last = last" (click)="select(i)" [ngClass]="{ 'ci-table-active': selectedId == i }">
               <td class="mdl-data-table__cell">
                 <i class="material-icons" *ngIf = "entry.keyword">vpn_key</i>
                 <span class="ci-warning" *ngIf="entry.required">*</span>{{ i + 1 }}
@@ -76,9 +86,54 @@
         </table>
       </div>
     </ci-card>
+    <ci-card>
+      <ci-card-title>
+        状态
+      </ci-card-title>
+      <div class="ci-card-table ci-entry-table">
+        <table class="mdl-data-table">
+          <thead>
+            <th class="mdl-data-table__cell--non-numeric">标题</th>
+            <th class="mdl-data-table__cell--non-numeric">操作</th>
+          </thead>
+          <tbody>
+            <tr *ngFor = "let indicator of indicators, let i = index, let last = last" (click)="selectIndicator(i)" [ngClass]="{ 'ci-table-active': selectedIndicatorId == i }">
+              <td class="mdl-data-table__cell--non-numeric" style="max-width: 85px; overflow: hidden">{{ indicator.name }}</td>
+              <td class="mdl-data-table__cell--non-numeric">
+                <button class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect" (click) = "deleteIndicator(i)">
+                  <i class="material-icons">delete</i>
+                </button>
+                <button class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect" (click) = "moveIndicatorDown(i)" [hidden]="last">
+                  <i class="material-icons">arrow_downward</i>
+                </button>
+                <button class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect" (click) = "moveIndicatorUp(i)" [hidden]="i == 0">
+                  <i class="material-icons">arrow_upward</i>
+                </button>
+              </td>
+              <td>
+              </td>
+            </tr>
+            <tr (click) = "pushIndicator()" class="ci-table-creation">
+              <td>
+                <span class="ci-annotation-normal">
+                  <i class="material-icons">add</i>
+                </span>
+              </td>
+              <td class="mdl-data-table__cell--non-numeric">
+                <span class="ci-annotation-normal">
+                  新建
+                </span>
+              </td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </ci-card>
   </div>
   <div class="ci-card-col wide">
-    <ci-card *ngIf = "selected != null">
+    <ci-card *ngIf = "selected !== null">
       <ci-card-title>
         <span class="ci-annotation-normal">{{ selectedId+1 }}</span> {{ selected.title }}
       </ci-card-title>
@@ -201,6 +256,16 @@
             [(ngModel)]="selected.keyword">
           <span class="mdl-checkbox__label">关键字</span>
         </label>
+      </div>
+    </ci-card>
+
+    <ci-card *ngIf = "selectedIndicator !== null">
+      <ci-card-title>
+        状态 - {{ selectedIndicator.name }}
+      </ci-card-title>
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" [ngClass]="{'is-dirty': selectedIndicator.name && selectedIndicator.name!=''}">
+        <input class="mdl-textfield__input" type="text" id="conf-form-indicator-name" [(ngModel)]="selectedIndicator.name">
+        <label class="mdl-textfield__label" for="conf-form-indicator-name">名称</label>
       </div>
     </ci-card>
   </div>

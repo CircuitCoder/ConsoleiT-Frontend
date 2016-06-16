@@ -4,6 +4,7 @@ import {ROUTER_DIRECTIVES} from "@angular/router-deprecated";
 import {CICardView, CICard, CICardService} from "../../card";
 import {CIConfService} from "../../conf";
 import {CILoginService} from "../../login";
+import {CIFrameService} from "../../frame.service";
 import {MDL} from "../../mdl";
 import {CIAvatar} from "../../avatar";
 
@@ -25,9 +26,13 @@ export class CIConfHome extends CICardView {
 
   userId: number;
 
-  constructor(_card: CICardService, private _conf: CIConfService, private _login: CILoginService) {
+  constructor(_card: CICardService,
+              private _conf: CIConfService,
+              private _login: CILoginService,
+              private _frame: CIFrameService) {
     super(_card);
     this.userId = _login.getUser()._id;
+    _frame.setFab(null);
   }
 
   routerOnActivate() {

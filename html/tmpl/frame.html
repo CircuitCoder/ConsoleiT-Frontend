@@ -65,8 +65,16 @@
     </div>
   </main>
 
-  <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored ci-fab" [ngClass] = "{'ci-has-fab': fab != null, 'ci-fab-animating': fabAnimating}" (click)="fab.action()">
-    <i class="material-icons">{{ fab ? fab.icon : "" }}</i>
-  </button>
+  <div class="ci-fabs" [ngClass] = "{'ci-has-fab': fab != null, 'ci-fab-animating': fabAnimating, 'ci-show-subfabs': showSubfabs}">
+    <div class="ci-subfabs" *ngIf="fab && fab.subfabs">
+      <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--mini-fab ci-subfab" *ngFor="let mf of fab.subfabs; let i = index" (click)="mf.action()" [ngStyle]="{ 'transition-delay': showSubfabs ? (fab.subfabs.length - 1) * 0.1 - i * 0.1 + 's' : i * 0.1 + 's' }">
+        <i class="material-icons">{{ mf.icon }}</i>
+      </button>
+    </div>
+
+    <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored ci-fab" (click)="fab.action()">
+      <i class="material-icons">{{ fab ? fab.icon : "" }}</i>
+    </button>
+  </div>
 </div>
 

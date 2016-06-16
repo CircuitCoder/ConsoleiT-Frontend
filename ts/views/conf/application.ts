@@ -8,6 +8,8 @@ import {CILoginService} from "../../login";
 import {CINotifier} from "../../notifier";
 import {MDL} from "../../mdl";
 
+import {CIConfFormMetadata} from "../../data";
+
 import * as CIUtil from "../../util";
 
 @Component({
@@ -19,15 +21,18 @@ export class CIConfApplication extends CICardView implements CanDeactivate {
 
   formId: any;
   formName: string;
+  form: any[] = [];
+  formMeta: CIConfFormMetadata = null; 
+
   userId: number;
   operatorId: number;
 
+  role: string;
   canModify: boolean;
   canModerate: boolean;
-  role: string;
 
-  form: any;
-  data: any;
+  data: any = {};
+  istatus: any = null; // TODO: interface
   savedData: any;
   locked: boolean;
   new: boolean;
@@ -48,8 +53,6 @@ export class CIConfApplication extends CICardView implements CanDeactivate {
     private _login: CILoginService,
     private _notifier: CINotifier) {
       super(_card);
-      this.form = [];
-      this.data = {};
       this.userId = +params.get("uid");
       this.formId = params.get("form");
       this.operatorId = _login.getUser()._id;
@@ -113,6 +116,7 @@ export class CIConfApplication extends CICardView implements CanDeactivate {
 
     Promise.all([formPromise, resultPromise]).then((results: any[]) => {
       this.form = results[0].content;
+      this.formMeta = results[0].meta;
       this.role = results[0].role;
       this.status = results[0].status;
       this.formName = results[0].title;
@@ -123,6 +127,7 @@ export class CIConfApplication extends CICardView implements CanDeactivate {
       });
 
       this.data = data.submission;
+      this.istatus = data.internalStatus;
       this.locked = data.locked;
       this.new = data.new;
       this.status = data.status;

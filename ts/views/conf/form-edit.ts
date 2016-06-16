@@ -6,6 +6,7 @@ import {CIFrameService} from "../../frame.service";
 import {CIConfService} from "../../conf";
 import {CINotifier} from "../../notifier";
 import {MDL} from "../../mdl";
+import {CIConfFormMetadata} from "../../data";
 
 import {FORM_STATUS_MAP} from "./const";
 
@@ -17,14 +18,23 @@ import {FORM_STATUS_MAP} from "./const";
 export class CIConfFormEdit extends CICardView {
 
   formId: any;
-  data: any;
+  content: any[] = [];
   formStatus: string = "";
   formStatusStr: string = "";
   formName: string = "";
 
+  meta: CIConfFormMetadata = {
+    payment: false,
+  };
+
   selected: any = null;
   selectedId: number = -1;
   selectedChoice: number = -1;
+
+  indicators: any[] = [];
+
+  selectedIndicator: any = null;
+  selectedIndicatorId: number = -1;
 
   @ViewChild("choiceInput") choiceInput: ElementRef;
 
@@ -37,9 +47,6 @@ export class CIConfFormEdit extends CICardView {
       super(_card);
       this.formId = params.get("form");
 
-      // TODO: formName
-      this.data = [];
-
       _frame.setFab({
         icon: "save",
         action: () => {
@@ -50,7 +57,9 @@ export class CIConfFormEdit extends CICardView {
 
   routerOnActivate() {
     this._conf.getForm(this.formId, (res) => {
-      this.data = res.content;
+      this.content = res.content;
+      this.indicators = res.indicators;
+      this.meta = res.meta;
       this.formName = res.title;
       this.formStatus = res.status;
 
@@ -66,11 +75,14 @@ export class CIConfFormEdit extends CICardView {
   select(i: number) {
     this.selectedChoice = -1;
     this.selectedId = i;
-    this.selected = this.data[i];
+    if(i !== -1) {
+      this.selected = this.content[i];
+      this.selectIndicator(-1);
+    }
   }
 
   pushField() {
-    let newLen = this.data.push({
+    let newLen = this.content.push({
       type: "input"
     });
 
@@ -84,21 +96,21 @@ export class CIConfFormEdit extends CICardView {
       this.selectedChoice = -1;
     }
 
-    this.data.splice(i, 1);
+    this.content.splice(i, 1);
   }
 
   moveUp(i: number) {
     if(i === 0) return;
-    let tmp = this.data[i];
-    this.data[i] = this.data[i - 1];
-    this.data[i - 1] = tmp;
+    let tmp = this.content[i];
+    this.content[i] = this.content[i - 1];
+    this.content[i - 1] = tmp;
   }
 
   moveDown(i: number) {
-    if(i === this.data.length - 1) return;
-    let tmp = this.data[i];
-    this.data[i] = this.data[i + 1];
-    this.data[i + 1] = tmp;
+    if(i === this.content.length - 1) return;
+    let tmp = this.content[i];
+    this.content[i] = this.content[i + 1];
+    this.content[i + 1] = tmp;
   }
 
   /* Editing - Choices */
@@ -134,12 +146,55 @@ export class CIConfFormEdit extends CICardView {
     this.selected.choices[i + 1] = tmp;
   }
 
+  /* Editing - Indicators */
+
+  selectIndicator(i: number) {
+    this.selectedIndicatorId = i;
+    if(i !== -1) {
+      this.selectedIndicator = this.indicators[i];
+      this.select(-1);
+    }
+  }
+
+  pushIndicator() {
+    let newLen = this.indicators.push({
+      type: "Boolean",
+    });
+
+    this.selectIndicator(newLen - 1);
+  }
+
+  deleteIndicator(i: number) {
+    if(this.selectedIndicatorId === i) {
+      this.selectedIndicator = null;
+      this.selectedIndicatorId = -1;
+    }
+
+    this.indicators.splice(i, 1);
+  }
+
+  moveIndicatorUp(i: number) {
+    if(i === 0) return;
+    let tmp = this.indicators[i];
+    this.indicators[i] = this.indicators[i - 1];
+    this.indicators[i - 1] = tmp;
+  }
+
+  moveIndicatorDown(i: number) {
+    if(i === this.indicators.length - 1) return;
+    let tmp = this.indicators[i];
+    this.indicators[i] = this.indicators[i + 1];
+    this.indicators[i + 1] = tmp;
+  }
+
   /* Editing - Actions */
 
   submit() {
     this._conf.postForm(this.formId, {
-      content: this.data,
-      title: this.formName
+      content: this.content,
+      indicators: this.indicators,
+      meta: this.meta,
+      title: this.formName,
     }, res => {
       if(res.msg === "OperationSuccessful") {
         this._notifier.show("操作成功，您可能需要刷新浏览器才能看到效果");

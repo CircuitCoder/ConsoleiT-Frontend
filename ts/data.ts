@@ -8,3 +8,7 @@ export interface CILoginData {
   realname: string
 }
 
+export class CIConfFormMetadata {
+  payment: boolean;
+}
+

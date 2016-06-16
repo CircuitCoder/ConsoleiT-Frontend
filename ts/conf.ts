@@ -4,6 +4,8 @@ import {Injectable} from "@angular/core";
 import {CIHttp} from "./http";
 import {CINotifier} from "./notifier";
 
+import {CIConfFormMetadata} from "./data";
+
 @Injectable()
 export class CIConfService extends CIHttp {
   constructor(_http: Http, private _notifier: CINotifier) {
@@ -182,7 +184,12 @@ export class CIConfService extends CIHttp {
     });
   }
 
-  postForm(formId: string, data: { content: any, title: string }, cb: (result: any) => void) {
+  postForm(formId: string, data: {
+    content: any[],
+    indicators: any[],
+    meta: CIConfFormMetadata,
+    title: string
+  }, cb: (result: any) => void) {
     this.post(`/${this.conf._id}/form/${formId}/content`, data, (err, res) => {
       if(err) {
         console.log(err);
@@ -225,7 +232,8 @@ export class CIConfService extends CIHttp {
           status: res.new ? "未提交" : (res.status ? res.status : "审核中"),
           new: res.new,
           locked: res.locked,
-          submission: res.submission
+          submission: res.submission,
+          internalStatus: res.internalStatus,
         });
       }
     });
@@ -288,6 +296,17 @@ export class CIConfService extends CIHttp {
 
   getFormResults(formId: string, cb: (result: any) => void) {
     this.get(`/${this.conf._id}/form/${formId}/submissions`, (err, res) => {
+      if(err) {
+        console.log(err);
+        this._notifier.show("$Unknown");
+      } else {
+        cb(res);
+      }
+    });
+  }
+
+  performAction(formId: string, action: string, applicants: number[], cb: (result: any) => void) {
+    this.post(`/${this.conf._id}/form/${formId}/perform/${action}`, { applicants }, (err, res) => {
       if(err) {
         console.log(err);
         this._notifier.show("$Unknown");

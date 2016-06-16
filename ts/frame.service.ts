@@ -7,10 +7,17 @@ export interface CIFrameTabDefination {
   router?: any;
 }
 
+export interface CIFrameSubfabDefination {
+  icon: string;
+  action: () => void;
+  desc?: string;
+}
+
 export interface CIFrameFabDefination {
   icon: string;
   desc?: string;
   action: () => void;
+  subfabs?: CIFrameSubfabDefination[];
 }
 
 @Injectable()
@@ -33,5 +40,9 @@ export class CIFrameService {
 
   setFab(fab: CIFrameFabDefination) {
     this.frame.setFab(fab);
+  }
+
+  toggleSubfabs() {
+    this.frame.toggleSubfabs();
   }
 }

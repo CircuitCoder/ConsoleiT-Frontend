@@ -4,7 +4,8 @@ import {Observable} from "rxjs/Rx";
 
 import {CICardView, CICard, CICardService} from "../../card";
 import {CIConfService} from "../../conf";
-import {CIFrameService} from "../../frame.service";
+import {CIFrameService, CIFrameSubfabDefination} from "../../frame.service";
+import {CINotifier} from "../../notifier";
 import {MDL} from "../../mdl";
 
 @Component({
@@ -34,18 +35,14 @@ export class CIConfApplicationList extends CICardView {
   @ViewChild("searchInput") searchInput: ElementRef;
 
   constructor(_card: CICardService,
-              private _conf: CIConfService,
               params: RouteParams,
+              private _notif: CINotifier,
+              private _conf: CIConfService,
               private _frame: CIFrameService,
               private _router: Router) {
     super(_card);
     this.formId = params.get("form");
-    _frame.setFab({
-      icon: 'lightbulb_outline',
-      action: () => {
-        console.log("HA");
-      }
-    });
+    _frame.setFab(null);
   }
 
   routerOnActivate() {
@@ -61,6 +58,26 @@ export class CIConfApplicationList extends CICardView {
 
       this.sortBy("name");
       this.visible = this.registrants.length;
+    });
+
+    this._conf.getForm(this.formId, (res) => {
+      let meta = res.meta;
+      let subfabs:CIFrameSubfabDefination[]  = [];
+      if(meta.payment)
+        subfabs.push({
+          icon: "credit_card",
+          action: () => {
+            this.perform("payment");
+          }
+        });
+
+      this._frame.setFab({
+        icon: "more_vert",
+        action: () => {
+          this._frame.toggleSubfabs();
+        },
+        subfabs: subfabs
+      });
     });
 
     return super.routerOnActivate();
@@ -180,13 +197,13 @@ export class CIConfApplicationList extends CICardView {
 
   /* Jump */
   gotoApplicant($event: Event, form: string, applicant: number) {
-    this._router.navigate(['Application', { form: form, uid: applicant }]);
+    this._router.navigate(["Application", { form: form, uid: applicant }]);
   }
 
   gotoNewTab($event: Event, form: string, applicant: number) {
     $event.preventDefault();
     $event.stopPropagation();
-    let url = this._router.generate(['Application', { form: form, uid: applicant }]).toLinkUrl();
+    let url = this._router.generate(["Application", { form: form, uid: applicant }]).toLinkUrl();
     window.open(url);
   }
 
@@ -194,5 +211,20 @@ export class CIConfApplicationList extends CICardView {
   stopEvent($event: Event) {
     $event.stopPropagation();
     $event.preventDefault();
+  }
+
+  /* Action */
+  perform(action: string) {
+    let uids = this.registrants.map(e => e.selected ? e.user : -1).filter(e => e > 0);
+    if(uids.length === 0) {
+      this._notif.show("请点击复选框选出一些人。对，左边那个");
+      return;
+    }
+
+    this._conf.performAction(this.formId, action, uids, (res: any) => {
+      // Check if it needs to update current view
+
+      this._notifier.show(res.msg);
+    });
   }
 }

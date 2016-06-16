@@ -81,6 +81,21 @@
       </ci-card-actions>
     </ci-card>
 
+    <ci-card *ngIf = "formMeta && formMeta.payment && istatus" class="conf-payment-status" [ngClass]="{ paid: istatus.payment }">
+      <ci-card-title>
+        缴费状态
+      </ci-card-title>
+      <div class="conf-payment-status-icon">
+        <i class="material-icons">{{ istatus.payment ? 'done' : 'credit_card' }}</i>
+      </div>
+      <div class="conf-payment-status-hint" *ngIf = "istatus.payment">
+        我们已收到您的付款！
+      </div>
+      <div class="conf-payment-status-hint" *ngIf = "!istatus.payment">
+        我们未收到您的付款
+      </div>
+    </ci-card>
+
     <ci-card *ngIf = "role != 'applicant' && registrants">
       <ci-card-title>
         提交列表

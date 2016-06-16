@@ -156,27 +156,61 @@ ci-frame {
     }
   }
 
-  .ci-fab {
+  .ci-fabs {
     position: fixed;
     right: 30px;
     bottom: 20px;
     z-index: 4;
-    transition: transform 0.2s ease;
+    width: 56px;
 
-    transform: scale(0);
-
-    &.ci-has-fab {
-      transform: scale(1);
+    .ci-fab {
+      display: block;
+      margin-top: 15px;
+      transition: transform 0.2s ease-in;
+      transform: scale(0);
+      .material-icons {
+        transition: opacity 0.2s ease-in-out;
+        opacity: 1;
+      }
     }
 
-    .material-icons {
-      transition: opacity 0.2s ease-in-out;
-      opacity: 1;
+    &.ci-has-fab {
+      .ci-fab {
+        transition: transform 0.2s ease-out;
+        transform: scale(1);
+      }
     }
 
     &.ci-fab-animating {
+      .ci-fab {
+        .material-icons {
+          opacity: 0;
+        }
+      }
+    }
+
+    .ci-subfab {
+      transition-property: transform;
+      transition-timing-function: ease-in;
+      transition-duration: .2s;
+
+      transform: translateY(20px) scale(0);
+      transform-origin: center;
+
+      display: block; 
+      margin: auto;
+      margin-top: 15px;
+
       .material-icons {
-        opacity: 0;
+        color: rgba(0,0,0,.54);
+      }
+    }
+
+    &.ci-show-subfabs {
+      .ci-subfab {
+        transition-timing-function: ease-out;
+
+        transform: translateY(0) scale(1);
       }
     }
   }
