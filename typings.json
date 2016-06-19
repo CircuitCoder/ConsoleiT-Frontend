@@ -1,8 +1,8 @@
 {
   "globalDependencies": {
-    "codemirror": "registry:dt/codemirror#0.0.0+20160521152226",
-    "es6-shim": "github:DefinitelyTyped/DefinitelyTyped/es6-shim/es6-shim.d.ts#4de74cb527395c13ba20b438c3a7a419ad931f1c",
-    "node": "registry:dt/node#4.0.0+20160509154515",
-    "webpack": "github:DefinitelyTyped/DefinitelyTyped/webpack/webpack.d.ts#95c02169ba8fa58ac1092422efbd2e3174a206f4"
+    "codemirror": "registry:dt/codemirror#0.0.0+20160619021621",
+    "es6-shim": "registry:dt/es6-shim#0.31.2+20160602141504",
+    "node": "registry:dt/node#6.0.0+20160613154055",
+    "webpack": "registry:dt/webpack#1.12.9+20160523035535"
   }
 }

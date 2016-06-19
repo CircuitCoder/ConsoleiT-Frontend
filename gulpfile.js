@@ -53,7 +53,7 @@ var styleList = [
 
 function buildjs() {
   return gulp.src('./ts/main.ts')
-      .pipe(plumber())
+      .pipe(gulpif(!production, plumber()))
       .pipe(webpack(require('./webpack.config'))) // Handles source map
       .pipe(rev()) // TODO ignore chunk file
       .pipe(gulp.dest('./build/js'))
@@ -68,7 +68,7 @@ function buildjs() {
 
 function buildcss() {
   return gulp.src('./sass/**/*.scss')
-      .pipe(plumber())
+      .pipe(gulpif(!production, plumber()))
       .pipe(sourcemaps.init())
       .pipe(sass().on('error', sass.logError))
       .pipe(gulp.src(styleList, {passthrough: true}))
