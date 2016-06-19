@@ -55,6 +55,7 @@ function buildjs() {
   return gulp.src('./ts/main.ts')
       .pipe(gulpif(!production, plumber()))
       .pipe(webpack(require('./webpack.config'))) // Handles source map
+      .pipe(gulpif(production, uglify()))
       .pipe(rev()) // TODO ignore chunk file
       .pipe(gulp.dest('./build/js'))
       .pipe(rev.manifest({
