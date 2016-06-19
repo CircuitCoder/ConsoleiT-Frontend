@@ -2,7 +2,6 @@
   "globalDependencies": {
     "codemirror": "registry:dt/codemirror#0.0.0+20160619021621",
     "es6-shim": "registry:dt/es6-shim#0.31.2+20160602141504",
-    "node": "registry:dt/node#6.0.0+20160613154055",
-    "webpack": "registry:dt/webpack#1.12.9+20160523035535"
+    "node": "registry:dt/node#6.0.0+20160613154055"
   }
 }
