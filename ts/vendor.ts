@@ -15,9 +15,11 @@ import "@angular/http";
 import "@angular/router-deprecated";
 import "@angular/router";
 
+/*
 import "@angular2-material/core";
 import "@angular2-material/checkbox";
 import "@angular2-material/radio";
 import "@angular2-material/input";
 import "@angular2-material/icon";
 import "@angular2-material/button";
+*/
