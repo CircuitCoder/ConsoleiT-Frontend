@@ -1,7 +1,8 @@
 language: node_js
 node_js:
+- '6'
 - '5'
-- '4'
+
 env:
 - "DEPLOY_DEST=consoleit@console.bjmun.org:frontend"
 addons:
@@ -16,6 +17,7 @@ script:
 before_deploy:
 - openssl aes-256-cbc -K $encrypted_eea10c5c794c_key -iv $encrypted_eea10c5c794c_iv -in .travis/deploy_key.enc -out .travis/deploy_key -d
 - .travis/pack.sh
+
 deploy:
 - provider: releases
   skip_cleanup: true
@@ -24,7 +26,7 @@ deploy:
   on:
     tags: true
     repo: CircuitCoder/ConsoleiT-Frontend
-    node: "5"
+    node: '6'
   file:
     - artifacts/webpack.tar.gz
     - artifacts/webpack.zip
@@ -35,5 +37,5 @@ deploy:
   on:
     repo: CircuitCoder/ConsoleiT-Frontend
     tags: true
-    node: "5"
+    node: '6'
 
