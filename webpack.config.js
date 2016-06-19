@@ -57,7 +57,7 @@ module.exports = {
     new webpack.optimize.CommonsChunkPlugin({
       name: ['vendor']
     }),
-    new ForkCheckerPlugin()
+    new ForkCheckerPlugin(),
   ],
 
   devtool: 'source-map',

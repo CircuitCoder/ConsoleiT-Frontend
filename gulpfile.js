@@ -1,33 +1,32 @@
 'use strict';
 
-var readFileSync = require('fs').readFileSync;
+const readFileSync = require('fs').readFileSync;
 
-var gulp = require('gulp');
+const gulp = require('gulp');
 
-var concat = require('gulp-concat');
-var connect = require('gulp-connect');
-var cssmin = require('gulp-cssmin');
-var del = require('del');
-var gulpif = require('gulp-if');
-var htmlmin = require('gulp-htmlmin');
-var plumber = require('gulp-plumber');
-var rename = require('gulp-rename');
-var rev = require('gulp-rev');
-var revReplace = require('gulp-rev-replace');
-var sass = require('gulp-sass');
-var shell = require('gulp-shell');
-var sourcemaps = require('gulp-sourcemaps');
-var uglify = require('gulp-uglify');
-var util = require('gulp-util');
-var watch = require('glob-watcher');
-var webpack = require('webpack-stream');
+const concat = require('gulp-concat');
+const connect = require('gulp-connect');
+const cssmin = require('gulp-cssmin');
+const del = require('del');
+const gulpif = require('gulp-if');
+const htmlmin = require('gulp-htmlmin');
+const plumber = require('gulp-plumber');
+const rename = require('gulp-rename');
+const rev = require('gulp-rev');
+const revReplace = require('gulp-rev-replace');
+const sass = require('gulp-sass');
+const shell = require('gulp-shell');
+const sourcemaps = require('gulp-sourcemaps');
+const util = require('gulp-util');
+const watch = require('glob-watcher');
+const webpack = require('webpack-stream');
 
-var debounce = require('lodash.debounce');
+const debounce = require('lodash.debounce');
 
-var production = false;
-var webserver = false;
+let production = false;
+let webserver = false;
 
-var htmlminOpt = {
+const htmlminOpt = {
   collapseWhitespace: true,
   conservativeCollapse: true,
   removeComments: true,
@@ -38,24 +37,26 @@ var htmlminOpt = {
   minifyURLs: true
 }
 
-var fontList = [
+const fontList = [
   'node_modules/material-design-icons/iconfont/MaterialIcons-Regular.eot',
   'node_modules/material-design-icons/iconfont/MaterialIcons-Regular.woff',
   'node_modules/material-design-icons/iconfont/MaterialIcons-Regular.woff2',
   'node_modules/material-design-icons/iconfont/MaterialIcons-Regular.ttf',
 ];
 
-var styleList = [
+const styleList = [
   './lib/*.css',
   'node_modules/codemirror/lib/codemirror.css',
   'node_modules/codemirror/theme/material.css'
 ];
 
+const webpackProdConf = require('./webpack.config.prod');
+const webpackConf = require('./webpack.config');
+
 function buildjs() {
   return gulp.src('./ts/main.ts')
       .pipe(gulpif(!production, plumber()))
-      .pipe(webpack(require('./webpack.config'))) // Handles source map
-      .pipe(gulpif(production, uglify()))
+      .pipe(webpack(production ? webpackProdConf : webpackConf)) // Handles source map
       .pipe(rev()) // TODO ignore chunk file
       .pipe(gulp.dest('./build/js'))
       .pipe(rev.manifest({
