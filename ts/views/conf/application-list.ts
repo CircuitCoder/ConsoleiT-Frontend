@@ -217,7 +217,7 @@ export class CIConfApplicationList extends CICardView {
   perform(action: string) {
     let uids = this.registrants.map(e => e.selected ? e.user : -1).filter(e => e > 0);
     if(uids.length === 0) {
-      this._notif.show("请点击复选框选出一些人。对，左边那个");
+      this._notifier.show("请点击复选框选出一些人。对，左边那个");
       return;
     }
 
