@@ -10,8 +10,8 @@ import {MDL} from "../../mdl";
 
 import {FORM_STATUS_MAP} from "./const";
 
-const CodeMirror = require("codemirror");
-require("codemirror/mode/gfm/gfm.js");
+import "codemirror/mode/gfm/gfm.js";
+import * as CodeMirror from "codemirror";
 
 @Component({
   template: require("html/view/conf/settings.html"),

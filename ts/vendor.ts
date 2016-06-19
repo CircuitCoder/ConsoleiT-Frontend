@@ -2,10 +2,11 @@ import "script!lib/fix.js";
 import "script!lib/md5.js";
 import "script!lib/FileSaver.min.js";
 import "script!lib/material.min.js";
-import "script!marked/marked.min.js";
-import "script!es6-shim/es6-shim.js";
-import "script!reflect-metadata/Reflect.js";
-import "script!zone.js/dist/zone.js";
+import "rxjs";
+import "marked";
+import "es6-shim";
+import "reflect-metadata";
+import "zone.js/dist/zone.min.js";
 
 import "@angular/platform-browser";
 import "@angular/platform-browser-dynamic";
@@ -14,6 +15,9 @@ import "@angular/common";
 import "@angular/http";
 import "@angular/router-deprecated";
 import "@angular/router";
+
+import "codemirror/mode/gfm/gfm.js";
+import "codemirror";
 
 /*
 import "@angular2-material/core";
