@@ -22,7 +22,7 @@ export class CIConfApplication extends CICardView implements CanDeactivate {
   formId: any;
   formName: string;
   form: any[] = [];
-  formMeta: CIConfFormMetadata = null; 
+  formMeta: CIConfFormMetadata = null;
 
   userId: number;
   operatorId: number;

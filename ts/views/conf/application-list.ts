@@ -36,7 +36,7 @@ export class CIConfApplicationList extends CICardView {
 
   constructor(_card: CICardService,
               params: RouteParams,
-              private _notif: CINotifier,
+              private _notifier: CINotifier,
               private _conf: CIConfService,
               private _frame: CIFrameService,
               private _router: Router) {
@@ -62,7 +62,7 @@ export class CIConfApplicationList extends CICardView {
 
     this._conf.getForm(this.formId, (res) => {
       let meta = res.meta;
-      let subfabs:CIFrameSubfabDefination[]  = [];
+      let subfabs: CIFrameSubfabDefination[]  = [];
       if(meta.payment)
         subfabs.push({
           icon: "credit_card",
@@ -223,7 +223,6 @@ export class CIConfApplicationList extends CICardView {
 
     this._conf.performAction(this.formId, action, uids, (res: any) => {
       // Check if it needs to update current view
-
       this._notifier.show(res.msg);
     });
   }
