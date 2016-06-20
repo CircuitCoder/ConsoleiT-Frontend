@@ -39,7 +39,7 @@
       <ci-card-title>
         组织团队
       </ci-card-title>
-      <div class="conf-member-list" *ngFor="#member of confData.members">
+      <div class="conf-member-list" *ngFor="let member of confData.members">
         <ci-avatar [name]="confMembers[member._id].realname" [email]="confMembers[member._id].email"></ci-avatar>
         <div class="conf-member-info">
           <div class="conf-member-name">{{confMembers[member._id].realname}}</div>
