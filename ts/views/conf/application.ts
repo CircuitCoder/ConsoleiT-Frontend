@@ -6,6 +6,7 @@ import {CIFrameService} from "../../frame.service";
 import {CIConfService} from "../../conf";
 import {CILoginService} from "../../login";
 import {CINotifier} from "../../notifier";
+import {CIAvatar} from '../../avatar';
 import {MDL} from "../../mdl";
 
 import {CIConfFormMetadata} from "../../data";
@@ -14,7 +15,7 @@ import * as CIUtil from "../../util";
 
 @Component({
   template: require("html/view/conf/application.html"),
-  directives: [CICard, MDL, ROUTER_DIRECTIVES]
+  directives: [CICard, MDL, ROUTER_DIRECTIVES, CIAvatar]
 })
 
 export class CIConfApplication extends CICardView implements CanDeactivate {
@@ -25,6 +26,7 @@ export class CIConfApplication extends CICardView implements CanDeactivate {
   formMeta: CIConfFormMetadata = null;
 
   userId: number;
+  applicant: any = null;
   operatorId: number;
 
   role: string;
@@ -109,7 +111,12 @@ export class CIConfApplication extends CICardView implements CanDeactivate {
       this.status = results[0].status;
       this.formName = results[0].title;
       return results[1];
-    }).then((data: any) => {
+    }).then((bundle: any) => {
+      console.log(bundle);
+
+      this.applicant = bundle.applicant;
+      const data = bundle.application;
+
       this.form.forEach((e: any, i: number) => {
         if(e.type === "checkbox" && !data.submission[i]) data.submission[i] = {};
       });
@@ -119,7 +126,6 @@ export class CIConfApplication extends CICardView implements CanDeactivate {
       this.locked = data.locked;
       this.new = data.new;
       this.status = data.status;
-
       this.savedData = CIUtil.deepClone(this.data);
     });
 

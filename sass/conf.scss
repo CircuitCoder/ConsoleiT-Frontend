@@ -239,3 +239,27 @@ ci-card.conf-payment-status {
     }
   }
 }
+
+.ci-applicant-info {
+  position: absolute;
+  top: 16px;
+  bottom: 16px;
+  left: 16px;
+  right: 16px;
+
+  padding-left: 100px;
+
+  .ci-applicant-realname {
+    line-height: 30px;
+    font-size: 24px;
+    color: rgba(0,0,0,.87);
+  }
+
+  .ci-applicant-email {
+    line-height: 20px;
+    font-size: 16px;
+    padding-top: 10px;
+    word-break: break-all;
+    color: rgba(0,0,0,.3);
+  }
+}

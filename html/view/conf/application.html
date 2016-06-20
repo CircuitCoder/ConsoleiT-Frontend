@@ -80,6 +80,16 @@
       </ci-card-actions>
     </ci-card>
 
+    <ci-card [hideTitle]="true" *ngIf = "applicant && canModerate">
+      <div class="mdl-card__supporting-text">
+        <ci-avatar [name]="applicant.realname" [email]="applicant.email" *ngIf="applicant"></ci-avatar>
+        <div class="ci-applicant-info">
+          <div class="ci-applicant-realname">{{ applicant.realname }}</div>
+          <div class="ci-applicant-email">{{ applicant.email }}</div>
+        </div>
+      </div>
+    </ci-card>
+
     <ci-card *ngIf = "formMeta && formMeta.payment && istatus" class="conf-payment-status" [ngClass]="{ paid: istatus.payment }">
       <ci-card-title>
         缴费状态

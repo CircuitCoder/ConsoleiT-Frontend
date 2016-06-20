@@ -228,13 +228,10 @@ export class CIConfService extends CIHttp {
         console.log(err);
         this._notifier.show("$Unknown");
       } else {
-        cb({
-          status: res.new ? "未提交" : (res.status ? res.status : "已提交"),
-          new: res.new,
-          locked: res.locked,
-          submission: res.submission,
-          internalStatus: res.internalStatus,
-        });
+
+        res.application.status = res.application.new ? "未提交"
+            : (res.application.status ? res.application.status : "已提交"),
+        cb(res);
       }
     });
   }
