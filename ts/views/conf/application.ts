@@ -38,8 +38,6 @@ export class CIConfApplication extends CICardView implements CanDeactivate {
   new: boolean;
   status: string;
 
-  registrants: any;
-
   showModerator: boolean;
   moderatorNote: string;
 
@@ -70,16 +68,6 @@ export class CIConfApplication extends CICardView implements CanDeactivate {
 
       if(this.role === "admin")  this.canModify = true;
       else this.canModify = this.operatorId === this.userId;
-
-      if(this.role === "admin") {
-        this.registrants = this._conf.getRegistrants();
-        if(!this.registrants) { // Directly routed to this page
-          this._conf.getFormResults(this.formId, (res) => {
-            this._conf.registerFormResults(res);
-            this.registrants = this._conf.getRegistrants();
-          });
-        }
-      }
 
       if(this.canModerate) {
         _frame.setFab({

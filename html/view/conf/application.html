@@ -66,7 +66,6 @@
         <pre>{{ moderatorNote ? moderatorNote : "无笔记" }}</pre>
       </div>
 
-
       <ci-card-actions>
         <button class="mdl-button--raised mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" (click)="submit()" *ngIf="canModify" [disabled]="role != 'admin' && locked">
           {{ new ? "提交" : "更新" }}
@@ -93,28 +92,6 @@
       </div>
       <div class="conf-payment-status-hint" *ngIf = "!istatus.payment">
         我们未收到您的付款
-      </div>
-    </ci-card>
-
-    <ci-card *ngIf = "role != 'applicant' && registrants">
-      <ci-card-title>
-        提交列表
-      </ci-card-title>
-      <div class="ci-card-table ci-entry-table">
-        <table class="mdl-data-table mdl-js-data-table mdl-data-table conf-jumplist">
-          <thead>
-            <tr>
-              <th class="mdl-data-table__cell--non-numeric">申请者</th>
-              <th class="mdl-data-table__cell--non-numeric">锁定</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let entry of registrants, let i = index" [routerLink] = "['Application', {form: formId, uid: entry.user}]" [class.is-active] = "entry.user == userId">
-              <td class="mdl-data-table__cell--non-numeric">{{ entry.profile.realname }}</td>
-              <td class="mdl-data-table__cell--non-numeric"><i class="material-icons">{{ entry.locked ? "lock" : "" }}</i></td>
-            </tr>
-          </tbody>
-        </table>
       </div>
     </ci-card>
   </div>
