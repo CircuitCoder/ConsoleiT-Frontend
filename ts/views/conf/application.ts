@@ -174,7 +174,7 @@ export class CIConfApplication extends CICardView implements CanDeactivate {
       this._conf.postApplication(this.formId, this.userId, this.data, (res) => {
         if(res.msg === "OperationSuccessful") {
           this._notifier.show(res.msg);
-          this.status = "审核中";
+          this.status = "已提交";
         } else if(res.error) this._notifier.show(res.error);
       });
     }

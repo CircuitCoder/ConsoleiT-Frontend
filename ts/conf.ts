@@ -229,7 +229,7 @@ export class CIConfService extends CIHttp {
         this._notifier.show("$Unknown");
       } else {
         cb({
-          status: res.new ? "未提交" : (res.status ? res.status : "审核中"),
+          status: res.new ? "未提交" : (res.status ? res.status : "已提交"),
           new: res.new,
           locked: res.locked,
           submission: res.submission,
