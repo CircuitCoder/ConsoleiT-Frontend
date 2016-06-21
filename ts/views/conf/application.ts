@@ -25,6 +25,7 @@ export class CIConfApplication extends CICardView implements CanDeactivate {
   formMeta: CIConfFormMetadata = null;
 
   userId: number;
+  applicant: any = null;
   operatorId: number;
 
   role: string;
@@ -109,7 +110,12 @@ export class CIConfApplication extends CICardView implements CanDeactivate {
       this.status = results[0].status;
       this.formName = results[0].title;
       return results[1];
-    }).then((data: any) => {
+    }).then((bundle: any) => {
+      console.log(bundle);
+
+      this.applicant = bundle.applicant;
+      const data = bundle.application;
+
       this.form.forEach((e: any, i: number) => {
         if(e.type === "checkbox" && !data.submission[i]) data.submission[i] = {};
       });
@@ -119,7 +125,6 @@ export class CIConfApplication extends CICardView implements CanDeactivate {
       this.locked = data.locked;
       this.new = data.new;
       this.status = data.status;
-
       this.savedData = CIUtil.deepClone(this.data);
     });
 
