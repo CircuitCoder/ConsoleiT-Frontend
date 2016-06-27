@@ -17,7 +17,7 @@
       </div>
     </ci-card>
 
-    <ci-card [hideTitle]="true">
+    <ci-card [hideTitle]="true" *ngIf="loaded">
       <div class="ci-card-table ci-entry-table ci-application-list">
         <table class="mdl-data-table">
           <thead>

@@ -17,6 +17,7 @@ export class CIConfApplicationList extends CICardView {
 
   formId: string;
 
+  loaded: boolean = false;
   registrants: any[] = [];
   keywords: any[] = [];
 
@@ -58,6 +59,8 @@ export class CIConfApplicationList extends CICardView {
 
       this.sortBy("name");
       this.visible = this.registrants.length;
+
+      this.loaded = true;
     });
 
     this._conf.getForm(this.formId, (res) => {
