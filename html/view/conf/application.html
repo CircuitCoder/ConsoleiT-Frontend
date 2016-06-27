@@ -58,10 +58,6 @@
         {{ formName }}
       </ci-card-title>
 
-      <div class="mdl-card__supporting-text">
-        状态: <strong>{{ status }}{{ locked ? "，已锁定":"" }}</strong>
-      </div>
-
       <div class="mdl-card__supporting-text moderator-note-showbox" *ngIf="canModerate" [ngClass]="{'ci-annotation': !moderatorNote || moderatorNote == '' }">
         <pre>{{ moderatorNote ? moderatorNote : "无笔记" }}</pre>
       </div>
@@ -80,18 +76,38 @@
       </ci-card-actions>
     </ci-card>
 
-    <ci-card *ngIf = "formMeta && formMeta.payment && istatus" class="conf-payment-status" [ngClass]="{ paid: istatus.payment }">
+    <ci-card *ngIf = "formMeta && data">
       <ci-card-title>
-        缴费状态
+        状态
       </ci-card-title>
-      <div class="conf-payment-status-icon">
-        <i class="material-icons">{{ istatus.payment ? 'done' : 'credit_card' }}</i>
-      </div>
-      <div class="conf-payment-status-hint" *ngIf = "istatus.payment">
-        我们已收到您的付款！
-      </div>
-      <div class="conf-payment-status-hint" *ngIf = "!istatus.payment">
-        我们未收到您的付款
+      <div class="conf-application-status">
+        <div class="conf-application-status-entry" *ngIf = "new">
+          <i class="material-icons">access_time</i>
+          <div class="conf-application-status-hint">
+            未提交
+          </div>
+        </div>
+
+        <div class="conf-application-status-entry" *ngIf = "!new">
+          <i class="material-icons">done</i>
+          <div class="conf-application-status-hint">
+            已提交
+          </div>
+        </div>
+
+        <div class="conf-application-status-entry" *ngIf = "formMeta.payment && payment">
+          <i class="material-icons">credit_card</i>
+          <div class="conf-application-status-hint">
+            已确认缴费
+          </div>
+        </div>
+
+        <div class="conf-application-status-entry" *ngIf = "locked">
+          <i class="material-icons">lock</i>
+          <div class="conf-application-status-hint">
+            已锁定
+          </div>
+        </div>
       </div>
     </ci-card>
   </div>

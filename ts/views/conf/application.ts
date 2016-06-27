@@ -33,9 +33,9 @@ export class CIConfApplication extends CICardView implements CanDeactivate {
   canModerate: boolean;
 
   data: any = {};
-  istatus: any = null; // TODO: interface
   savedData: any;
-  locked: boolean;
+  locked: boolean = false;
+  payment: boolean = false;
   new: boolean;
   status: string;
 
@@ -121,8 +121,8 @@ export class CIConfApplication extends CICardView implements CanDeactivate {
       });
 
       this.data = data.submission;
-      this.istatus = data.internalStatus;
       this.locked = data.locked;
+      this.payment = data.payment;
       this.new = data.new;
       this.status = data.status;
       this.savedData = CIUtil.deepClone(this.data);
@@ -168,6 +168,7 @@ export class CIConfApplication extends CICardView implements CanDeactivate {
         if(res.msg === "OperationSuccessful") {
           this._notifier.show(res.msg);
           this.status = "已提交";
+          this.new = false;
         } else if(res.error) this._notifier.show(res.error);
       });
     }
