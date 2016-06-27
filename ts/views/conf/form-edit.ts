@@ -120,8 +120,11 @@ export class CIConfFormEdit extends CICardView {
   }
 
   pushChoice() {
+    // TODO: merge
+    //
     if(!Array.isArray(this.selected.choices)) this.selected.choices = [];
-    this.selectedChoice = this.selected.choices.push("") - 1;
+
+    this.selectedChoice = this.selected.choices.push({ title: "", disabled: false }) - 1;
 
     setTimeout(() => this.choiceInput.nativeElement.focus(), 0);
   }
@@ -129,11 +132,10 @@ export class CIConfFormEdit extends CICardView {
   deleteChoice(i: number) {
     if(this.selectedChoice === i)
       this.selectedChoice = -1;
-
-    this.selected.choices.splice(i, 1);
   }
 
   moveChoiceUp(i: number) {
+    if(i === 0) return;
     let tmp = this.selected.choices[i];
     this.selected.choices[i] = this.selected.choices[i - 1];
     this.selected.choices[i - 1] = tmp;
@@ -144,6 +146,16 @@ export class CIConfFormEdit extends CICardView {
     let tmp = this.selected.choices[i];
     this.selected.choices[i] = this.selected.choices[i + 1];
     this.selected.choices[i + 1] = tmp;
+  }
+
+  enableChoice(j: number, $event: any) {
+    $event.stopPropagation();
+    this.selected.choices[j].disabled = false;
+  }
+
+  disableChoice(j: number, $event: any) {
+    $event.stopPropagation();
+    this.selected.choices[j].disabled = true;
   }
 
   /* Editing - Indicators */

@@ -95,9 +95,9 @@ export class CIConfApplicationList extends CICardView {
   getKwRepr(kw: any, value: any) {
     if(kw.type === "checkbox") {
       if(!value) return "";
-      else return kw.choices.filter((e: any, i: any) => value[i]).join(", ");
+      else return kw.choices.filter((e: any, i: any) => value[i].title).join(", ");
     } else if(kw.type === "radio") {
-      return kw.choices[value] === undefined ? "" : kw.choices[value];
+      return (kw.choices[value] === undefined || kw.choices[value].title === undefined) ? "" : kw.choices[value].title;
     } else return value === undefined ? "" : value;
   }
 

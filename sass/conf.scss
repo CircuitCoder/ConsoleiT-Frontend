@@ -237,3 +237,43 @@
     }
   }
 }
+
+.ci-conf-form-edit-title {
+  max-width: 80px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: opacity .2s ease;
+}
+
+.ci-conf-form-edit-disabled {
+  .ci-conf-form-edit-title {
+    opacity: 0.3;
+  }
+}
+
+.ci-conf-form-edit-choice-title {
+  opacity: 1;
+  transition: opacity .2s ease;
+}
+
+.ci-conf-form-edit-choice-enable {
+  display: none;
+}
+
+.ci-conf-form-edit-choice-disable {
+  display: inline-block;
+}
+
+.ci-conf-form-edit-choice-disabled {
+  .ci-conf-form-edit-choice-title {
+    opacity: .3;
+  }
+
+  .ci-conf-form-edit-choice-enable {
+    display: inline-block;
+  }
+
+  .ci-conf-form-edit-choice-disable {
+    display: none;
+  }
+}

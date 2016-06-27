@@ -48,12 +48,12 @@
             <th class="mdl-data-table__cell--non-numeric">操作</th>
           </thead>
           <tbody>
-            <tr *ngFor = "let entry of content, let i = index, let last = last" (click)="select(i)" [ngClass]="{ 'ci-table-active': selectedId == i }">
+            <tr *ngFor = "let entry of content, let i = index, let last = last" (click)="select(i)" [ngClass]="{ 'ci-table-active': selectedId == i, 'ci-conf-form-edit-disabled': entry.disabled }">
               <td class="mdl-data-table__cell">
                 <i class="material-icons" *ngIf = "entry.keyword">vpn_key</i>
                 <span class="ci-warning" *ngIf="entry.required">*</span>{{ i + 1 }}
               </td>
-              <td class="mdl-data-table__cell--non-numeric" style="max-width: 85px; overflow: hidden">{{ entry.title }}</td>
+              <td class="mdl-data-table__cell--non-numeric ci-conf-form-edit-title">{{ entry.title }}</td>
               <td class="mdl-data-table__cell--non-numeric">
                 <button class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect" (click) = "deleteField(i)">
                   <i class="material-icons">delete</i>
@@ -98,7 +98,7 @@
           </thead>
           <tbody>
             <tr *ngFor = "let indicator of indicators, let i = index, let last = last" (click)="selectIndicator(i)" [ngClass]="{ 'ci-table-active': selectedIndicatorId == i }">
-              <td class="mdl-data-table__cell--non-numeric" style="max-width: 85px; overflow: hidden">{{ indicator.name }}</td>
+              <td class="mdl-data-table__cell--non-numeric ci-conf-form-edit-title">{{ indicator.name }}</td>
               <td class="mdl-data-table__cell--non-numeric">
                 <button class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect" (click) = "deleteIndicator(i)">
                   <i class="material-icons">delete</i>
@@ -201,10 +201,16 @@
               <th class="mdl-data-table__cell--non-numeric" style="width: 150px">选项</th>
             </thead>
             <tbody>
-              <tr *ngFor = "let choice of selected.choices, let j = index, let last = last" (click)="selectChoice(j)" [ngClass]="{ 'ci-table-active': selectedChoice == j }">
+              <tr *ngFor = "let choice of selected.choices, let j = index, let last = last" (click)="selectChoice(j)" [ngClass]="{ 'ci-table-active': selectedChoice == j, 'ci-conf-form-edit-choice-disabled': choice.disabled }">
                 <td class="mdl-data-table__cell">{{ j + 1 }}</td>
-                <td class="mdl-data-table__cell--non-numeric">{{ choice }}</td>
+                <td class="mdl-data-table__cell--non-numeric ci-conf-form-edit-choice-title">{{ choice.title }}</td>
                 <td class="mdl-data-table__cell--non-numeric">
+                  <button class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect ci-conf-form-edit-choice-enable" (click) = "enableChoice(j, $event)">
+                    <i class="material-icons">do_not_disturb_off</i>
+                  </button>
+                  <button class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect ci-conf-form-edit-choice-disable" (click) = "disableChoice(j, $event)">
+                    <i class="material-icons">do_not_disturb_on</i>
+                  </button>
                   <button class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect" (click) = "deleteChoice(j)">
                     <i class="material-icons">delete</i>
                   </button>
@@ -235,8 +241,8 @@
       </div>
 
 
-      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" [ngClass]="{'is-dirty': selected.choices[selectedChoice] && selected.choices[selectedChoice]!=''}" *ngIf="selectedChoice != -1" style="margin-top: 16px" ci-mdl>
-        <input class="mdl-textfield__input" type="text" id="conf-form-choice" [(ngModel)] = "selected.choices[selectedChoice]" #choiceInput>
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" [ngClass]="{'is-dirty': selected.choices[selectedChoice].title && selected.choices[selectedChoice].title!=''}" *ngIf="selectedChoice != -1" style="margin-top: 16px" ci-mdl>
+        <input class="mdl-textfield__input" type="text" id="conf-form-choice" [(ngModel)] = "selected.choices[selectedChoice].title" #choiceInput>
         <label class="mdl-textfield__label" for="conf-form-choice">修改选项 {{ selectedChoice + 1 }}</label>
       </div>
 
@@ -255,6 +261,14 @@
             class="mdl-checkbox__input"
             [(ngModel)]="selected.keyword">
           <span class="mdl-checkbox__label">关键字</span>
+        </label>
+
+        <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="conf-form-disabled" [ngClass]="{'is-checked': selected.disabled}">
+          <input type="checkbox"
+            id="conf-form-disabled"
+            class="mdl-checkbox__input"
+            [(ngModel)]="selected.disabled">
+          <span class="mdl-checkbox__label">禁用</span>
         </label>
       </div>
     </ci-card>
