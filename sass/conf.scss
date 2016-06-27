@@ -155,6 +155,12 @@
       transform: rotate(0);
     }
   }
+
+  th, td {
+    max-width: 100px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
 }
 
 .ci-application-search {
