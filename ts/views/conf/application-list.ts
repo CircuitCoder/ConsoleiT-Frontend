@@ -184,8 +184,8 @@ export class CIConfApplicationList extends CICardView {
 
     this.registrants.forEach(e => {
       if(this.searchStr === "") e.visible = true;
-      else if(e.profile.realname.indexOf(this.searchStr) !== -1) e.visible = true;
-      else if(e.profile.schoolName.indexOf(this.searchStr) !== -1) e.visible = true;
+      else if(e.profile.realname && e.profile.realname.indexOf(this.searchStr) !== -1) e.visible = true;
+      else if(e.profile.schoolName && e.profile.schoolName.indexOf(this.searchStr) !== -1) e.visible = true;
       else {
         // Search in keywords
         e.visible = this.keywords.some(k => this.getKwRepr(k.field, e.submission[k.id]).indexOf(this.searchStr) !== -1);
