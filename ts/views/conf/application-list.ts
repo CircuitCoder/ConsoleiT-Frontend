@@ -31,6 +31,8 @@ export class CIConfApplicationList extends CICardView {
     ascending: true
   };
 
+  meta: any = {};
+
   searchStr: string = "";
 
   @ViewChild("searchInput") searchInput: ElementRef;
@@ -64,9 +66,9 @@ export class CIConfApplicationList extends CICardView {
     });
 
     this._conf.getForm(this.formId, (res) => {
-      let meta = res.meta;
+      this.meta = res.meta;
       let subfabs: CIFrameSubfabDefination[]  = [];
-      if(meta.payment)
+      if(this.meta.payment)
         subfabs.push({
           icon: "credit_card",
           action: () => {

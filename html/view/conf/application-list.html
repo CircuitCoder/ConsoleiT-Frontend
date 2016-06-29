@@ -43,6 +43,7 @@
               <i class="material-icons sort-indicator" [ngClass]="{ ascending: currentSort.ascending, sorted: currentSort.name === 'keyword' && currentSort.spec == kw.id }">keyboard_arrow_down</i>
             </th>
             <th class="mdl-data-table__cell--non-numeric"></th>
+            <th class="mdl-data-table__cell--non-numeric"></th>
           </thead>
           <tbody>
             <!-- Using display for now since table rows can't be transformed -->
@@ -59,6 +60,10 @@
               <td class="mdl-data-table__cell--non-numeric">{{ entry.profile.realname }}</td>
               <td class="mdl-data-table__cell--non-numeric">{{ entry.profile.schoolName }}</td>
               <td class="mdl-data-table__cell--non-numeric" *ngFor="let kw of keywords">{{ getKwRepr(kw.field, entry.submission[kw.id]) }}</td>
+              <td class="mdl-data-table__cell--non-numeric">
+                <i class="material-icons conf-application-list-status" [ngStyle]="{ opacity: entry.locked ? 0.7 : 0 }">lock</i>
+                <i class="material-icons conf-application-list-status" [ngStyle]="{ opacity: entry.payment ? 0.7 : 0, display: meta.payment ? 'inline' : 'none' }">credit_card</i>
+              </td>
               <td class="mdl-data-table__cell--non-numeric">
                 <button class="mdl-button mdl-js-button mdl-button--icon" (click)="gotoNewTab($event, formId, entry.user)">
                   <i class="material-icons">open_in_new</i>
