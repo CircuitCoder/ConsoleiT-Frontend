@@ -19,6 +19,8 @@ import "@angular/router";
 import "codemirror/mode/gfm/gfm.js";
 import "codemirror";
 
+import "script!particles.js";
+
 /*
 import "@angular2-material/core";
 import "@angular2-material/checkbox";

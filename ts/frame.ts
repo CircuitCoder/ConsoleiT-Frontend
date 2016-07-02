@@ -21,6 +21,8 @@ import {CIAbout} from "./views/misc";
 
 import * as CIUtil from "./util";
 
+import particlesConfig from "./particles.config";
+
 @Component({
   selector: "ci-frame",
   template: require("html/tmpl/frame.html"),
@@ -88,6 +90,7 @@ export class CIFrame {
   notif: CIDataNotif[] = [];
   user: CIUser = null;
   started: boolean = false;
+  showParticles: boolean = false;
   confs: any[] = [];
   tabs: CIFrameTabDefination[] = [];
   fab: CIFrameFabDefination = null;
@@ -118,7 +121,6 @@ export class CIFrame {
       },
 
       onLogout: () => {
-        console.log("Logout");
         outer.user = null;
         outer._router.navigate(["Login"]);
       },
@@ -145,6 +147,13 @@ export class CIFrame {
   }
 
   ngAfterViewInit() {
+    // Initialize particles js
+    window.particlesJS("particles-background", particlesConfig);
+
+    setTimeout(() => {
+      this.showParticles = true;
+    });
+
     this._login.doRestore();
   }
 
