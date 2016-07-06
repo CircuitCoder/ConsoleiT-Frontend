@@ -7,7 +7,8 @@ export class CIHttp {
   private reqOpt = new RequestOptions({
     headers: new Headers({
       "Content-Type": "application/json"
-    })
+    }),
+    withCredentials: true,
   });
 
   constructor(private _http: Http, prefix: string) {
