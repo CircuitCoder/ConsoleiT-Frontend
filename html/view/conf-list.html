@@ -12,7 +12,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="#conf of confs" [routerLink]="['Conf', {id: conf._id}]">
+          <tr *ngFor="let conf of confs" [routerLink]="['Conf', {id: conf._id}]">
             <td class="mdl-data-table__cell--non-numeric">{{ conf.title }}</td>
             <td class="mdl-data-table__cell--non-numeric">{{ conf.statusText }}</td>
           </tr>

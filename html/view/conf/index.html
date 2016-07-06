@@ -1,6 +1,6 @@
 <div class="ci-card-container" type="action" *ngIf="confData">
   <div class="ci-card-col wide">
-    <ci-card *ngFor = "#body of confDescs; #i = index">
+    <ci-card *ngFor = "let body of confDescs, let i = index">
       <ci-card-title>
         {{ i == 0 ? confData.title : confDescTitles[i-1] }}
       </ci-card-title>
@@ -22,7 +22,7 @@
         目前会议正在 <strong>{{ confData.currentStage }}</strong>
       </div>
       <ci-card-actions [ngSwitch]="confData.status">
-        <div *ngSwitchWhen="1">
+        <div *ngSwitchCase="1">
           <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" [routerLink]="['Application', {uid: userId, type: 'academic-zh'}]">
             中文学术团队申请通道
           </button>
