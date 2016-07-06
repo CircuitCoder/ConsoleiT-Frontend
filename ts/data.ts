@@ -11,4 +11,3 @@ export interface CILoginData {
 export class CIConfFormMetadata {
   payment: boolean;
 }
-

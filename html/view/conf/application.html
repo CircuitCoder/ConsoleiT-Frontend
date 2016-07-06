@@ -123,6 +123,10 @@
         <button class="mdl-button mdl-js-button mdl-button--icon" (click)="locked?unlock():lock()">
           <i class="material-icons">{{ locked? "lock_open": "lock_outline" }}</i>
         </button>
+
+        <button class="mdl-button mdl-js-button mdl-button--icon" (click)="confirmPayment()" *ngIf = "!payment">
+          <i class="material-icons">credit_card</i>
+        </button>
       </div>
       <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" [ngClass]="{'is-dirty': moderatorNote}">
         <textarea class="mdl-textfield__input" type="text" id="moderator-note" rows="8" [(ngModel)]="moderatorNote"></textarea>

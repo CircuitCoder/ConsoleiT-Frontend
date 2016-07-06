@@ -6,6 +6,23 @@ import {CINotifier} from "./notifier";
 
 import {CIConfFormMetadata} from "./data";
 
+export interface CIConfRegistrantPreview {
+  locked: boolean;
+  payment: boolean;
+  user: number;
+  profile: {
+    _id: number;
+    realname: string;
+    schoolName: string;
+  };
+  submission: any;
+}
+
+export interface CIConfRegistrantEntry extends CIConfRegistrantPreview {
+  visible?: boolean;
+  selected?: boolean;
+}
+
 @Injectable()
 export class CIConfService extends CIHttp {
   constructor(_http: Http, private _notifier: CINotifier) {
@@ -17,7 +34,7 @@ export class CIConfService extends CIHttp {
   private group: any;
   private forms: [{ name: string, title: string, role: string }];
 
-  private registrants: any;
+  private registrants: CIConfRegistrantPreview[];
   private keywords: any;
 
   registerConf(data: any) {

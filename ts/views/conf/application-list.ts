@@ -3,7 +3,7 @@ import {Router, RouteParams, ROUTER_DIRECTIVES} from "@angular/router-deprecated
 import {Observable} from "rxjs/Rx";
 
 import {CICardView, CICard, CICardService} from "../../card";
-import {CIConfService} from "../../conf";
+import {CIConfService, CIConfRegistrantEntry} from "../../conf";
 import {CIFrameService, CIFrameSubfabDefination} from "../../frame.service";
 import {CINotifier} from "../../notifier";
 import {MDL} from "../../mdl";
@@ -18,7 +18,7 @@ export class CIConfApplicationList extends CICardView {
   formId: string;
 
   loaded: boolean = false;
-  registrants: any[] = [];
+  registrants: CIConfRegistrantEntry[] = [];
   keywords: any[] = [];
 
   currentSort: {
@@ -67,14 +67,26 @@ export class CIConfApplicationList extends CICardView {
 
     this._conf.getForm(this.formId, (res) => {
       this.meta = res.meta;
-      let subfabs: CIFrameSubfabDefination[]  = [];
-      if(this.meta.payment)
+      let subfabs: CIFrameSubfabDefination[]  = [{
+        icon: "lock_outline",
+        action: () => {
+          this.perform("lock");
+        },
+      }, {
+        icon: "lock_open",
+        action: () => {
+          this.perform("unlock");
+        },
+      }];
+
+      if(this.meta.payment) {
         subfabs.push({
           icon: "credit_card",
           action: () => {
             this.perform("payment");
           }
         });
+      }
 
       this._frame.setFab({
         icon: "more_vert",
@@ -229,6 +241,23 @@ export class CIConfApplicationList extends CICardView {
     this._conf.performAction(this.formId, action, uids, (res: any) => {
       // Check if it needs to update current view
       this._notifier.show(res.msg);
+
+      const uidSet = new Set(uids);
+      const modified = this.registrants.filter(e => uidSet.has(e.user));
+
+      if(action === "lock") {
+        modified.forEach(e => {
+          e.locked = true;
+        });
+      } else if(action === "unlock") {
+        modified.forEach(e => {
+          e.locked = false;
+        });
+      } else if(action === "payment") {
+        modified.forEach(e => {
+          e.payment = true;
+        });
+      }
     });
   }
 }

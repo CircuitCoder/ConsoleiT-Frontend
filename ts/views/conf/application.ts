@@ -175,22 +175,23 @@ export class CIConfApplication extends CICardView implements CanDeactivate {
   }
 
   lock() {
-    this._conf.lockFormResult(this.formId, this.userId, (res) => {
-      if(res.error) this._notifier.show(res.error);
-      else {
-        this._notifier.show(res.msg);
-        this.locked = true;
-      }
+    this._conf.performAction(this.formId, "lock", [this.userId], (res) => {
+      this._notifier.show(res.msg);
+      this.locked = true;
     });
   }
 
   unlock() {
-    this._conf.unlockFormResult(this.formId, this.userId, (res) => {
-      if(res.error) this._notifier.show(res.error);
-      else {
-        this._notifier.show(res.msg);
-        this.locked = false;
-      }
+    this._conf.performAction(this.formId, "unlock", [this.userId], (res) => {
+      this._notifier.show(res.msg);
+      this.locked = false;
+    });
+  }
+
+  confirmPayment() {
+    this._conf.performAction(this.formId, "payment", [this.userId], (res) => {
+      this._notifier.show(res.msg);
+      this.payment = true;
     });
   }
 

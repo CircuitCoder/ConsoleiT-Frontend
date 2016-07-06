@@ -56,7 +56,7 @@ ci-frame {
   }
 
   main.mdl-layout__content {
-    transition-property: 0;
+    transition-property: margin-top;
     transition-duration: 0s;
     transition-delay: 0.2s;
     margin-top: 0;
@@ -197,6 +197,8 @@ ci-frame {
       margin: auto;
       margin-top: 15px;
 
+      background: #E8E8E8;
+
       .material-icons {
         color: rgba(0,0,0,.54);
       }
@@ -238,7 +240,7 @@ body {
   right: 0;
   left: 0;
 
-  transition-property: transform opacity;
+  transition-property: transform, opacity;
   transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
   transition-duration: 1s;
 

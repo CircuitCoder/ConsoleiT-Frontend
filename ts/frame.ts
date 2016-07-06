@@ -23,6 +23,8 @@ import * as CIUtil from "./util";
 
 import particlesConfig from "./particles.config";
 
+declare var particlesJS: (name: string, config: any) => void;
+
 @Component({
   selector: "ci-frame",
   template: require("html/tmpl/frame.html"),
@@ -100,6 +102,7 @@ export class CIFrame {
   tabAnimating: boolean = false;
   fabAnimating: boolean = false;
   showSubfabs: boolean = false;
+  showTitle: boolean = false;
 
   constructor(private _login: CILoginService,
               private _router: Router,
@@ -117,7 +120,7 @@ export class CIFrame {
       onLogin: (user: CIUser) => {
         outer.user = user;
         outer._router.navigate(["Dashboard"]);
-        this.updateSidebar();
+        outer.updateSidebar();
       },
 
       onLogout: () => {
@@ -128,27 +131,31 @@ export class CIFrame {
       onRestore: (error: string, user: CIUser) => {
         if(error) {
           console.log(error);
-          if(!this.isComponentActive(CILogin)) {
+          if(!outer.isComponentActive(CILogin)) {
             outer._notifier.show(error);
             outer._router.navigate(["Login"]);
           }
         } else {
           outer.user = user;
-          if(this.isComponentActive(CILogin)) {
+          outer.updateSidebar();
+
+          if(outer.isComponentActive(CILogin)) {
             outer._notifier.show("AlreadyLoggedIn");
             outer._router.navigate(["Dashboard"]);
           }
         }
 
         outer.started = true;
-        if(outer.user) this.updateSidebar();
+        setTimeout(() => {
+          outer.showTitle = true;
+        });
       }
     });
   }
 
   ngAfterViewInit() {
     // Initialize particles js
-    window.particlesJS("particles-background", particlesConfig);
+    particlesJS("particles-background", particlesConfig);
 
     setTimeout(() => {
       this.showParticles = true;
