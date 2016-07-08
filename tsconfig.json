@@ -20,6 +20,7 @@
   ],
   "awesomeTypescriptLoaderOptions": {
     "resolveGlobs": true,
+    "usePrecompiledFiles": true,
     "forkChecker": true
   },
   "compileOnSave": false,

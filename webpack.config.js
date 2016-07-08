@@ -15,6 +15,15 @@ module.exports = {
     root: __dirname,
     extensions: ['', '.ts', '.js'],
     modulesDirectories: ['node_modules'],
+    alias: {
+      '@angular/common': '@angular/common/bundles/common.umd.min.js',
+      '@angular/core': '@angular/core/bundles/core.umd.min.js',
+      '@angular/http': '@angular/http/bundles/http.umd.min.js',
+      '@angular/platform-browser': '@angular/platform-browser/bundles/platform-browser.umd.min.js',
+      '@angular/platform-browser-dynamic': '@angular/platform-browser-dynamic/bundles/platform-browser-dynamic.umd.min.js',
+      '@angular/router': '@angular/router/bundles/router.umd.min.js',
+      '@angular/router-deprecated': '@angular/router-deprecated/bundles/router-deprecated.umd.min.js',
+    }
   },
 
   module: {
@@ -52,7 +61,7 @@ module.exports = {
     new ForkCheckerPlugin(),
   ],
 
-  devtool: 'source-map',
+  devtool: 'cheap-module-eval-source-map',
 
   output: {
     filename: 'bundle-[name].js',
