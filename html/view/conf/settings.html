@@ -118,11 +118,59 @@
         </table>
       </div>
     </ci-card>
+
+    <span class="ci-anchor" id="conf-setting-comm"></span>
+
+    <ci-card>
+      <ci-card-title>
+        委员会
+      </ci-card-title>
+      <div class="ci-card-table">
+        <table class="mdl-data-table">
+          <thead>
+            <th class="mdl-data-table__cell--non-numeric">
+              ID
+            </th>
+            <th class="mdl-data-table__cell--non-numeric">
+              标题
+            </th>
+            <th class="mdl-data-table__cell--non-numeric">
+              操作
+            </th>
+          </thead>
+          <tbody>
+            <tr *ngFor="let c of committees; let i = id">
+              <td class="mdl-data-table__cell--non-numeric">
+                {{ c.name }}
+              </td>
+              <td class="mdl-data-table__cell--non-numeric">
+                {{ c.title }}
+              </td>
+              <td class="mdl-data-table__cell--non-numeric">
+              </td>
+            </tr>
+            <tr (click)="showCommitteeCreation()" class="ci-table-creation">
+              <td class="mdl-data-table__cell--non-numeric">
+                <span class="ci-annotation-normal">
+                  <i class="material-icons">add</i>
+                </span>
+              </td>
+              <td class="mdl-data-table__cell--non-numeric">
+                <span class="ci-annotation-normal">
+                  新委员会
+                </span>
+              </td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </ci-card>
   </div>
 </div>
 
-<div class="new-form-dialog-overlap" [ngClass]="{ shown: formCreation }" *ngIf="formDialogCreated" (click)="closeFormCreation($event, this)">
-  <ci-card class="new-form-dialog">
+<div class="dialog-overlap" [ngClass]="{ shown: formCreation }" *ngIf="formDialogCreated" (click)="closeFormCreation($event, this)">
+  <ci-card class="dialog">
     <ci-card-title>
       新建表单
     </ci-card-title>
@@ -130,7 +178,7 @@
       请输入新表单的 ID. 此 ID 要求与本会议中其他表单不同，并会显示在网页 URL 中。
     </div>
     <div class="mdl-card__supporting-text">
-      您可以在 ID 中使用大小写英文字母、数字或者连字符。
+      您可以在 ID 中使用小写英文字母、数字或者连字符。
       ID 在表单创建后不能更改。表单名可以更改。
     </div>
 
@@ -146,9 +194,41 @@
 
     <ci-card-actions>
       <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised mdl-button--colored" (click) = "performFormCreation()">
-        创建新表单
+        创建表单
       </button>
       <span style="margin-left: 16px; transition: opacity 0.2s ease" [ngStyle]="{ opacity: formCreating ? 1 : 0 }" class="ci-annotation-normal">创建中...</span>
+    </ci-card-actions>
+  </ci-card>
+</div>
+
+<div class="dialog-overlap" [ngClass]="{ shown: committeeCreation }" *ngIf="committeeDialogCreated" (click)="closeCommitteeCreation($event, this)">
+  <ci-card class="dialog">
+    <ci-card-title>
+      新建委员会
+    </ci-card-title>
+    <div class="mdl-card__supporting-text">
+      请输入委员会的 ID. 此 ID 要求与本会议中其他表单不同，并会显示在网页 URL 中。
+    </div>
+    <div class="mdl-card__supporting-text">
+      您可以在 ID 中使用小写英文字母、数字或者连字符。
+      ID 在表单创建后不能更改。委员会名可以更改。
+    </div>
+
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+      <input class="mdl-textfield__input" type="text" id="ci-conf-settings-committeeId" [(ngModel)]="committeeId" ci-mdl>
+      <label class="mdl-textfield__label" for="ci-conf-settings-committeeId">ID</label>
+    </div>
+
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+      <input class="mdl-textfield__input" type="text" id="ci-conf-settings-committeeTitle" [(ngModel)]="committeeTitle" ci-mdl>
+      <label class="mdl-textfield__label" for="ci-conf-settings-committeeTitle">委员会名</label>
+    </div>
+
+    <ci-card-actions>
+      <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised mdl-button--colored" (click) = "performCommitteeCreation()">
+        创建委员会
+      </button>
+      <span style="margin-left: 16px; transition: opacity 0.2s ease" [ngStyle]="{ opacity: committeeCreating ? 1 : 0 }" class="ci-annotation-normal">创建中...</span>
     </ci-card-actions>
   </ci-card>
 </div>

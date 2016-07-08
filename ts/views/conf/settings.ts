@@ -3,7 +3,7 @@ import {Router, ROUTER_DIRECTIVES} from "@angular/router-deprecated";
 
 import {CICardView, CICard, CICardService} from "../../card";
 import {CIFrameService} from "../../frame.service";
-import {CIConfService} from "../../conf";
+import {CIConfService, CIConfCommitteeSpec} from "../../conf";
 import {CILoginService} from "../../login";
 import {CINotifier} from "../../notifier";
 import {MDL} from "../../mdl";
@@ -24,12 +24,19 @@ export class CIConfSettings extends CICardView {
   memberMap: any;
   settings: any;
   forms: any = [];
+  committees: CIConfCommitteeSpec[] = [];
 
   formId: string = "";
   formTitle: string = "";
   formCreation: boolean = false;
   formDialogCreated: boolean = false;
   formCreating: boolean = false;
+
+  committeeId: string = "";
+  committeeTitle: string = "";
+  committeeCreation: boolean = false;
+  committeeDialogCreated: boolean = false;
+  committeeCreating: boolean = false;
 
   @ViewChild("descArea") descArea: ElementRef;
 
@@ -56,9 +63,23 @@ export class CIConfSettings extends CICardView {
     }
 
   ngAfterViewInit() {
-    this._conf.getAllForms((forms: any) => {
-      this.forms = forms;
+    Promise.all([
+      new Promise((resolve, reject) => {
+        this._conf.getAllForms((forms: any) => {
+          this.forms = forms;
+          resolve();
+        });
+      }),
+      new Promise((resolve, reject) => {
+        this._conf.getAllCommittees(comms => {
+          this.committees = comms;
+          resolve();
+        });
+      })
+    ]).then(() => {
       super.ngAfterViewInit();
+    }).catch(e => {
+      throw e;
     });
 
     this.descMirror = CodeMirror.fromTextArea(this.descArea.nativeElement, {
@@ -74,6 +95,8 @@ export class CIConfSettings extends CICardView {
       return new Promise((resolve, reject) => {
         // Hide dialog
         this.formDialogCreated = false;
+        this.committeeDialogCreated = false;
+
         setTimeout(() => super.routerOnDeactivate().then(resolve, reject), 0);
       });
     } else {
@@ -89,6 +112,10 @@ export class CIConfSettings extends CICardView {
     });
   }
 
+  /**
+   * Forms
+   */
+
   getFormStatus(id: string) {
     if(id in FORM_STATUS_MAP) return FORM_STATUS_MAP[id];
     else return id;
@@ -100,7 +127,7 @@ export class CIConfSettings extends CICardView {
   }
 
   closeFormCreation(event: any) {
-    if(event.target.className.indexOf("new-form-dialog-overlap") !== -1)
+    if(event.target.className.indexOf("dialog-overlap") !== -1)
       this.formCreation = false;
   }
 
@@ -128,6 +155,48 @@ export class CIConfSettings extends CICardView {
       else {
         // On deactivate will remove formCreation flag
         this._router.navigate(["FormEdit", { form: res.id }]);
+      }
+    });
+  }
+
+  /**
+   * Committees
+   */
+
+  showCommitteeCreation() {
+    this.committeeDialogCreated = true;
+    setTimeout(() => this.committeeCreation = true, 0);
+  }
+
+  closeCommitteeCreation(event: any) {
+    if(event.target.className.indexOf("dialog-overlap") !== -1)
+      this.committeeCreation = false;
+  }
+
+  performCommitteeCreation() {
+    /* Check id */
+    if(this.committeeId.length === 0) {
+      this._notifier.show("非法 ID");
+      return;
+    }
+
+    for(let i = 0; i < this.committeeId.length; ++i) {
+      let charCode = this.committeeId.charCodeAt(i);
+      if(!((charCode < 123 && charCode > 96) || charCode === 45)) {
+        this._notifier.show("非法 ID");
+        return;
+      }
+    }
+
+    this.committeeCreating = true;
+    this._conf.createCommittee(this.committeeId, this.committeeTitle, (res: any) => {
+      if(res.error === "DuplicatedId") {
+        this._notifier.show("重复 ID");
+        this.committeeCreating = false;
+      }
+      else {
+        // On deactivate will remove committeeCreation flag
+        // this._router.navigate(["FormEdit", { committee: res.id }]);
       }
     });
   }

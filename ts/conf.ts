@@ -23,6 +23,30 @@ export interface CIConfRegistrantEntry extends CIConfRegistrantPreview {
   selected?: boolean;
 }
 
+export interface CIConfCommitteeSpec {
+  conf: number;
+  name: string;
+  title: string;
+}
+
+export interface CIConfSeatSpec {
+  id: string;
+  title: string;
+  count: number;
+}
+
+export interface CIConfCommittee extends CIConfCommitteeSpec {
+  admins: number[];
+  daises: number[];
+  seat: CIConfSeatSpec[];
+}
+
+export interface CIConfParticipant {
+  user: number;
+  group: string;
+  seat: string;
+}
+
 @Injectable()
 export class CIConfService extends CIHttp {
   constructor(_http: Http, private _notifier: CINotifier) {
@@ -252,28 +276,6 @@ export class CIConfService extends CIHttp {
     });
   }
 
-  lockFormResult(formId: string, uid: number, cb: (result: any) => void) {
-    this.put(`/${this.conf._id}/form/${formId}/submission/${uid}/lock`, {}, (err, res) => {
-      if(err) {
-        console.log(err);
-        this._notifier.show("$Unknown");
-      } else {
-        cb(res);
-      }
-    });
-  }
-
-  unlockFormResult(formId: string, uid: number, cb: (result: any) => void) {
-    this.delete(`/${this.conf._id}/form/${formId}/submission/${uid}/lock`, (err, res) => {
-      if(err) {
-        console.log(err);
-        this._notifier.show("$Unknown");
-      } else {
-        cb(res);
-      }
-    });
-  }
-
   getNote(formId: string, uid: number, cb: (note: string) => void) {
     this.get(`/${this.conf._id}/form/${formId}/submission/${uid}/note`, (err, res) => {
       if(err) {
@@ -320,6 +322,76 @@ export class CIConfService extends CIHttp {
 
   performAction(formId: string, action: string, applicants: number[], cb: (result: any) => void) {
     this.post(`/${this.conf._id}/form/${formId}/perform/${action}`, { applicants }, (err, res) => {
+      if(err) {
+        console.log(err);
+        this._notifier.show("$Unknown");
+      } else {
+        cb(res);
+      }
+    });
+  }
+
+  /**
+   * Committees
+   */
+
+  getAllCommittees(cb: (committees: CIConfCommittee[]) => void) {
+    this.get(`/${this.conf._id}/committee/all`, (err, res) => {
+      if(err) {
+        console.log(err);
+        this._notifier.show("$Unknown");
+      } else {
+        cb(res);
+      }
+    });
+  }
+
+  createCommittee(commId: string, title: string, cb: (result: any) => void) {
+    this.post(`/${this.conf._id}/committee`, { id: commId, title }, (err, res) => {
+      if(err) {
+        console.log(err);
+        this._notifier.show("$Unknown");
+      } else {
+        cb(res);
+      }
+    });
+  }
+
+  updateMembers(commId: string, role: string, uids: number[], cb: (result: any) => void) {
+    this.post(`/${this.conf._id}/committee/${commId}/${role}`, { uids }, (err, res) => {
+      if(err) {
+        console.log(err);
+        this._notifier.show("$Unknown");
+      } else {
+        cb(res);
+      }
+    });
+  }
+
+  appendParticipant(commId: string, participants: CIConfParticipant[], cb: (result: any) => void) {
+    this.post(`/${this.conf._id}/committee/${commId}/append`, { participants }, (err, res) => {
+      if(err) {
+        console.log(err);
+        this._notifier.show("$Unknown");
+      } else {
+        cb(res);
+      }
+    });
+  }
+
+  assignParticipant(commId: string, group: string, seat: string, cb: (result: any) => void) {
+    this.post(`/${this.conf._id}/committee/${commId}/assign`, { group, seat }, (err, res) => {
+      if(err) {
+        console.log(err);
+        this._notifier.show("$Unknown");
+      } else {
+        cb(res);
+      }
+    });
+  }
+
+  groupParticipant(commId: string, users: number[], group: string, cb: (result: any) => void) {
+    this.post(`/${this.conf._id}/committee/${commId}/group`, { group, users }, (err, res) => {
       if(err) {
         console.log(err);
         this._notifier.show("$Unknown");
