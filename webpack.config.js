@@ -1,8 +1,10 @@
 const webpack = require('webpack');
 const ForkCheckerPlugin = require('awesome-typescript-loader').ForkCheckerPlugin;
 
+const cache = {};
+
 module.exports = {
-  cache: true,
+  cache: cache,
 
   entry: {
     main: 'ts/main.ts',
@@ -56,5 +58,5 @@ module.exports = {
     filename: 'bundle-[name].js',
     sourceMapFilename: 'bundle-[name].map',
     chunkFilename: '[chunkhash].js',
-  }
+  },
 }

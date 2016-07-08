@@ -54,7 +54,7 @@ const webpackProdConf = require('./webpack.config.prod');
 const webpackConf = require('./webpack.config');
 
 function buildjs() {
-  return gulp.src('./ts/main.ts')
+  return gulp.src(['./ts/main.ts', './ts/vendor.ts'])
       .pipe(gulpif(!production, plumber()))
       .pipe(webpack(production ? webpackProdConf : webpackConf)) // Handles source map
       .pipe(rev()) // TODO ignore chunk file
