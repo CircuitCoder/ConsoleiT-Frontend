@@ -452,8 +452,8 @@ export class CIConfApplicationList extends CICardView {
     const list: CIConfParticipant[] = [];
 
     for(let reg of this.pairingSucceeded) {
-      if('uuid' in reg.ptreg)
-        list.push({ user: reg.reg.user, group: (<any>reg.ptreg).uuid })
+      if("uuid" in reg.ptreg)
+        list.push({ user: reg.reg.user, group: (<any>reg.ptreg).uuid });
       else {
         const uuid = CIUtil.generateUUID();
         list.push({ user: reg.reg.user, group: uuid });
