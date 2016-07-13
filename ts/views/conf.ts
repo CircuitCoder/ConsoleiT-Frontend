@@ -10,6 +10,7 @@ import {CIConfApplicationList} from "./conf/application-list";
 import {CIConfApplication} from "./conf/application";
 import {CIConfHome} from "./conf/home";
 import {CIConfFormEdit} from "./conf/form-edit";
+import {CIConfCommittee} from "./conf/committee";
 import {CIConfSettings} from "./conf/settings";
 
 @Component({
@@ -35,6 +36,10 @@ import {CIConfSettings} from "./conf/settings";
     path: "/form/:form/edit",
     name: "FormEdit",
     component: CIConfFormEdit
+  }, {
+    path: "/committee/:comm",
+    name: "Committee",
+    component: CIConfCommittee,
   }, {
     path: "/settings",
     name: "Settings",
@@ -62,14 +67,26 @@ export class CIConf {
     return new Promise<void>((resolve, reject) => {
       outer._conf.getData(outer.confId, (data) => {
         outer._conf.registerConf(data);
-        let forms = outer._conf.getFormDescs();
-        let tabs: any = [
+
+        const forms = outer._conf.getFormDescs();
+        const committees = outer._conf.getCommittees();
+
+        const tabs: any = [
           {
             title: "主页",
             route: ["/Conf", {id: this.confId}, "Home"],
             router: this._router
           }
         ];
+
+        // Inject committees
+        for(let c of committees) {
+          tabs.push({
+            title: c.title,
+            route: ["/Conf", {id: this.confId}, "Committee", { comm: c.name }],
+            router: this._router,
+          });
+        }
 
         // Inject forms
         forms.forEach(e => {

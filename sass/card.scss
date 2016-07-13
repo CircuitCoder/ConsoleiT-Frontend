@@ -302,3 +302,13 @@ ci-card, ci-search-input-card {
   }
 }
 
+.ci-background-title {
+  margin-bottom: -10px;
+  .mdl-card {
+    box-shadow: none;
+
+    .ci-card-content {
+      background: transparent;
+    }
+  }
+}

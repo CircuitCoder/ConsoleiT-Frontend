@@ -365,6 +365,17 @@ export class CIConfService extends CIHttp {
     });
   }
 
+  getCommittee(commId: string, cb: (result: any) => void) {
+    this.get(`/${this.conf._id}/committee/${commId}`, (err, res) => {
+      if(err) {
+        console.log(err);
+        this._notifier.show("$Unknown");
+      } else {
+        cb(res);
+      }
+    });
+  }
+
   createCommittee(commId: string, title: string, cb: (result: any) => void) {
     this.post(`/${this.conf._id}/committee`, { id: commId, title }, (err, res) => {
       if(err) {

@@ -1,0 +1,43 @@
+<div class="ci-card-container" type="1-col-wide" *ngIf = "data">
+  <div class="ci-card-col">
+    <ci-card>
+      <ci-card-title>
+        {{ data.title }}
+      </ci-card-title>
+      <div [innerHTML]="data.desc"></div>
+      <div class="mdl-card__supporting-text ci-annotation" *ngIf = "data.desc == ''">
+        主席团并未为此委员会添加简介
+      </div>
+    </ci-card>
+
+    <ci-card class="ci-background-title">
+      <ci-card-title>
+        学术团队
+      </ci-card-title>
+    </ci-card>
+
+    <div class="dais-cards">
+      <ci-card [hideTitle]="true" class="dais-card" *ngFor="let d of data.daisProfiles">
+        <ci-avatar [name]="d.realname" [email]="d.email"></ci-avatar>
+        <div class="dais-hint">
+          <div class="dais-title">
+            嘻嘻
+          </div>
+          <div class="dais-name">
+            {{ d.realname }}
+          </div>
+        </div>
+      </ci-card>
+
+      <ci-card [hideTitle]="true" class="dais-card dais-add" *ngIf="isAdmin">
+        <i class="material-icons">add</i>
+      </ci-card>
+    </div>
+
+    <ci-card class="ci-background-title">
+      <ci-card-title>
+        代表
+      </ci-card-title>
+    </ci-card>
+  </div>
+</div>
