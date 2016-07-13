@@ -53,7 +53,7 @@ export interface CIConfFormPreview {
 export interface CIConfParticipant {
   user: number;
   group: string;
-  seat: string;
+  seat?: string;
 }
 
 @Injectable()

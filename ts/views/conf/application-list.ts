@@ -3,7 +3,7 @@ import {Router, RouteParams, ROUTER_DIRECTIVES} from "@angular/router-deprecated
 import {Observable} from "rxjs/Rx";
 
 import {CICardView, CICard, CICardService} from "../../card";
-import {CIConfService, CIConfRegistrantEntry, CIConfCommitteePreview} from "../../conf";
+import {CIConfService, CIConfRegistrantEntry, CIConfCommitteePreview, CIConfParticipant} from "../../conf";
 import {CIFrameService, CIFrameSubfabDefination} from "../../frame.service";
 import {CILoginService} from "../../login";
 import {CINotifier} from "../../notifier";
@@ -383,6 +383,9 @@ export class CIConfApplicationList extends CICardView {
     const selected = this.registrants.filter(e => e.selected);
     if(selected.length === 0) return this._notifier.show("请重新选择目标");
 
+    this.pairingSucceeded = [];
+    this.pairingFailed = [];
+
     const map: { [key: string]: CIConfRegistrantEntry } = {};
     for(let reg of selected) {
       const rn = reg.profile.realname;
@@ -422,6 +425,29 @@ export class CIConfApplicationList extends CICardView {
   }
 
   confirmPairing() {
-    this.pairing = false;
+    this.pairingPerforming = true;
+
+    const list: CIConfParticipant[] = [];
+
+    for(let reg of this.pairingSucceeded) {
+      if('uuid' in reg.ptreg)
+        list.push({ user: reg.reg.user, group: (<any>reg.ptreg).uuid })
+      else {
+        const uuid = CIUtil.generateUUID();
+        list.push({ user: reg.reg.user, group: uuid });
+        (<any>reg.reg).uuid = uuid;
+      }
+    }
+
+    for(let reg of this.pairingFailed) {
+      if(reg.selected) list.push({ user: reg.reg.user, group: CIUtil.generateUUID() });
+    }
+
+    this._conf.appendParticipant(this.committees[this.selectedCommittee].name, list, (res) => {
+      this._notifier.show(res.msg);
+
+      this.pairingPerforming = false;
+      this.pairing = false;
+    });
   }
 }
