@@ -270,11 +270,21 @@ export class CIConfApplicationList extends CICardView {
     this.visible = 0;
 
     this.registrants.forEach(e => {
+
       if(this.searchStr === "") e.visible = true;
+
+      /* Search for meta */
+      else if(this.searchStr === "已缴费") e.visible = e.payment;
+      else if(this.searchStr === "未缴费") e.visible = !e.payment;
+      else if(this.searchStr === "已锁定") e.visible = e.locked;
+      else if(this.searchStr === "未锁定") e.visible = !e.locked;
+
+      /* Search for profile */
       else if(e.profile.realname && e.profile.realname.indexOf(this.searchStr) !== -1) e.visible = true;
       else if(e.profile.schoolName && e.profile.schoolName.indexOf(this.searchStr) !== -1) e.visible = true;
+
+      /* Search in keywords */
       else {
-        // Search in keywords
         e.visible = this.keywords.some(k => this.getFieldRepr(k.field, e.submission[k.id]).indexOf(this.searchStr) !== -1);
       }
 
