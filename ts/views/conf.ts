@@ -24,15 +24,15 @@ import {CIConfSettings} from "./conf/settings";
     component: CIConfHome,
     useAsDefault: true
   }, {
-    path: "/:form/list",
+    path: "/form/:form/list",
     name: "ApplicationList",
     component: CIConfApplicationList
   }, {
-    path: "/:form/:uid",
+    path: "/form/:form/:uid",
     name: "Application",
     component: CIConfApplication
   }, {
-    path: "/:form/edit",
+    path: "/form/:form/edit",
     name: "FormEdit",
     component: CIConfFormEdit
   }, {
