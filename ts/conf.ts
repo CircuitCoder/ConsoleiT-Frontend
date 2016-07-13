@@ -21,6 +21,10 @@ export interface CIConfRegistrantPreview {
 export interface CIConfRegistrantEntry extends CIConfRegistrantPreview {
   visible?: boolean;
   selected?: boolean;
+  previewed?: boolean;
+  preview?: boolean;
+  cache?: any;
+  loaded?: boolean;
 }
 
 export interface CIConfCommitteePreview {

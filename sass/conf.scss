@@ -95,7 +95,7 @@
 }
 
 .ci-application-list {
-  tbody tr {
+  tbody > tr {
     transition-property: transform, opacity, background-color;
     transition-timing-function: ease, ease, cubic-bezier(.4, 0, .2, 1);
     transition-duration: .2s, .2s, .28s;
@@ -127,6 +127,88 @@
   .conf-application-list-status {
     font-size: 24px;
   }
+
+  tbody > tr.registry-preview {
+    // TODO: optimize
+    height: 301px;
+
+    cursor: default;
+    overflow: hidden;
+
+    border-bottom: rgba(0, 0, 0, 0.117647) 1px solid; // From MDL
+
+    &.registry-preview-loaded {
+      .registry-preview-content {
+        opacity: 1;
+      }
+    }
+
+    .registry-preview-wrapper {
+      height: 300px;
+      width: 100%;
+      overflow-x: hidden;
+      overflow-y: scroll;
+      position: absolute;
+    }
+
+    .registry-preview-content {
+      width: 100%;
+      padding: 40px 60px;
+
+      transition: opacity 0.2s ease-out;
+      opacity: 0;
+
+      background: white;
+
+      column-count: 2;
+      column-gap: 200px;
+
+      box-sizing: border-box;
+
+      font-size: 16px;
+      line-height: 30px;
+
+      word-break: break-all;
+
+      strong:empty:after {
+        content: '空';
+        color: rgba(0,0,0,.3);
+        font-weight: normal;
+      }
+
+      .registry-preview-row {
+        padding: 0 20px;
+        &:first-child .registry-preview-title {
+          margin-top: 0;
+        }
+      }
+
+      .registry-preview-title {
+        line-height: 40px;
+        font-size: 24px;
+        margin-top: 20px;
+        display: inline-block;
+
+      }
+    }
+
+    .registry-preview-loading {
+      height: 300px;
+      width: 100%;
+      position: absolute;
+
+      line-height: 300px;
+      font-size: 16px;
+      text-align: center;
+      color: rgba(0,0,0,.30);
+
+      background: white;
+    }
+  }
+}
+
+ci-card .mdl-card .ci-card-content .ci-card-table.ci-entry-table tbody > tr.registry-preview {
+  cursor: default;
 }
 
 ci-card.ci-application-search {
@@ -254,3 +336,4 @@ ci-card.ci-application-search {
     margin-right: 12px;
   }
 }
+

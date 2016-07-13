@@ -47,29 +47,51 @@
           </thead>
           <tbody>
             <!-- Using display for now since table rows can't be transformed -->
-            <tr *ngFor="let entry of registrants; let i = index" [ngStyle]="{ display: entry.visible ? 'table-row' : 'none' }" (click)="gotoApplicant($event, formId, entry.user)">
-              <td class="mdl-data-table__cell--non-numeric">
-                <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" [attr.for]="'ci-applicant-' + i" [ngClass]="{'is-checked': entry.selected }" (click)="select(i, $event)" ci-mdl>
-                  <input type="checkbox"
-                    [id]="'ci-applicant' + i"
-                    class="mdl-checkbox__input"
-                    (click)="stopEvent($event)"
-                    [checked]="entry.selected">
-                </label>
-              </td>
-              <td class="mdl-data-table__cell--non-numeric">{{ entry.profile.realname }}</td>
-              <td class="mdl-data-table__cell--non-numeric">{{ entry.profile.schoolName }}</td>
-              <td class="mdl-data-table__cell--non-numeric" *ngFor="let kw of keywords">{{ getKwRepr(kw.field, entry.submission[kw.id]) }}</td>
-              <td class="mdl-data-table__cell--non-numeric">
-                <i class="material-icons conf-application-list-status" [ngStyle]="{ opacity: entry.locked ? 0.7 : 0 }">lock</i>
-                <i class="material-icons conf-application-list-status" [ngStyle]="{ opacity: entry.payment ? 0.7 : 0, display: meta.payment ? 'inline' : 'none' }">credit_card</i>
-              </td>
-              <td class="mdl-data-table__cell--non-numeric">
-                <button class="mdl-button mdl-js-button mdl-button--icon" (click)="gotoNewTab($event, formId, entry.user)">
-                  <i class="material-icons">open_in_new</i>
-                </button>
-              </td>
-            </tr>
+            <template ngFor let-entry [ngForOf]="registrants" let-i="index" [ngForTrackBy]="trackById">
+              <tr [ngStyle]="{ display: entry.visible ? 'table-row' : 'none' }" (click)="previewApplicant($event, formId, entry)">
+                <td class="mdl-data-table__cell--non-numeric">
+                  <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" [attr.for]="'ci-applicant-' + i" [ngClass]="{'is-checked': entry.selected }" (click)="select(i, $event)" ci-mdl>
+                    <input type="checkbox"
+                      [id]="'ci-applicant' + i"
+                      class="mdl-checkbox__input"
+                      (click)="stopEvent($event)"
+                      [checked]="entry.selected">
+                  </label>
+                </td>
+                <td class="mdl-data-table__cell--non-numeric">{{ entry.profile.realname }}</td>
+                <td class="mdl-data-table__cell--non-numeric">{{ entry.profile.schoolName }}</td>
+                <td class="mdl-data-table__cell--non-numeric" *ngFor="let kw of keywords">{{ getFieldRepr(kw.field, entry.submission[kw.id]) }}</td>
+                <td class="mdl-data-table__cell--non-numeric">
+                  <i class="material-icons conf-application-list-status" [ngStyle]="{ opacity: entry.locked ? 0.7 : 0 }">lock</i>
+                  <i class="material-icons conf-application-list-status" [ngStyle]="{ opacity: entry.payment ? 0.7 : 0, display: meta.payment ? 'inline' : 'none' }">credit_card</i>
+                </td>
+                <td class="mdl-data-table__cell--non-numeric">
+                  <button class="mdl-button mdl-js-button mdl-button--icon" (click)="gotoNewTab($event, formId, entry.user)">
+                    <i class="material-icons">open_in_new</i>
+                  </button>
+                </td>
+              </tr>
+
+              <tr class="registry-preview"
+                [ngClass]="{ 'registry-preview-loaded': entry.loaded }"
+                [ngStyle]="{ display: entry.visible && entry.preview ? 'table-row' : 'none' }">
+                  <div class="registry-preview-loading">
+                    加载中...
+                  </div>
+                  <div class="registry-preview-wrapper">
+                    <div class="registry-preview-content" *ngIf = "entry.cache">
+                      <div *ngFor="let f of form; let i = index" class="registry-preview-row">
+                        <span class="registry-preview-title" *ngIf="f.type === 'title'">
+                          {{ f.title }}
+                        </span>
+                        <span class="registry-preview-field" *ngIf="f.type !== 'title'">
+                          {{ f.title }}: <strong>{{ getFieldRepr(f, entry.cache[i]) }}</strong>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+              </tr>
+            </template>
           </tbody>
         </table>
       </div>

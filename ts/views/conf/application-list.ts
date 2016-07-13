@@ -31,6 +31,10 @@ export class CIConfApplicationList extends CICardView {
   registrants: CIConfRegistrantEntry[] = [];
   keywords: any[] = [];
 
+  /* Preview */
+  form: any[] = [];
+  cache: { applicant: any, application: any }[] = [];
+
   currentSort: {
     name: string,
     spec: number,
@@ -95,6 +99,7 @@ export class CIConfApplicationList extends CICardView {
     });
 
     this._conf.getForm(this.formId, (res) => {
+      this.form = res.content;
       this.meta = res.meta;
       let subfabs: CIFrameSubfabDefination[]  = [{
         icon: "lock_outline",
@@ -174,12 +179,12 @@ export class CIConfApplicationList extends CICardView {
     super.ngAfterViewInit();
   }
 
-  getKwRepr(kw: any, value: any) {
-    if(kw.type === "checkbox") {
+  getFieldRepr(field: any, value: any) {
+    if(field.type === "checkbox") {
       if(!value) return "";
-      else return kw.choices.filter((e: any, i: any) => value[i].title).join(", ");
-    } else if(kw.type === "radio") {
-      return (kw.choices[value] === undefined || kw.choices[value].title === undefined) ? "" : kw.choices[value].title;
+      else return field.choices.filter((e: any, i: any) => value[i].title).join(", ");
+    } else if(field.type === "radio") {
+      return (field.choices[value] === undefined || field.choices[value].title === undefined) ? "" : field.choices[value].title;
     } else return value === undefined ? "" : value;
   }
 
@@ -270,7 +275,7 @@ export class CIConfApplicationList extends CICardView {
       else if(e.profile.schoolName && e.profile.schoolName.indexOf(this.searchStr) !== -1) e.visible = true;
       else {
         // Search in keywords
-        e.visible = this.keywords.some(k => this.getKwRepr(k.field, e.submission[k.id]).indexOf(this.searchStr) !== -1);
+        e.visible = this.keywords.some(k => this.getFieldRepr(k.field, e.submission[k.id]).indexOf(this.searchStr) !== -1);
       }
 
       if(e.visible) {
@@ -280,7 +285,24 @@ export class CIConfApplicationList extends CICardView {
     });
   }
 
-  /* Jump */
+  /* Preview & jump */
+  previewApplicant($event: Event, form: string, entry: CIConfRegistrantEntry) {
+    entry.preview = !entry.preview;
+
+    // Toggle off
+    if(!entry.preview) return;
+
+    // Previously cached / requested
+    if(entry.previewed) return;
+    entry.previewed = true;
+    this._conf.getFormResult(form, entry.user, (res: any) => {
+      entry.cache = res.application.submission;
+      setTimeout(() => {
+        entry.loaded = true;
+      });
+    });
+  }
+
   gotoApplicant($event: Event, form: string, applicant: number) {
     this._router.navigate(["Application", { form: form, uid: applicant }]);
   }
@@ -449,5 +471,10 @@ export class CIConfApplicationList extends CICardView {
       this.pairingPerforming = false;
       this.pairing = false;
     });
+  }
+
+  /* Tracking */
+  trackById(index: number, entry: CIConfRegistrantEntry) {
+    return entry.user;
   }
 }
