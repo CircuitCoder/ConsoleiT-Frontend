@@ -27,7 +27,7 @@ export class CICardService {
 
     return Promise.all(CICardService.cards.map((c: CICard) => {
       let p = c.getPosition();
-      return new Promise((resolve, reject) => {
+      return new Promise<void>((resolve, reject) => {
         setTimeout(() => {
           c.setVisible(visible).then(() => {
             return resolve();
@@ -138,7 +138,7 @@ export class CICardView implements OnDeactivate, OnActivate {
     this._card.clearCard();
   }
 
-  routerOnDeactivate() {
+  routerOnDeactivate(): Promise<any> {
     return this._card.setVisibleAll(false);
   }
 }

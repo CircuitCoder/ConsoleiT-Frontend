@@ -3,10 +3,20 @@ import {Router, RouteParams, ROUTER_DIRECTIVES} from "@angular/router-deprecated
 import {Observable} from "rxjs/Rx";
 
 import {CICardView, CICard, CICardService} from "../../card";
-import {CIConfService, CIConfRegistrantEntry} from "../../conf";
+import {CIConfService, CIConfRegistrantEntry, CIConfCommitteePreview} from "../../conf";
 import {CIFrameService, CIFrameSubfabDefination} from "../../frame.service";
+import {CILoginService} from "../../login";
 import {CINotifier} from "../../notifier";
 import {MDL} from "../../mdl";
+import * as CIUtil from "../../util";
+
+interface PairingRow {
+  reg: CIConfRegistrantEntry;
+  ptname: string;
+  ptreg?: CIConfRegistrantEntry;
+
+  selected: boolean;
+};
 
 @Component({
   template: require("html/view/conf/application-list.html"),
@@ -35,6 +45,23 @@ export class CIConfApplicationList extends CICardView {
 
   searchStr: string = "";
 
+  /* Assignment dialog */
+  selectedCommittee: number = 0;
+  pairingKeyword: number = 0;
+  pairingKeywordPool: any[] = [];
+  assignment: boolean = false;
+  assignmentDialogCreated: boolean = false;
+  @ViewChild("assignmentSelect") assignmentSelect: ElementRef;
+
+  pairingSucceeded: PairingRow[] = [];
+  pairingFailed: PairingRow[] = [];
+  pairing: boolean = false;
+  pairingDialogCreated: boolean = false;
+  pairingPerforming: boolean = false;
+  @ViewChild("pairingSelect") pairingSelect: ElementRef;
+
+  committees: CIConfCommitteePreview[] = [];
+
   @ViewChild("searchInput") searchInput: ElementRef;
 
   constructor(_card: CICardService,
@@ -42,6 +69,7 @@ export class CIConfApplicationList extends CICardView {
               private _notifier: CINotifier,
               private _conf: CIConfService,
               private _frame: CIFrameService,
+              private _login: CILoginService,
               private _router: Router) {
     super(_card);
     this.formId = params.get("form");
@@ -53,6 +81,7 @@ export class CIConfApplicationList extends CICardView {
       this._conf.registerFormResults(res);
       this.registrants = this._conf.getRegistrants();
       this.keywords = this._conf.getKeywords();
+      this.pairingKeywordPool = this.keywords.filter(e => e.field.type === "input" || e.field.type === "area");
 
       this.registrants.forEach((e) => {
         e.visible = true;
@@ -88,6 +117,15 @@ export class CIConfApplicationList extends CICardView {
         });
       }
 
+      if(this._conf.hasPerm(this._login.getUser()._id, "committee.manipulate")) {
+        subfabs.push({
+          icon: "assignment_ind",
+          action: () => {
+            this.assignParticipant();
+          }
+        });
+      }
+
       this._frame.setFab({
         icon: "more_vert",
         action: () => {
@@ -97,12 +135,42 @@ export class CIConfApplicationList extends CICardView {
       });
     });
 
+    this.committees = this._conf.getCommittees();
+
     return super.routerOnActivate();
+  }
+
+  routerOnDeactivate() {
+    const promises: Promise<void>[] = [];
+    if(!this.assignment) {
+      promises.push(new Promise<void>((resolve, reject) => {
+        this.assignmentDialogCreated = false;
+
+        setTimeout(resolve);
+      }));
+    } else {
+      this.assignment = false;
+      promises.push(Promise.resolve());
+    }
+
+    if(!this.pairing) {
+      promises.push(new Promise<void>((resolve, reject) => {
+        this.pairingDialogCreated = false;
+
+        setTimeout(resolve);
+      }));
+    } else {
+      this.pairing = false;
+      promises.push(Promise.resolve());
+    }
+
+    return Promise.all(promises).then(() => super.routerOnDeactivate());
   }
 
   ngAfterViewInit() {
     const searchChanged = Observable.fromEvent(this.searchInput.nativeElement, "keyup").debounceTime(200).distinctUntilChanged();
     searchChanged.subscribe(() => this.refilter());
+
     super.ngAfterViewInit();
   }
 
@@ -259,5 +327,101 @@ export class CIConfApplicationList extends CICardView {
         });
       }
     });
+  }
+
+  /* Assignment */
+  assignParticipant() {
+    const uids = this.registrants.filter(e => e.selected).map(e => e.user);
+    if(uids.length === 0) {
+      this._notifier.show("请点击复选框选出一些人。对，左边那个");
+      return;
+    }
+
+    this.showAssignment();
+  }
+
+  showAssignment() {
+    this.assignmentDialogCreated = true;
+
+    setTimeout(() => {
+      CIUtil.updateGetmdlSelects((it) => {
+        this.selectedCommittee = it;
+      }, this.assignmentSelect.nativeElement);
+
+      CIUtil.updateGetmdlSelects((it) => {
+        this.pairingKeyword = it;
+      }, this.pairingSelect.nativeElement);
+
+      CIUtil.upgradeMDL();
+
+      this.assignment = true;
+    }, 0);
+  }
+
+  closeAssignment(event: any) {
+    if(event.target.className.indexOf("dialog-overlap") !== -1)
+      this.assignment = false;
+  }
+
+  performPairing() {
+    // Validate
+    if(!this.pairingKeywordPool[this.pairingKeyword]) return this._notifier.show("请选择一个关键字");
+
+    if(!this.pairingKeywordPool[this.pairingKeyword].id
+       || !this.pairingKeywordPool[this.pairingKeyword].field)
+         return this._notifier.show("喵，数据好像除了点问题，请刷新");
+
+    if(this.pairingKeywordPool[this.pairingKeyword].field.type !== "input"
+       && this.pairingKeywordPool[this.pairingKeyword].field.type !== "area")
+         return this._notifier.show("由于我们使用姓名配对，请选择一个文本框或文本区类型的关键字");
+
+    this.assignment = false;
+    const kwid = this.pairingKeywordPool[this.pairingKeyword].id;
+
+    // Perform pairing
+
+    const selected = this.registrants.filter(e => e.selected);
+    if(selected.length === 0) return this._notifier.show("请重新选择目标");
+
+    const map: { [key: string]: CIConfRegistrantEntry } = {};
+    for(let reg of selected) {
+      const rn = reg.profile.realname;
+      if(rn in map) // Duplicated name
+        map[rn] = null;
+      else
+        map[rn] = reg;
+    }
+
+    for(let reg of selected) {
+      if(!reg.submission) continue;
+
+      const ptname: string = reg.submission[kwid];
+      if(!ptname || !(ptname in map) || map[ptname] === null) this.pairingFailed.push({ reg: reg, ptname: ptname, selected: true });
+      else {
+        // Loop check
+        const ptreg = map[ptname];
+        if(ptreg.submission && ptreg.submission[kwid] === reg.profile.realname) {
+          this.pairingSucceeded.push({ reg: reg, ptname: ptname, ptreg: ptreg, selected: true });
+        } else {
+          this.pairingFailed.push({ reg: reg, ptname: ptname, selected: true });
+        }
+      }
+    }
+
+    this.showPairing();
+  }
+
+  showPairing() {
+    this.pairingDialogCreated = true;
+    setTimeout(() => this.pairing = true, 0);
+  }
+
+  closePairing(event: any) {
+    if(event.target.className.indexOf("dialog-overlap") !== -1)
+      this.pairing = false;
+  }
+
+  confirmPairing() {
+    this.pairing = false;
   }
 }

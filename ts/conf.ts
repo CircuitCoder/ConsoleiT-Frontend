@@ -23,10 +23,13 @@ export interface CIConfRegistrantEntry extends CIConfRegistrantPreview {
   selected?: boolean;
 }
 
-export interface CIConfCommitteeSpec {
-  conf: number;
-  name: string;
+export interface CIConfCommitteePreview {
   title: string;
+  name: string;
+}
+
+export interface CIConfCommitteeSpec extends CIConfCommitteePreview {
+  conf: number;
 }
 
 export interface CIConfSeatSpec {
@@ -39,6 +42,12 @@ export interface CIConfCommittee extends CIConfCommitteeSpec {
   admins: number[];
   daises: number[];
   seat: CIConfSeatSpec[];
+}
+
+export interface CIConfFormPreview {
+  name: string;
+  title: string;
+  role: string;
 }
 
 export interface CIConfParticipant {
@@ -56,7 +65,8 @@ export class CIConfService extends CIHttp {
   private conf: any;
   private members: any;
   private group: any;
-  private forms: [{ name: string, title: string, role: string }];
+  private forms: CIConfFormPreview[];
+  private committees: CIConfCommitteePreview[];
 
   private registrants: CIConfRegistrantPreview[];
   private keywords: any;
@@ -66,6 +76,7 @@ export class CIConfService extends CIHttp {
     this.members = data.members;
     this.group = data.group;
     this.forms = data.forms;
+    this.committees = data.committees;
   }
 
   getConf() {
@@ -98,6 +109,10 @@ export class CIConfService extends CIHttp {
     let filtered = this.forms.filter(e => e.name === formId);
     if(filtered.length === 0) return null;
     else return filtered[0];
+  }
+
+  getCommittees() {
+    return this.committees;
   }
 
   registerFormResults(data: any) {

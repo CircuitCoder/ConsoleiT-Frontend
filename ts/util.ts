@@ -140,6 +140,17 @@ export function downgradeMDL(elem: any) {
 }
 
 /**
+ * Reinitialize getmdl-select
+ * Require a MDL upgrade afterwards
+ */
+export function updateGetmdlSelects(cb: (iter: number) => void, item: HTMLElement) {
+  let items = item.querySelectorAll("li");
+  [].forEach.call(items, (i: any, index: number) => {
+    i.addEventListener("click", () => cb(index));
+  });
+}
+
+/**
  * Deep clone a object or a array.
  * GUYS why there is still not a deep clone function in standard js?
  */

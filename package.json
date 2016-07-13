@@ -58,6 +58,7 @@
     "codemirror": "^5.15.2",
     "es6-promise": "3.1.2",
     "es6-shim": "0.35.0",
+    "getmdl-select": "^1.0.4",
     "marked": "^0.3.5",
     "material-design-icons": "^2.2.1",
     "particles.js": "^2.0.0",

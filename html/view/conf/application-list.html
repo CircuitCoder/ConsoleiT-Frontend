@@ -76,3 +76,84 @@
     </ci-card>
   </div>
 </div>
+
+<div class="dialog-overlap" [ngClass]="{ shown: assignment }" *ngIf="assignmentDialogCreated" (click)="closeAssignment($event, this)">
+  <ci-card class="dialog">
+    <ci-card-title>
+      移动到委员会 - 1/2
+    </ci-card-title>
+    <div class="mdl-card__supporting-text">
+      请在下方选择要移动到的委员会，和用于配对的属性。
+    </div>
+
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select" #assignmentSelect>
+      <input class="mdl-textfield__input" type="text" id="ci-conf-settings-assignmentTarget" [ngModel]="(committees[selectedCommittee] || {}).title" readonly tabIndex="-1" ci-mdl>
+      <label class="mdl-textfield__label" for="ci-conf-settings-assignmentTarget">委员会</label>
+      <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu" for="ci-conf-settings-assignmentTarget">
+        <li *ngFor="let comm of committees" class="mdl-menu__item">{{ comm.title }}</li>
+      </ul>
+    </div>
+
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select" #pairingSelect>
+      <input class="mdl-textfield__input" type="text" id="ci-conf-settings-assignmentPairing" [ngModel]="((pairingKeywordPool[pairingKeyword] || {}).field || {}).title" ci-mdl>
+      <label class="mdl-textfield__label" for="ci-conf-settings-assignmentPairing">配对选项</label>
+      <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu" for="ci-conf-settings-assignmentPairing">
+        <li *ngFor="let kw of pairingKeywordPool" class="mdl-menu__item">{{ kw.field.title }}</li>
+      </ul>
+    </div>
+
+    <ci-card-actions>
+      <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised mdl-button--colored" (click) = "performPairing()">
+        下一步
+      </button>
+    </ci-card-actions>
+  </ci-card>
+</div>
+
+<div class="dialog-overlap" [ngClass]="{ shown: pairing }" *ngIf="pairingDialogCreated" (click)="closePairing($event, this)">
+  <ci-card class="dialog scroll">
+    <ci-card-title>
+      移动到委员会 - 2/2
+    </ci-card-title>
+    <div class="mdl-card__supporting-text">
+      请在下方确认配对结果。
+    </div>
+
+    <div class="mdl-card__supporting-text">
+      <div style="font-size: 20px; line-height: 30px;">成功的配对:</div>
+
+      <div *ngFor="let row of pairingSucceeded" class="ci-conf-pairing-row">
+        <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" [attr.for]="'ci-pairing-' + row.reg.user" [ngClass]="{'is-checked': row.selected }" (click)="row.selected = !row.selected">
+          <input type="checkbox"
+            [id]="'ci-pairing-' + row.reg.user"
+            class="mdl-checkbox__input"
+            (click)="stopEvent($event)"
+            [checked]="row.selected">
+        </label>
+        <strong>{{ row.reg.profile.realname }}</strong> - {{ row.ptname }}
+      </div>
+    </div>
+
+    <div class="mdl-card__supporting-text">
+      <div style="font-size: 20px; line-height: 30px;">失败的配对:</div>
+
+      <div *ngFor="let row of pairingFailed" class="ci-conf-pairing-row">
+        <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" [attr.for]="'ci-pairing-' + row.reg.user" [ngClass]="{'is-checked': row.selected }" (click)="row.selected = !row.selected" ci-mdl>
+          <input type="checkbox"
+            [id]="'ci-pairing-' + row.reg.user"
+            class="mdl-checkbox__input"
+            (click)="stopEvent($event)"
+            [checked]="row.selected">
+        </label>
+
+        <strong>{{ row.reg.profile.realname }}</strong>{{ row.ptname ? ' - ' + row.ptname : '' }}
+      </div>
+    </div>
+
+    <ci-card-actions>
+      <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised mdl-button--colored" (click) = "confirmPairing()" ci-mdl>
+        确认移动
+      </button>
+    </ci-card-actions>
+  </ci-card>
+</div>

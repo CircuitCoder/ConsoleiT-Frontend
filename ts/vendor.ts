@@ -21,6 +21,13 @@ import "codemirror";
 
 import "script!particles.js";
 
+/**
+ * Using a custom one
+ */
+
+// import "script!getmdl-select/getmdl-select.min.js";
+
+
 /*
 import "@angular2-material/core";
 import "@angular2-material/checkbox";

@@ -8,6 +8,7 @@ ci-card, ci-search-input-card {
     height: 100%;
     min-height: 0;
     background: none;
+    overflow: visible;
 
     transition: box-shadow 0.4s ease;
 
@@ -35,6 +36,10 @@ ci-card, ci-search-input-card {
 
       .ci-card-inner {
         padding: 0 16px;
+
+        // For dropdowns to be visible
+        position: relative;
+        z-index: 1;
 
         .mdl-card__supporting-text {
           padding: 16px 0;
@@ -250,3 +255,50 @@ ci-card, ci-search-input-card {
   line-height: 12px;
   margin-bottom: 12px;
 }
+
+// dialogs
+.dialog-overlap {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+
+  background-color: rgba(0,0,0,.3);
+
+  transform: translateY(-10000%); // Out of screen
+  opacity: 0;
+
+  transition-property: transform, opacity;
+  transition-duration: 0s, 0.2s;
+
+  transition-timing-function: linear, ease-in;
+  transition-delay: 0.2s, 0s;
+
+  &.shown {
+    transition-timing-function: linear, ease-out;
+    transition-delay: 0s, 0s;
+
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .dialog {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 450px;
+
+    &.scroll {
+      .ci-card-inner {
+        max-height: 50vh;
+        overflow-y: scroll;
+        overflow-x: hidden;
+      }
+    }
+  }
+}
+

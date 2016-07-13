@@ -47,7 +47,8 @@ const fontList = [
 const styleList = [
   './lib/*.css',
   'node_modules/codemirror/lib/codemirror.css',
-  'node_modules/codemirror/theme/material.css'
+  'node_modules/codemirror/theme/material.css',
+  'node_modules/getmdl-select/getmdl-select.min.css',
 ];
 
 const webpackProdConf = require('./webpack.config.prod');
@@ -127,6 +128,11 @@ function buildrev() {
       .pipe(gulp.dest('./dist'));
 }
 
+function buildindex() {
+  return gulp.src(['./html/index.html', './html/offline.html'])
+      .pipe(gulp.dest('./build'));
+}
+
 gulp.task('prebuild:production', function(done) {
   production = true;
   done();
@@ -156,28 +162,29 @@ gulp.task('clean:index', function() {
   return del(['dist/index.html', 'dist/offline.html']);
 });
 
+gulp.task('clean:rev', function() {
+  return del(['dist/**/*.*']);
+});
+
 gulp.task('build:js', gulp.series('clean:js', buildjs));
 gulp.task('build:css', gulp.series('clean:css', buildcss));
 gulp.task('build:font', gulp.series('clean:font', buildfont));
 gulp.task('build:assets', gulp.series('clean:assets', buildassets));
-gulp.task('build:index', gulp.series('clean:index', function() {
-  return gulp.src(['./html/index.html', './html/offline.html'])
-      .pipe(gulp.dest('./build'));
-}));
-gulp.task('build:rev', buildrev);
+gulp.task('build:index', gulp.series('clean:index', buildindex));
+gulp.task('build:rev', gulp.series('clean:rev', buildrev));
 
 gulp.task('build', gulp.series(gulp.series('build:font', 'build:assets', 'build:js', 'build:css', 'build:index'), 'build:rev'));
 gulp.task('build:production', gulp.series('prebuild:production', 'build'));
 gulp.task('watch', gulp.series('build', function(done) {
-  gulp.watch(['./ts/**/*.ts', './html/view/**/*.html', './html/tmpl/**/*.html'], gulp.series('build:js'));
-  gulp.watch('./sass/**/*.scss', gulp.series('build:css'));
-  gulp.watch(['./html/index.html', './html/offline.html'], gulp.series('build:index'));
+  gulp.watch(['./ts/**/*.ts', './html/view/**/*.html', './html/tmpl/**/*.html'], buildjs);
+  gulp.watch('./sass/**/*.scss', buildcss);
+  gulp.watch(['./html/index.html', './html/offline.html'], buildindex);
 
   //TODO: watch vendor
 
   var revWatcher = gulp.watch(['./build/**/*.*']);
-  revWatcher.on('add', debounce(gulp.series('build:rev'), 200));
-  revWatcher.on('change', debounce(gulp.series('build:rev'), 200));
+  revWatcher.on('add', debounce(buildrev, 200));
+  revWatcher.on('change', debounce(buildrev, 200));
 
   
   // Reload when revision or index itself changed

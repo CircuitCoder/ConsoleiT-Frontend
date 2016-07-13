@@ -56,9 +56,9 @@ export class CILogin extends CICardView {
   routerOnDeactivate() {
     this.isStarted = false;
     this.showInit = false;
-    return Promise.all([new Promise((resolve, reject) => {
+    return Promise.all([new Promise<void>((resolve, reject) => {
       setTimeout(resolve, 800);
-    }), new Promise((resolve, reject) => {
+    }), new Promise<void>((resolve, reject) => {
       setTimeout(() => {
         super.routerOnDeactivate().then(resolve, reject);
       }, 200);
