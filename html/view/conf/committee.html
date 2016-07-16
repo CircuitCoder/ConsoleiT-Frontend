@@ -73,6 +73,11 @@
         <div class="bottom-bar-container">
           <i class="material-icons">event_seat</i>
           国家列表
+          <div class="bottom-bar-operations">
+            <div class="bottom-bar-operation" (click)="editing = false">
+              <i class="material-icons">done</i>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -89,8 +94,8 @@
           席位分配 / 设置...
 
           <div class="seat-settings">
-            <input [(ngModel)]="seatRef ? seatRef.title : dummy">
-            <input [(ngModel)]="seatRef ? seatRef.count : dummy" type="number">
+            <input [(ngModel)]="seatRef.title">
+            <input [(ngModel)]="seatRef.count" type="number">
           </div>
         </div>
       </div>

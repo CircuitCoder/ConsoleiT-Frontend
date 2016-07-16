@@ -309,8 +309,35 @@
   .bottom-bar-container {
     // TODO: responsive
 
+    position: relative;
     width: 900px;
     margin: 0 auto;
+  }
+
+  .bottom-bar-operations {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+
+    .bottom-bar-operation {
+      display: flex;
+      align-items: center;
+      height: 100%;
+      margin-left: 6px;
+
+      opacity: 0.54;
+      transition: opacity 0.2s ease;
+
+      .material-icons {
+        margin: 0;
+        color: black;
+      }
+
+      &:hover {
+        opacity: 0.7;
+      }
+    }
   }
 
   .seat-list {

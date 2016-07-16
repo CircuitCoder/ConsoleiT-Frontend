@@ -39,9 +39,14 @@ export class CIConfCommittee extends CICardView {
   extended: boolean = false;
   assigning: boolean = false;
 
-  seatRef: CIConfSeatSpec = null;
+  seatRef: CIConfSeatSpec = {
+    id: "",
+    title: "",
+    count: 0,
+  }; // Dummy object
 
-  dummy: string = "";
+  fromGroup: CICommitteeGroup = null;
+  movingTarget: CIConfParticipantPreview = null;
 
   constructor(
     _card: CICardService,
@@ -115,6 +120,33 @@ export class CIConfCommittee extends CICardView {
   }
 
   selectGroup(target: CICommitteeGroup, $event: Event) {
+    if(this.assigning) {
+      for(const g of this.groups)
+        if(g.seat === this.seatRef) {
+          g.seat = null;
+          break;
+        }
+
+      target.seat = this.seatRef;
+      this.assigning = false;
+      this.moving = false;
+    } else if(this.moving) {
+      if(this.fromGroup) {
+        const index = this.fromGroup.members.indexOf(this.movingTarget);
+        if(index > -1) this.fromGroup.members.splice(index, 1);
+
+        if(this.fromGroup.members.length === 0) {
+          const gindex = this.groups.indexOf(this.fromGroup);
+          this.groups.splice(gindex, 1);
+        }
+      }
+
+      target.members.push(this.movingTarget);
+
+      this.moving = false;
+      this.fromGroup = null;
+      this.movingTarget = null;
+    }
   }
 
   selectSeat(target: CIConfSeatSpec, $event: Event) {
@@ -126,17 +158,24 @@ export class CIConfCommittee extends CICardView {
 
   addSeat($event: Event) {
     $event.stopPropagation();
-    this.seats.push({
+    const len = this.seats.push({
       id: CIUtil.generateUUID(),
-      title: "ABC",
+      title: "新席位",
       count: 1,
     });
+
+    this.assigning = true;
+    this.extended = false;
+    this.seatRef = this.seats[len-1];
   }
 
   performMove(part: CIConfParticipantPreview, group: CICommitteeGroup, $event: Event) {
+    $event.stopPropagation();
     this.moving = true;
     this.extended = false;
-    $event.stopPropagation();
+
+    this.fromGroup = group;
+    this.movingTarget = part;
   }
 
   performExtend($event: Event) {
