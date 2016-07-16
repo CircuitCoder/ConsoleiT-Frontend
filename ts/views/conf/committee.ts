@@ -195,7 +195,21 @@ export class CIConfCommittee extends CICardView {
     this.extended = false;
     this.seatRef = this.seats[len-1];
 
-    this.seatStatus[this.seatRef.id] = CICommitteeSeatStatus.VALID;
+    this.seatStatus[this.seatRef.id] = CICommitteeSeatStatus.UNASSIGNED;
+    this.queueSync();
+  }
+
+  removeSeat(target: CIConfSeatSpec, $event: Event) {
+    for(let g of this.groups) if(g.seat === target) g.seat = null;
+    if(this.seatRef === target) this.seatRef = {
+      id: "",
+      title: "",
+      count: 0,
+    };
+
+    const index = this.seats.indexOf(target);
+    this.seats.splice(index, 1);
+
     this.queueSync();
   }
 

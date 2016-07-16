@@ -103,6 +103,7 @@
       <div class="bottom-bar-container">
         <div class="seat-list">
           <span *ngFor="let s of seats" class="seat" (click)="selectSeat(s, $event)" [ngClass]="{ valid: seatStatus[s.id] === 'valid', invalid: seatStatus[s.id] === 'invalid' }">
+            <i class="material-icons seat-remove" (click)="removeSeat(s, $event)">clear</i>
             <span class="seat-title">
               {{ s.title }}
             </span>
