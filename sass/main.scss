@@ -252,3 +252,9 @@ body {
     transform: scale(1);
   }
 }
+
+.clearfix {
+  width: 0;
+  height: 0;
+  clear: both;
+}

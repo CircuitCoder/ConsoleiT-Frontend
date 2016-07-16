@@ -1,4 +1,4 @@
-<div class="ci-card-container" type="1-col-wide" *ngIf = "data">
+<div class="ci-card-container ci-committee-container" type="1-col-wide" *ngIf = "ready" [ngClass]="{ editing: editing, assigning: assigning, moving: moving, pending: assigning || moving }" (click)="selectBg($event)">
   <div class="ci-card-col">
     <ci-card>
       <ci-card-title>
@@ -37,7 +37,80 @@
     <ci-card class="ci-background-title">
       <ci-card-title>
         代表
+        <div class="participant-edit-icon" (click)="editing = true">
+          <i class="material-icons">edit</i>
+        </div>
       </ci-card-title>
     </ci-card>
+
+    <div class="participant-cards">
+      <ci-card *ngFor="let g of groups" (click)="selectGroup(g, $event)" [hideTitle]="true" class="participant-card" [ngClass]="{ unassigned: !g.seat }">
+        <div class="seat">
+          {{ g.seat ? g.seat.title : "未分配" }}
+        </div>
+
+        <div class="participants">
+          <div class="participant" *ngFor="let p of g.members">
+            <ci-avatar [name]="p.profile.realname" [email]="p.profile.email"></ci-avatar>
+            <div class="participant-hint">
+              <div class="participant-name">
+                {{ p.profile.realname }}
+              </div>
+            </div>
+            <div class="participant-operations">
+              <div class="participant-operation">
+                <i class="material-icons" (click)="performMove(p, g, $event)">content_cut</i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ci-card>
+      <span class="clearfix"></span>
+    </div>
+
+    <div class="bottom-bar mdl-shadow--6dp" [ngClass]="{ extended: extended }" (click)="$event.stopPropagation()">
+      <div class="bottom-bar-title bottom-bar-title-default" (click)="performExtend($event)">
+        <div class="bottom-bar-container">
+          <i class="material-icons">event_seat</i>
+          国家列表
+        </div>
+      </div>
+
+      <div class="bottom-bar-title bottom-bar-title-moving">
+        <div class="bottom-bar-container">
+          <i class="material-icons">content_cut</i>
+          移动到...
+        </div>
+      </div>
+
+      <div class="bottom-bar-title bottom-bar-title-assigning">
+        <div class="bottom-bar-container">
+          <i class="material-icons">assignment</i>
+          席位分配 / 设置...
+
+          <div class="seat-settings">
+            <input [(ngModel)]="seatRef ? seatRef.title : dummy">
+            <input [(ngModel)]="seatRef ? seatRef.count : dummy" type="number">
+          </div>
+        </div>
+      </div>
+
+      <div class="bottom-bar-container">
+        <div class="seat-list">
+          <span *ngFor="let s of seats" class="seat" (click)="selectSeat(s, $event)">
+            <span class="seat-title">
+              {{ s.title }}
+            </span>
+            <i class="material-icons">person</i>
+            <span class="seat-member-count">
+              {{ s.count }}
+            </span>
+          </span>
+          <span class="seat seat-add" (click)="addSeat($event)">
+            <i class="material-icons">add</i>
+          </span>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

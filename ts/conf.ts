@@ -40,12 +40,13 @@ export interface CIConfSeatSpec {
   id: string;
   title: string;
   count: number;
+  group?: string;
 }
 
-export interface CIConfCommittee extends CIConfCommitteeSpec {
+export interface CIConfCommitteeData extends CIConfCommitteeSpec {
   admins: number[];
   daises: number[];
-  seat: CIConfSeatSpec[];
+  seats: CIConfSeatSpec[];
 }
 
 export interface CIConfFormPreview {
@@ -57,7 +58,15 @@ export interface CIConfFormPreview {
 export interface CIConfParticipant {
   user: number;
   group: string;
-  seat?: string;
+}
+
+export interface CIConfParticipantPreview extends CIConfParticipant {
+  profile: {
+    _id: number;
+    realname: string;
+    schoolName: string;
+    email: string;
+  };
 }
 
 @Injectable()
@@ -354,7 +363,7 @@ export class CIConfService extends CIHttp {
    * Committees
    */
 
-  getAllCommittees(cb: (committees: CIConfCommittee[]) => void) {
+  getAllCommittees(cb: (committees: CIConfCommitteeSpec[]) => void) {
     this.get(`/${this.conf._id}/committee/all`, (err, res) => {
       if(err) {
         console.log(err);
@@ -398,7 +407,18 @@ export class CIConfService extends CIHttp {
     });
   }
 
-  appendParticipant(commId: string, participants: CIConfParticipant[], cb: (result: any) => void) {
+  getParticipants(commId: string, cb: (result: CIConfParticipantPreview[]) => void) {
+    this.get(`/${this.conf._id}/committee/${commId}/participants`, (err, res) => {
+      if(err) {
+        console.log(err);
+        this._notifier.show("$Unknown");
+      } else {
+        cb(<CIConfParticipantPreview[]> res);
+      }
+    });
+  }
+
+  appendParticipants(commId: string, participants: CIConfParticipant[], cb: (result: any) => void) {
     this.post(`/${this.conf._id}/committee/${commId}/append`, { participants }, (err, res) => {
       if(err) {
         console.log(err);
@@ -409,7 +429,7 @@ export class CIConfService extends CIHttp {
     });
   }
 
-  assignParticipant(commId: string, group: string, seat: string, cb: (result: any) => void) {
+  assignParticipants(commId: string, group: string, seat: string, cb: (result: any) => void) {
     this.post(`/${this.conf._id}/committee/${commId}/assign`, { group, seat }, (err, res) => {
       if(err) {
         console.log(err);
@@ -420,7 +440,7 @@ export class CIConfService extends CIHttp {
     });
   }
 
-  groupParticipant(commId: string, users: number[], group: string, cb: (result: any) => void) {
+  groupParticipants(commId: string, users: number[], group: string, cb: (result: any) => void) {
     this.post(`/${this.conf._id}/committee/${commId}/group`, { group, users }, (err, res) => {
       if(err) {
         console.log(err);

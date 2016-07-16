@@ -475,7 +475,7 @@ export class CIConfApplicationList extends CICardView {
       if(reg.selected) list.push({ user: reg.reg.user, group: CIUtil.generateUUID() });
     }
 
-    this._conf.appendParticipant(this.committees[this.selectedCommittee].name, list, (res) => {
+    this._conf.appendParticipants(this.committees[this.selectedCommittee].name, list, (res) => {
       this._notifier.show(res.msg);
 
       this.pairingPerforming = false;
