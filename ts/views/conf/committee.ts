@@ -95,7 +95,6 @@ export class CIConfCommittee extends CICardView {
       }),
       new Promise((resolve, reject) => {
         this._conf.getParticipants(this.commId, (res) => {
-          console.log(res);
           this.participants = res;
 
           const mapper: { [key: string]: CICommitteeGroup } = {};
