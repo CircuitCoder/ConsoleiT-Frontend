@@ -140,7 +140,7 @@ export class CIConfSettings extends CICardView {
 
     for(let i = 0; i < this.formId.length; ++i) {
       let charCode = this.formId.charCodeAt(i);
-      if(!((charCode < 123 && charCode > 96) || charCode === 45)) {
+      if(!((charCode < 123 && charCode > 96) || charCode === 45 || (charCode < 58 && charCode > 47))) {
         this._notifier.show("非法 ID");
         return;
       }
@@ -182,7 +182,7 @@ export class CIConfSettings extends CICardView {
 
     for(let i = 0; i < this.committeeId.length; ++i) {
       let charCode = this.committeeId.charCodeAt(i);
-      if(!((charCode < 123 && charCode > 96) || charCode === 45)) {
+      if(!((charCode < 123 && charCode > 96) || charCode === 45 || (charCode < 58 && charCode > 47))) {
         this._notifier.show("非法 ID");
         return;
       }
@@ -195,8 +195,11 @@ export class CIConfSettings extends CICardView {
         this.committeeCreating = false;
       }
       else {
-        // On deactivate will remove committeeCreation flag
-        // this._router.navigate(["FormEdit", { committee: res.id }]);
+        this._conf.getAllCommittees(comms => {
+          this.committees = comms;
+          this.committeeCreation = false;
+          this.committeeCreating = false;
+        });
       }
     });
   }
