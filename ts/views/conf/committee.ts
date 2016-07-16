@@ -1,9 +1,14 @@
 import {Component} from "@angular/core";
 import {Router, RouteParams, ROUTER_DIRECTIVES} from "@angular/router-deprecated";
+import {Subject} from "rxjs/Rx";
 
 import {CICardView, CICard, CICardService} from "../../card";
 import {CIFrameService} from "../../frame.service";
-import {CIConfService, CIConfCommitteeData, CIConfParticipantPreview, CIConfSeatSpec} from "../../conf";
+import {CIConfService,
+        CIConfCommitteeData,
+        CIConfParticipantPreview,
+        CIConfSeatSpec,
+        CIConfParticipant} from "../../conf";
 import {CILoginService} from "../../login";
 import {CINotifier} from "../../notifier";
 import {MDL} from "../../mdl";
@@ -17,7 +22,7 @@ interface CICommitteeGroup {
   seat?: CIConfSeatSpec;
 };
 
-enum CICommitteeSeatStatus {
+const enum CICommitteeSeatStatus {
   VALID = 'valid',
   INVALID = 'invalid',
   UNASSIGNED = 'unassigned',
@@ -56,6 +61,8 @@ export class CIConfCommittee extends CICardView {
 
   seatStatus: { [key: string]: CICommitteeSeatStatus } = { };
 
+  syncEmitter: Subject<void> = new Subject<void>();
+
   constructor(
     _card: CICardService,
     _frame: CIFrameService,
@@ -67,6 +74,7 @@ export class CIConfCommittee extends CICardView {
       super(_card, true, false);
       _frame.setFab(null);
       this.commId = _params.get("comm");
+      this.syncEmitter.debounceTime(1000).subscribe(() => this.sync());
     }
 
   ngAfterViewInit() {
@@ -142,6 +150,7 @@ export class CIConfCommittee extends CICardView {
       target.seat = this.seatRef;
 
       this.reevaluate();
+      this.queueSync();
 
       this.assigning = false;
       this.moving = false;
@@ -159,6 +168,7 @@ export class CIConfCommittee extends CICardView {
       target.members.push(this.movingTarget);
 
       this.reevaluate();
+      this.queueSync();
 
       this.moving = false;
       this.fromGroup = null;
@@ -185,7 +195,8 @@ export class CIConfCommittee extends CICardView {
     this.extended = false;
     this.seatRef = this.seats[len-1];
 
-    this.seatStatus[this.seat] = CICommitteeSeatStatus.VALID;
+    this.seatStatus[this.seatRef.id] = CICommitteeSeatStatus.VALID;
+    this.queueSync();
   }
 
   performMove(part: CIConfParticipantPreview, group: CICommitteeGroup, $event: Event) {
@@ -202,6 +213,11 @@ export class CIConfCommittee extends CICardView {
     $event.stopPropagation();
   }
 
+  seatSettingsChanged() {
+    this.reevaluate();
+    this.queueSync();
+  }
+
   reevaluate() {
     for(let s of this.seats) this.seatStatus[s.id] = CICommitteeSeatStatus.UNASSIGNED;
 
@@ -211,8 +227,27 @@ export class CIConfCommittee extends CICardView {
       if(g.members.length === g.seat.count) this.seatStatus[g.seat.id] = CICommitteeSeatStatus.VALID;
       else this.seatStatus[g.seat.id] = CICommitteeSeatStatus.INVALID;
     }
+  }
 
-    console.log(this.seats);
-    console.log(this.seatStatus);
+  queueSync() {
+    this.syncEmitter.next();
+  }
+
+  sync() {
+    const participants: CIConfParticipant[] = [];
+    for(const g of this.groups) {
+      for(const p of g.members) {
+        p.group = g.id;
+        participants.push({
+          user: p.user,
+          group: p.group,
+        });
+      }
+
+      if(g.seat) g.seat.group = g.id;
+    }
+
+    this._conf.syncParticipants(this.commId, participants, (res: any) => { });
+    this._conf.syncSeats(this.commId, this.seats, (res: any) => { });
   }
 }

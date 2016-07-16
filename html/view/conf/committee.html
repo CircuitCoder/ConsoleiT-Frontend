@@ -93,7 +93,7 @@
           <i class="material-icons">assignment</i>
           席位分配 / 设置...
 
-          <div class="seat-settings" (change)="reevaluate()">
+          <div class="seat-settings" (change)="seatSettingsChanged()">
             <input [(ngModel)]="seatRef.title">
             <input [(ngModel)]="seatRef.count" type="number">
           </div>

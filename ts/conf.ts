@@ -418,8 +418,8 @@ export class CIConfService extends CIHttp {
     });
   }
 
-  appendParticipants(commId: string, participants: CIConfParticipant[], cb: (result: any) => void) {
-    this.post(`/${this.conf._id}/committee/${commId}/append`, { participants }, (err, res) => {
+  syncParticipants(commId: string, participants: CIConfParticipant[], cb: (result: any) => void) {
+    this.post(`/${this.conf._id}/committee/${commId}/participants`, { participants }, (err, res) => {
       if(err) {
         console.log(err);
         this._notifier.show("$Unknown");
@@ -429,19 +429,8 @@ export class CIConfService extends CIHttp {
     });
   }
 
-  assignParticipants(commId: string, group: string, seat: string, cb: (result: any) => void) {
-    this.post(`/${this.conf._id}/committee/${commId}/assign`, { group, seat }, (err, res) => {
-      if(err) {
-        console.log(err);
-        this._notifier.show("$Unknown");
-      } else {
-        cb(res);
-      }
-    });
-  }
-
-  groupParticipants(commId: string, users: number[], group: string, cb: (result: any) => void) {
-    this.post(`/${this.conf._id}/committee/${commId}/group`, { group, users }, (err, res) => {
+  syncSeats(commId: string, seats: CIConfSeatSpec[], cb: (result: any) => void) {
+    this.post(`/${this.conf._id}/committee/${commId}/seats`, { seats }, (err, res) => {
       if(err) {
         console.log(err);
         this._notifier.show("$Unknown");
