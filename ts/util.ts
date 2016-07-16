@@ -17,7 +17,7 @@ export function generateGravatar(email: string) {
   return `https://gravatar.lug.ustc.edu.cn/avatar/${md5(email)}?d=404&r=g`;
 }
 
-const md = require('markdown-it');
+const md = require("markdown-it");
 const mdc = md({
   linkify: true,
   typographer: false,
@@ -27,15 +27,15 @@ const mdc = md({
 
 mdc.renderer.rules.paragraph_open = (tokens: any[], idx: number, options: any, env: any, self: any) => {
   const token = tokens[idx];
-  if(token.level === 0) return '<div class="mdl-card__supporting-text">';
+  if(token.level === 0) return `<div class="mdl-card__supporting-text">`;
   else return self.renderToken(tokens, idx, options);
-}
+};
 
 mdc.renderer.rules.paragraph_close = (tokens: any, idx: any, options: any, env: any, self: any) => {
   const token = tokens[idx];
-  if(token.level === 0) return '</div>';
+  if(token.level === 0) return "</div>";
   else return self.renderToken(tokens, idx, options);
-}
+};
 
 /**
  * Custom markdown rendering

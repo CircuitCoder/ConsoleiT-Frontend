@@ -61,7 +61,7 @@ export class CIConfCommittee extends CICardView {
 
   seatStatus: { [key: string]: CICommitteeSeatStatus } = { };
 
-  syncEmitter: Subject<void> = new Subject<void>();
+  syncEmitter: Subject<boolean> = new Subject<boolean>();
 
   constructor(
     _card: CICardService,
@@ -190,7 +190,7 @@ export class CIConfCommittee extends CICardView {
       id: CIUtil.generateUUID(),
       seat: null,
       members: [this.movingTarget]
-    })
+    });
 
     this.reevaluate();
     this.queueSync();
@@ -217,7 +217,7 @@ export class CIConfCommittee extends CICardView {
 
     this.assigning = true;
     this.extended = false;
-    this.seatRef = this.seats[len-1];
+    this.seatRef = this.seats[len - 1];
 
     this.seatStatus[this.seatRef.id] = CICommitteeSeatStatus.UNASSIGNED;
     this.queueSync();
@@ -268,7 +268,8 @@ export class CIConfCommittee extends CICardView {
   }
 
   queueSync() {
-    this.syncEmitter.next();
+    // To prevent compiler error
+    this.syncEmitter.next(true);
   }
 
   sync() {
