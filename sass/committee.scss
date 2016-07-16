@@ -364,6 +364,14 @@
       }
 
       cursor: pointer;
+
+      &.valid {
+        border-color: rgba(76,175,80,.7);
+      }
+
+      &.invalid {
+        border-color: rgba(244,67,54,.7);
+      }
     }
   }
 }

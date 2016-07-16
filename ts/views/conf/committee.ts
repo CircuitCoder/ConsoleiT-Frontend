@@ -17,6 +17,12 @@ interface CICommitteeGroup {
   seat?: CIConfSeatSpec;
 };
 
+enum CICommitteeSeatStatus {
+  VALID = 'valid',
+  INVALID = 'invalid',
+  UNASSIGNED = 'unassigned',
+}
+
 @Component({
   template: require("html/view/conf/committee.html"),
   directives: [MDL, CICard, ROUTER_DIRECTIVES, CIAvatar]
@@ -48,6 +54,8 @@ export class CIConfCommittee extends CICardView {
   fromGroup: CICommitteeGroup = null;
   movingTarget: CIConfParticipantPreview = null;
 
+  seatStatus: { [key: string]: CICommitteeSeatStatus } = { };
+
   constructor(
     _card: CICardService,
     _frame: CIFrameService,
@@ -67,6 +75,8 @@ export class CIConfCommittee extends CICardView {
         this._conf.getCommittee(this.commId, (res) => {
           this.data = res;
           this.seats = this.data.seats;
+
+          for(const s of this.seats) this.seatStatus[s.id] = CICommitteeSeatStatus.VALID;
 
           const uid = this._login.getUser()._id;
           this.isAdmin = res.admins.indexOf(uid) !== -1;
@@ -107,6 +117,8 @@ export class CIConfCommittee extends CICardView {
         if(g.id in mapper) g.seat = mapper[g.id];
       };
 
+      this.reevaluate();
+
       this.ready = true;
       setTimeout(resolve);
     }))
@@ -128,6 +140,9 @@ export class CIConfCommittee extends CICardView {
         }
 
       target.seat = this.seatRef;
+
+      this.reevaluate();
+
       this.assigning = false;
       this.moving = false;
     } else if(this.moving) {
@@ -142,6 +157,8 @@ export class CIConfCommittee extends CICardView {
       }
 
       target.members.push(this.movingTarget);
+
+      this.reevaluate();
 
       this.moving = false;
       this.fromGroup = null;
@@ -167,6 +184,8 @@ export class CIConfCommittee extends CICardView {
     this.assigning = true;
     this.extended = false;
     this.seatRef = this.seats[len-1];
+
+    this.seatStatus[this.seat] = CICommitteeSeatStatus.VALID;
   }
 
   performMove(part: CIConfParticipantPreview, group: CICommitteeGroup, $event: Event) {
@@ -181,5 +200,19 @@ export class CIConfCommittee extends CICardView {
   performExtend($event: Event) {
     if(!this.moving && !this.assigning) this.extended = !this.extended;
     $event.stopPropagation();
+  }
+
+  reevaluate() {
+    for(let s of this.seats) this.seatStatus[s.id] = CICommitteeSeatStatus.UNASSIGNED;
+
+    for(let g of this.groups) {
+      if(!g.seat) continue;
+
+      if(g.members.length === g.seat.count) this.seatStatus[g.seat.id] = CICommitteeSeatStatus.VALID;
+      else this.seatStatus[g.seat.id] = CICommitteeSeatStatus.INVALID;
+    }
+
+    console.log(this.seats);
+    console.log(this.seatStatus);
   }
 }
