@@ -404,3 +404,36 @@
     }
   }
 }
+
+@keyframes breath-icon {
+  0% {
+    opacity: 1;
+    transform: rotate(0);
+  }
+
+  50% {
+    opacity: 0.3;
+  }
+
+  100% {
+    transform: rotate(180deg);
+  }
+}
+
+.syncing-indicator {
+  position: absolute;
+  right: 20px;
+  line-height: 60px;
+
+  opacity: 0;
+  transition: opacity 0.2s ease;
+
+  &.syncing {
+    opacity: 0.54;
+  }
+
+  .material-icons {
+    vertical-align: middle;
+    animation: breath-icon 1s infinite;
+  }
+}

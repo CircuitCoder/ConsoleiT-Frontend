@@ -105,6 +105,10 @@
         </div>
       </div>
 
+      <div class="syncing-indicator" [ngClass]="{ syncing: syncing > 0 }">
+        <i class="material-icons">sync</i>
+      </div>
+
       <div class="bottom-bar-container">
         <div class="seat-list">
           <span *ngFor="let s of seats" class="seat" (click)="selectSeat(s, $event)" [ngClass]="{ valid: seatStatus[s.id] > 0, invalid: seatStatus[s.id] < 0 }">

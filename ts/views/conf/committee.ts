@@ -62,6 +62,7 @@ export class CIConfCommittee extends CICardView {
   seatStatus: { [key: string]: CICommitteeSeatStatus } = { };
 
   syncEmitter: Subject<boolean> = new Subject<boolean>();
+  syncing: number = 0;
 
   constructor(
     _card: CICardService,
@@ -273,6 +274,7 @@ export class CIConfCommittee extends CICardView {
   }
 
   sync() {
+    ++this.syncing;
     const participants: CIConfParticipant[] = [];
     for(const s of this.seats) s.group = null;
     for(const g of this.groups) {
@@ -287,7 +289,9 @@ export class CIConfCommittee extends CICardView {
       if(g.seat) g.seat.group = g.id;
     }
 
-    this._conf.syncParticipants(this.commId, participants, (res: any) => { });
-    this._conf.syncSeats(this.commId, this.seats, (res: any) => { });
+    Promise.all([
+      new Promise((resolve, reject) => this._conf.syncParticipants(this.commId, participants, resolve)),
+      new Promise((resolve, reject) => this._conf.syncSeats(this.commId, this.seats, resolve))
+    ]).then(() => --this.syncing);
   }
 }
