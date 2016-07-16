@@ -49,6 +49,11 @@ module.exports = {
         test: /\.html$/,
         loader: 'raw-loader',
         exclude: ['html/index.html', 'html/offline.html']
+      },
+
+      {
+        test: /\.json$/,
+        loader: 'json-loader',
       }
     ]
   },

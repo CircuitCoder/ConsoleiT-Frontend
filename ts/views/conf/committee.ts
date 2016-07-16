@@ -23,9 +23,9 @@ interface CICommitteeGroup {
 };
 
 const enum CICommitteeSeatStatus {
-  VALID = 'valid',
-  INVALID = 'invalid',
-  UNASSIGNED = 'unassigned',
+  VALID = 1,
+  INVALID = -1,
+  UNASSIGNED = 0,
 }
 
 @Component({
@@ -189,7 +189,7 @@ export class CIConfCommittee extends CICardView {
     this.groups.push({
       id: CIUtil.generateUUID(),
       seat: null,
-      members: [this.movingTarget];
+      members: [this.movingTarget]
     })
 
     this.reevaluate();
@@ -273,6 +273,7 @@ export class CIConfCommittee extends CICardView {
 
   sync() {
     const participants: CIConfParticipant[] = [];
+    for(const s of this.seats) s.group = null;
     for(const g of this.groups) {
       for(const p of g.members) {
         p.group = g.id;

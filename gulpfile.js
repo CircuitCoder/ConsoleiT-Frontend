@@ -15,7 +15,6 @@ const rename = require('gulp-rename');
 const rev = require('gulp-rev');
 const revReplace = require('gulp-rev-replace');
 const sass = require('gulp-sass');
-const shell = require('gulp-shell');
 const sourcemaps = require('gulp-sourcemaps');
 const util = require('gulp-util');
 const watch = require('glob-watcher');

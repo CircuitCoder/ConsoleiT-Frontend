@@ -2,7 +2,7 @@ import "script!lib/fix.js";
 import "script!lib/md5.js";
 import "script!lib/FileSaver.min.js";
 import "script!lib/material.min.js";
-import "script!marked";
+import "markdown-it";
 import "rxjs";
 import "es6-shim";
 import "reflect-metadata";

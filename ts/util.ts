@@ -7,7 +7,6 @@ export interface MDLHandler {
 }
 
 declare const md5: any;
-declare const marked: any;
 declare const saveAs: any;
 declare const componentHandler: MDLHandler;
 
@@ -18,36 +17,44 @@ export function generateGravatar(email: string) {
   return `https://gravatar.lug.ustc.edu.cn/avatar/${md5(email)}?d=404&r=g`;
 }
 
+const md = require('markdown-it');
+const mdc = md({
+  linkify: true,
+  typographer: false,
+  html: false,
+  breaks: true,
+});
+
+mdc.renderer.rules.paragraph_open = (tokens: any[], idx: number, options: any, env: any, self: any) => {
+  const token = tokens[idx];
+  if(token.level === 0) return '<div class="mdl-card__supporting-text">';
+  else return self.renderToken(tokens, idx, options);
+}
+
+mdc.renderer.rules.paragraph_close = (tokens: any, idx: any, options: any, env: any, self: any) => {
+  const token = tokens[idx];
+  if(token.level === 0) return '</div>';
+  else return self.renderToken(tokens, idx, options);
+}
+
 /**
  * Custom markdown rendering
  */
 export function cardMarked(text: string, cb: (titles: string[], bodies: string[]) => void) {
   if(!text) return cb([], [""]);
 
-  let renderer = new marked.Renderer();
-  renderer.heading = (text: string, level: number) => {
-    if(level === 1)
-      return `#${text}\n`;
-    else
-      return `<h${level}>${text}</h${level}>`;
-  };
+  const compiled = mdc.render(text);
+  console.log(compiled);
+  const bodies = compiled.split(/<h1>.*<\/h1>\n/);
+  const titles: string[] = [];
+  const titleMatcher = /<h1>(.*)<\/h1>\n/g;
+  let match = titleMatcher.exec(compiled);
 
-  renderer.paragraph = (text: string) => {
-    return `<div class="mdl-card__supporting-text">${text}</div>`;
-  };
+  while(match) {
+    titles.push(match[1]);
+    match = titleMatcher.exec(compiled);
+  }
 
-  // TODO: tables
-
-  let compiled = marked(text, {
-    renderer: renderer,
-    breaks: true,
-    sanitize: true
-  });
-
-  let bodies = compiled.split(/#.*\n/);
-  let titles = compiled.match(/#(.*)\n/g).map((str: string) => str.substring(1));
-  console.log(bodies);
-  console.log(titles);
   cb(titles, bodies);
 }
 
