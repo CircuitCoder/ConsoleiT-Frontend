@@ -176,6 +176,31 @@ export class CIConfCommittee extends CICardView {
     }
   }
 
+  moveToNewGroup() {
+    if(this.fromGroup) {
+      const index = this.fromGroup.members.indexOf(this.movingTarget);
+      if(index > -1) this.fromGroup.members.splice(index, 1);
+
+      if(this.fromGroup.members.length === 0) {
+        const gindex = this.groups.indexOf(this.fromGroup);
+        this.groups.splice(gindex, 1);
+      }
+    }
+
+    this.groups.push({
+      id: CIUtil.generateUUID(),
+      seat: null,
+      members: [this.movingTarget];
+    })
+
+    this.reevaluate();
+    this.queueSync();
+
+    this.moving = false;
+    this.fromGroup = null;
+    this.movingTarget = null;
+  }
+
   selectSeat(target: CIConfSeatSpec, $event: Event) {
     $event.stopPropagation();
     this.assigning = true;
