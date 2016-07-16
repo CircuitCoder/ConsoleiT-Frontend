@@ -37,7 +37,7 @@
     <ci-card class="ci-background-title">
       <ci-card-title>
         代表
-        <div class="participant-edit-icon" (click)="editing = true">
+        <div class="participant-edit-icon" (click)="editing = true" *ngIf="isAdmin || isDais">
           <i class="material-icons">edit</i>
         </div>
       </ci-card-title>
