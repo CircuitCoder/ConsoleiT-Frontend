@@ -66,7 +66,7 @@ module.exports = {
     new ForkCheckerPlugin(),
   ],
 
-  devtool: 'cheap-module-eval-source-map',
+  devtool: 'cheap-eval-source-map',
 
   output: {
     filename: 'bundle-[name].js',
