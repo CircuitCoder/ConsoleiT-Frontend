@@ -64,6 +64,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      height: 185px;
     }
 
     cursor: pointer;
@@ -101,9 +102,9 @@
   .participant-card {
 
     // Dimensions
-    width: 440px;
-    height: 150;
-    margin: 0 20px 20px 0;
+    width: 445px;
+    height: 150px;
+    margin: 0 10px 10px 0;
     float: left;
 
     &:nth-child(2n) {
@@ -343,6 +344,8 @@
   .seat-list {
     margin-top: 60px;
     line-height: 42px;
+    height: 300px - 60px;
+    overflow-y: scroll;
 
     .seat {
       height: 32px;

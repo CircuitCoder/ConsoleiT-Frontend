@@ -72,7 +72,7 @@
       <div class="bottom-bar-title bottom-bar-title-default" (click)="performExtend($event)">
         <div class="bottom-bar-container">
           <i class="material-icons">event_seat</i>
-          国家列表
+          席位列表
           <div class="bottom-bar-operations">
             <div class="bottom-bar-operation" (click)="editing = false">
               <i class="material-icons">done</i>
@@ -109,8 +109,8 @@
         <i class="material-icons">sync</i>
       </div>
 
-      <div class="bottom-bar-container">
-        <div class="seat-list">
+      <div class="seat-list">
+        <div class="bottom-bar-container">
           <span *ngFor="let s of seats" class="seat" (click)="selectSeat(s, $event)" [ngClass]="{ valid: seatStatus[s.id] > 0, invalid: seatStatus[s.id] < 0 }">
             <i class="material-icons seat-remove" (click)="removeSeat(s, $event)">clear</i>
             <span class="seat-title">
